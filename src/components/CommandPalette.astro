@@ -1,0 +1,99 @@
+---
+const tools = [
+  { name: 'JSON Formatter', slug: '/json-formatter', icon: '{ }', tags: 'json format pretty print validate' },
+  { name: 'Base64 Encode/Decode', slug: '/base64', icon: '⟨⟩', tags: 'base64 encode decode convert' },
+  { name: 'UUID Generator', slug: '/uuid-generator', icon: '#', tags: 'uuid guid generate random unique id' },
+  { name: 'URL Encode/Decode', slug: '/url-encode-decode', icon: '%', tags: 'url encode decode percent escape' },
+  { name: 'Timestamp Converter', slug: '/timestamp-converter', icon: '⏱', tags: 'timestamp epoch unix date time convert' },
+  { name: 'Hash Generator', slug: '/hash-generator', icon: '🔒', tags: 'hash md5 sha256 sha512 checksum' },
+  { name: 'Word Counter', slug: '/word-counter', icon: 'Aa', tags: 'word character count text line' },
+  { name: 'Color Picker', slug: '/color-picker', icon: '🎨', tags: 'color hex rgb hsl picker converter' },
+  { name: 'Lorem Ipsum', slug: '/lorem-ipsum', icon: '¶', tags: 'lorem ipsum placeholder text dummy generate' },
+  { name: 'Online Clipboard', slug: '/online-clipboard', icon: '📋', tags: 'clipboard copy paste share transfer device' },
+];
+---
+
+<!-- Command Palette Overlay -->
+<div id="command-palette" class="hidden fixed inset-0 z-[300]">
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+    onclick="document.getElementById('command-palette').classList.add('hidden')"
+  ></div>
+
+  <!-- Modal -->
+  <div class="absolute inset-0 flex items-start justify-center pt-[15vh]">
+    <div class="w-full max-w-lg bg-bg-secondary border border-border-secondary rounded-xl shadow-2xl animate-scale-in overflow-hidden">
+      <!-- Search input -->
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-border-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-tertiary flex-shrink-0"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input
+          id="cmd-search"
+          type="text"
+          placeholder="Search tools..."
+          class="w-full bg-transparent text-sm text-text-primary placeholder-text-tertiary outline-none"
+          oninput="filterTools(this.value)"
+          onkeydown="handleCmdKeydown(event)"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <kbd class="text-[11px] font-mono text-text-tertiary bg-bg-tertiary border border-border-primary rounded px-1.5 py-0.5 flex-shrink-0">ESC</kbd>
+      </div>
+
+      <!-- Results -->
+      <div class="max-h-[320px] overflow-y-auto py-2" id="cmd-results">
+        {tools.map(tool => (
+          <a
+            href={tool.slug}
+            class="cmd-tool-item flex items-center gap-3 px-4 py-2.5 text-text-secondary hover:text-text-primary hover:bg-bg-hover transition-all duration-150 cursor-pointer no-underline"
+            data-name={tool.name}
+            data-tags={tool.tags}
+          >
+            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-bg-tertiary text-sm">{tool.icon}</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-medium truncate">{tool.name}</div>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-tertiary flex-shrink-0 opacity-0 group-hover:opacity-100"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        ))}
+      </div>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-between px-4 py-2.5 border-t border-border-primary bg-bg-tertiary/50">
+        <div class="flex items-center gap-3 text-[11px] text-text-tertiary">
+          <span class="flex items-center gap-1"><kbd class="font-mono bg-bg-tertiary border border-border-primary rounded px-1 py-0.5">↑↓</kbd> Navigate</span>
+          <span class="flex items-center gap-1"><kbd class="font-mono bg-bg-tertiary border border-border-primary rounded px-1 py-0.5">↵</kbd> Open</span>
+        </div>
+        <span class="text-[11px] text-text-tertiary">{tools.length} tools</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  function handleCmdKeydown(e) {
+    const results = document.getElementById('cmd-results');
+    if (!results) return;
+    const items = Array.from(results.querySelectorAll('.cmd-tool-item')).filter(el => el.style.display !== 'none');
+    const active = results.querySelector('.cmd-tool-item.bg-bg-hover');
+    let idx = items.indexOf(active);
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      items.forEach(i => i.classList.remove('bg-bg-hover'));
+      idx = Math.min(idx + 1, items.length - 1);
+      items[idx]?.classList.add('bg-bg-hover');
+      items[idx]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      items.forEach(i => i.classList.remove('bg-bg-hover'));
+      idx = Math.max(idx - 1, 0);
+      items[idx]?.classList.add('bg-bg-hover');
+      items[idx]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const highlighted = results.querySelector('.cmd-tool-item.bg-bg-hover');
+      if (highlighted) window.location.href = highlighted.getAttribute('href');
+    }
+  }
+</script>

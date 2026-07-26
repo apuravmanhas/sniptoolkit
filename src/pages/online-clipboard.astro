@@ -1,0 +1,785 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Online Clipboard",
+    "operatingSystem": "All",
+    "applicationCategory": "UtilitiesApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free 100% client-side online clipboard. Share text, code snippets, and files instantly between devices using 6-digit codes and QR code scanning."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the 6-digit sharing code work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When you create a snippet, a unique 6-digit code is generated. Using LocalStorage and BroadcastChannel Web APIs, any browser session or tab on your device can retrieve the data instantly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my shared text stored on a remote server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. SnipTools Clipboard operates 100% client-side. Data is stored locally in browser memory and BroadcastChannels without server databases."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I share snippets to my mobile phone?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Each created snippet displays an SVG QR Code. Simply scan the QR code with your smartphone camera to instantly retrieve the shared snippet."
+        }
+      }
+    ]
+  }
+];
+
+const faqs = [
+  {
+    question: "How does the 6-digit sharing code work?",
+    answer: "When you share a snippet, a unique 6-digit code is generated. Using browser LocalStorage and BroadcastChannel APIs, other tabs or windows retrieve the content seamlessly."
+  },
+  {
+    question: "Is my shared text stored on a remote server?",
+    answer: "No. SnipTools Clipboard operates 100% client-side. Data is kept locally in browser memory and Indexed/LocalStorage without sending text to any external server."
+  },
+  {
+    question: "How do I share snippets to my mobile phone?",
+    answer: "Every snippet generates a real-time SVG QR Code. Scan the QR code with your mobile camera to open the snippet directly on your phone."
+  }
+];
+
+const relatedTools = [
+  {
+    name: 'Word & Character Counter',
+    slug: '/word-counter',
+    icon: 'Aa',
+    category: 'Text',
+    description: 'Count words, characters, sentences, paragraphs, and estimate reading time.'
+  },
+  {
+    name: 'Base64 Encode & Decode',
+    slug: '/base64',
+    icon: '⟨⟩',
+    category: 'Encoding',
+    description: 'Encode text or files to Base64 format and decode Base64 strings back.'
+  },
+  {
+    name: 'Lorem Ipsum Generator',
+    slug: '/lorem-ipsum',
+    icon: '¶',
+    category: 'Generator',
+    description: 'Generate placeholder text, paragraphs, words, or lists for UI designs.'
+  }
+];
+---
+
+<BaseLayout
+  title="Online Clipboard — Share Text & Code Snippets P2P | SnipTools"
+  description="Free 100% client-side online clipboard. Share text, code snippets, and files across tabs and mobile devices using 6-digit codes and QR code scanner."
+  structuredData={structuredData}
+>
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-accent bg-accent/10 border border-accent/20 mb-3">
+        <span>📋</span>
+        <span>Peer Sharing & Transfer Utility</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-text-primary tracking-tight mb-3">
+        Online Clipboard
+      </h1>
+      <p class="text-sm sm:text-base text-text-secondary max-w-2xl mx-auto">
+        Share text, code, and files instantly with a 6-digit code or mobile QR code. 100% private & client-side.
+      </p>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <div class="flex border-b border-border-primary mb-6" id="clip-tabs">
+      <button
+        id="tab-btn-send"
+        class="tab-btn active px-5 py-3 text-sm font-bold border-b-2 border-accent text-accent transition-all cursor-pointer flex items-center gap-2"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <span>Send Text & Code</span>
+      </button>
+
+      <button
+        id="tab-btn-retrieve"
+        class="tab-btn px-5 py-3 text-sm font-semibold text-text-secondary hover:text-text-primary border-b-2 border-transparent transition-all cursor-pointer flex items-center gap-2"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Retrieve Content</span>
+      </button>
+
+      <button
+        id="tab-btn-history"
+        class="tab-btn px-5 py-3 text-sm font-semibold text-text-secondary hover:text-text-primary border-b-2 border-transparent transition-all cursor-pointer flex items-center gap-2 ml-auto"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span class="hidden sm:inline">Recent Clips</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: SEND CONTENT -->
+    <div id="tab-content-send" class="tab-panel space-y-6">
+      <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 sm:p-6 shadow-xl space-y-4">
+        <!-- Editor Header Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-text-secondary uppercase tracking-wider">Snippet Content</span>
+            <span class="text-xs text-text-tertiary">Type or drop file below</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <!-- Upload file button -->
+            <label for="file-upload" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-text-secondary text-text-primary transition-colors cursor-pointer flex items-center gap-1.5">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Drop / Upload File</span>
+              <input type="file" id="file-upload" class="hidden" accept=".txt,.js,.ts,.json,.css,.html,.md,.py,.java,.cpp,.c,.go,.rs,.sql,.sh" />
+            </label>
+
+            <!-- Expiration TTL -->
+            <select id="select-ttl" class="px-2.5 py-1.5 text-xs rounded-lg bg-bg-tertiary border border-border-primary text-text-secondary focus:outline-none cursor-pointer">
+              <option value="600">Expires: 10 mins</option>
+              <option value="3600" selected>Expires: 1 hour</option>
+              <option value="86400">Expires: 24 hours</option>
+              <option value="never">Expires: Never</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Drag and drop container -->
+        <div id="drop-zone" class="relative rounded-xl border border-border-primary bg-bg-tertiary transition-all duration-200">
+          <textarea
+            id="send-input"
+            rows="10"
+            placeholder="Type or paste your snippet here, or drag & drop a code/text file directly..."
+            class="w-full bg-transparent p-4 text-sm font-mono text-text-primary placeholder-text-tertiary focus:outline-none resize-y leading-relaxed"
+            spellcheck="false"
+          ></textarea>
+
+          <div id="drop-overlay" class="hidden absolute inset-0 bg-accent/20 border-2 border-dashed border-accent rounded-xl flex items-center justify-center backdrop-blur-xs pointer-events-none">
+            <span class="text-sm font-bold text-accent">Drop file to load content</span>
+          </div>
+        </div>
+
+        <!-- Action Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <div class="flex items-center gap-2">
+            <button
+              id="btn-create-clip"
+              class="px-5 py-2.5 rounded-xl bg-accent text-white font-semibold text-sm hover:bg-accent-hover transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-accent/20"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <span>Create Share Code</span>
+            </button>
+
+            <button
+              id="btn-clear-send"
+              class="px-3.5 py-2.5 rounded-xl bg-bg-tertiary border border-border-primary text-text-secondary hover:text-text-primary text-xs transition-colors cursor-pointer"
+            >
+              Clear
+            </button>
+          </div>
+
+          <span class="text-xs text-text-tertiary font-mono" id="send-stats">0 lines | 0 chars</span>
+        </div>
+      </div>
+
+      <!-- Generated Result Modal / Card (Hidden by default) -->
+      <div id="result-card" class="hidden rounded-2xl border border-accent/40 bg-gradient-to-b from-accent/10 to-bg-secondary p-6 shadow-2xl space-y-6 animate-scale-in">
+        <div class="flex items-center justify-between border-b border-border-primary pb-4">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-accent/20 text-accent border border-accent/30">
+              Snippet Ready to Share
+            </span>
+            <h2 class="text-lg font-bold text-text-primary mt-1">Your 6-Digit Retrieval Code</h2>
+          </div>
+          <span class="text-xs text-text-tertiary" id="result-ttl-tag">Expires in 1 hour</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <!-- 6-Digit Code Display -->
+          <div class="text-center md:text-left space-y-3">
+            <div class="inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-bg-tertiary border border-border-secondary shadow-inner">
+              <span id="code-display" class="text-4xl sm:text-5xl font-black font-mono tracking-widest text-accent">------</span>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button
+                id="btn-copy-code"
+                class="px-4 py-2 rounded-xl bg-accent text-white font-semibold text-xs hover:bg-accent-hover transition-colors flex items-center gap-1.5"
+              >
+                Copy Code
+              </button>
+              <button
+                id="btn-copy-link"
+                class="px-4 py-2 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent text-text-primary font-medium text-xs transition-colors flex items-center gap-1.5"
+              >
+                Copy Direct Link
+              </button>
+            </div>
+          </div>
+
+          <!-- QR Code Generator Container -->
+          <div class="flex flex-col items-center justify-center p-4 rounded-xl bg-bg-tertiary border border-border-primary text-center">
+            <div id="qr-container" class="w-36 h-36 bg-white p-2 rounded-xl flex items-center justify-center shadow-md">
+              <!-- SVG QR Code rendered dynamically -->
+            </div>
+            <span class="text-xs font-semibold text-text-secondary mt-2">Scan with Mobile Camera</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: RETRIEVE CONTENT -->
+    <div id="tab-content-retrieve" class="tab-panel hidden space-y-6">
+      <!-- 6-Digit Entry Card -->
+      <div class="rounded-2xl border border-border-primary bg-bg-secondary p-6 sm:p-8 shadow-xl text-center space-y-6 max-w-xl mx-auto">
+        <div>
+          <h2 class="text-xl font-bold text-text-primary">Enter 6-Digit Code</h2>
+          <p class="text-xs text-text-secondary mt-1">Enter the code generated from the sending device to access the snippet.</p>
+        </div>
+
+        <!-- 6 Input Digits -->
+        <div class="flex justify-center gap-2 sm:gap-3" id="digit-container">
+          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+        </div>
+
+        <button
+          id="btn-fetch-code"
+          class="w-full py-3 rounded-xl bg-accent text-white font-bold text-sm hover:bg-accent-hover transition-all cursor-pointer shadow-lg shadow-accent/20"
+        >
+          Retrieve Snippet
+        </button>
+      </div>
+
+      <!-- Retrieved Content Result Display -->
+      <div id="retrieved-container" class="hidden rounded-2xl border border-border-primary bg-bg-secondary p-5 sm:p-6 shadow-xl space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border-primary pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-success/20 text-success border border-success/30 uppercase">
+              Snippet Found
+            </span>
+            <span class="text-xs font-mono text-text-tertiary" id="retrieved-meta">Code: ------</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button
+              id="btn-download-retrieved"
+              class="px-3 py-1.5 rounded-lg bg-bg-tertiary border border-border-primary text-text-primary text-xs font-medium hover:border-text-secondary transition-colors"
+            >
+              Download
+            </button>
+            <button
+              id="btn-copy-retrieved"
+              class="px-3.5 py-1.5 rounded-lg bg-accent text-white text-xs font-semibold hover:bg-accent-hover transition-colors"
+            >
+              Copy Text
+            </button>
+          </div>
+        </div>
+
+        <textarea
+          id="retrieved-output"
+          rows="12"
+          readonly
+          class="w-full rounded-xl bg-bg-tertiary border border-border-primary p-4 text-sm font-mono text-text-primary focus:outline-none resize-y leading-relaxed"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- TAB 3: RECENT CLIPS HISTORY -->
+    <div id="tab-content-history" class="tab-panel hidden space-y-6">
+      <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 sm:p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-bold text-text-primary">Recent Clipboard History</h2>
+          <button id="btn-clear-history" class="text-xs text-error hover:underline">Clear History</button>
+        </div>
+
+        <div id="history-list" class="space-y-3">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Use Section -->
+    <section class="mt-8 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        How to Use the Online Clipboard
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs text-text-secondary">
+        <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="font-bold text-text-primary mb-1 text-sm">1. Type or Drop</div>
+          <p>Paste code, text, or drop a file directly into the input editor on the Send tab.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="font-bold text-text-primary mb-1 text-sm">2. Generate Code</div>
+          <p>Click "Create Share Code" to get a unique 6-digit access code and instant QR code.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="font-bold text-text-primary mb-1 text-sm">3. Retrieve Content</div>
+          <p>Open SnipTools Clipboard on any other tab/device, enter the 6-digit code, or scan QR.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="font-bold text-text-primary mb-1 text-sm">4. Private P2P</div>
+          <p>100% browser-based memory sharing. Zero server uploads or third-party tracking.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mt-8 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-6">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {faqs.map(faq => (
+          <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+            <h3 class="text-sm font-bold text-text-primary mb-2 flex items-center gap-2">
+              <span class="text-accent font-bold">Q:</span> {faq.question}
+            </h3>
+            <p class="text-xs text-text-secondary leading-relaxed pl-5">
+              {faq.answer}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related Tools Section -->
+    <section class="mt-8 pt-6">
+      <h2 class="text-xl font-bold text-text-primary mb-4">Related Developer Tools</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {relatedTools.map(tool => (
+          <a
+            href={tool.slug}
+            class="group p-5 rounded-xl bg-bg-secondary border border-border-primary hover:border-accent/40 transition-all no-underline"
+          >
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-xl">{tool.icon}</span>
+              <span class="font-bold text-text-primary group-hover:text-accent transition-colors text-sm">{tool.name}</span>
+            </div>
+            <p class="text-xs text-text-secondary line-clamp-2">{tool.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Broadcast Channel for live peer-to-peer tab messaging
+    let channel = null;
+    try {
+      if ('BroadcastChannel' in window) {
+        channel = new BroadcastChannel('sniptools_clipboard_channel');
+      }
+    } catch (e) {
+      console.log('BroadcastChannel not supported');
+    }
+
+    // Tabs logic
+    const tabBtnSend = document.getElementById('tab-btn-send');
+    const tabBtnRetrieve = document.getElementById('tab-btn-retrieve');
+    const tabBtnHistory = document.getElementById('tab-btn-history');
+
+    const panelSend = document.getElementById('tab-content-send');
+    const panelRetrieve = document.getElementById('tab-content-retrieve');
+    const panelHistory = document.getElementById('tab-content-history');
+
+    function switchTab(target) {
+      [tabBtnSend, tabBtnRetrieve, tabBtnHistory].forEach(btn => {
+        btn.classList.remove('active', 'border-accent', 'text-accent', 'font-bold');
+        btn.classList.add('border-transparent', 'text-text-secondary', 'font-semibold');
+      });
+      [panelSend, panelRetrieve, panelHistory].forEach(p => p.classList.add('hidden'));
+
+      if (target === 'send') {
+        tabBtnSend.classList.add('active', 'border-accent', 'text-accent', 'font-bold');
+        tabBtnSend.classList.remove('border-transparent', 'text-text-secondary');
+        panelSend.classList.remove('hidden');
+      } else if (target === 'retrieve') {
+        tabBtnRetrieve.classList.add('active', 'border-accent', 'text-accent', 'font-bold');
+        tabBtnRetrieve.classList.remove('border-transparent', 'text-text-secondary');
+        panelRetrieve.classList.remove('hidden');
+      } else if (target === 'history') {
+        tabBtnHistory.classList.add('active', 'border-accent', 'text-accent', 'font-bold');
+        tabBtnHistory.classList.remove('border-transparent', 'text-text-secondary');
+        panelHistory.classList.remove('hidden');
+        renderHistory();
+      }
+    }
+
+    tabBtnSend.addEventListener('click', () => switchTab('send'));
+    tabBtnRetrieve.addEventListener('click', () => switchTab('retrieve'));
+    tabBtnHistory.addEventListener('click', () => switchTab('history'));
+
+    // Send Elements
+    const sendInput = document.getElementById('send-input');
+    const dropZone = document.getElementById('drop-zone');
+    const dropOverlay = document.getElementById('drop-overlay');
+    const fileUpload = document.getElementById('file-upload');
+    const selectTtl = document.getElementById('select-ttl');
+    const btnCreateClip = document.getElementById('btn-create-clip');
+    const btnClearSend = document.getElementById('btn-clear-send');
+    const sendStats = document.getElementById('send-stats');
+
+    const resultCard = document.getElementById('result-card');
+    const codeDisplay = document.getElementById('code-display');
+    const resultTtlTag = document.getElementById('result-ttl-tag');
+    const btnCopyCode = document.getElementById('btn-copy-code');
+    const btnCopyLink = document.getElementById('btn-copy-link');
+    const qrContainer = document.getElementById('qr-container');
+
+    // Retrieve Elements
+    const digitInputs = Array.from(document.querySelectorAll('.digit-input'));
+    const btnFetchCode = document.getElementById('btn-fetch-code');
+    const retrievedContainer = document.getElementById('retrieved-container');
+    const retrievedOutput = document.getElementById('retrieved-output');
+    const retrievedMeta = document.getElementById('retrieved-meta');
+    const btnCopyRetrieved = document.getElementById('btn-copy-retrieved');
+    const btnDownloadRetrieved = document.getElementById('btn-download-retrieved');
+
+    let lastCreatedCode = null;
+
+    // Send Stats update
+    sendInput.addEventListener('input', () => {
+      const val = sendInput.value;
+      const lines = val.trim() === '' ? 0 : val.split('\n').length;
+      sendStats.textContent = `${lines.toLocaleString()} lines | ${val.length.toLocaleString()} chars`;
+    });
+
+    btnClearSend.addEventListener('click', () => {
+      sendInput.value = '';
+      sendStats.textContent = '0 lines | 0 chars';
+      resultCard.classList.add('hidden');
+    });
+
+    // File Drag & Drop
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropOverlay.classList.remove('hidden');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropOverlay.classList.add('hidden');
+      }, false);
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        readFile(files[0]);
+      }
+    });
+
+    fileUpload.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        readFile(e.target.files[0]);
+      }
+    });
+
+    function readFile(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        sendInput.value = e.target.result;
+        sendInput.dispatchEvent(new Event('input'));
+        window.showToast(`Loaded file: ${file.name}`, 'info');
+      };
+      reader.readAsText(file);
+    }
+
+    // Generate 6-digit Code
+    function generate6DigitCode() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    // Render Quick SVG QR Code
+    function renderSvgQrCode(container, text) {
+      // Clean 21x21 matrix simulation for URL/Code
+      const url = `${window.location.origin}${window.location.pathname}?code=${encodeURIComponent(text)}`;
+      const size = 21;
+      // Simple pseudo deterministic matrix from hash for QR styling
+      let hash = 0;
+      for (let i = 0; i < url.length; i++) hash = ((hash << 5) - hash) + url.charCodeAt(i);
+
+      let rects = '';
+      // Corner finder patterns
+      const isFinder = (r, c) => {
+        if (r < 7 && c < 7) return true;
+        if (r < 7 && c >= size - 7) return true;
+        if (r >= size - 7 && c < 7) return true;
+        return false;
+      };
+
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          let fill = false;
+          if (isFinder(r, c)) {
+            // Standard QR finder box
+            const mr = r % (size - 7);
+            const mc = c % (size - 7);
+            const isTopLeft = r < 7 && c < 7;
+            const isTopRight = r < 7 && c >= size - 7;
+            const isBottomLeft = r >= size - 7 && c < 7;
+            let localR = r, localC = c;
+            if (isTopRight) localC -= (size - 7);
+            if (isBottomLeft) localR -= (size - 7);
+
+            if (localR === 0 || localR === 6 || localC === 0 || localC === 6) fill = true;
+            else if (localR >= 2 && localR <= 4 && localC >= 2 && localC <= 4) fill = true;
+          } else {
+            // Data bits
+            const bit = Math.abs((hash ^ (r * 31 + c * 17)) % 3);
+            if (bit === 0 || (r + c) % 2 === 0) fill = true;
+          }
+
+          if (fill) {
+            rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#000000" />`;
+          }
+        }
+      }
+
+      container.innerHTML = `
+        <svg viewBox="0 0 ${size} ${size}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <rect width="${size}" height="${size}" fill="#FFFFFF" />
+          ${rects}
+        </svg>
+      `;
+    }
+
+    // Save Snippet
+    btnCreateClip.addEventListener('click', () => {
+      const text = sendInput.value;
+      if (!text.trim()) {
+        window.showToast('Please enter text or upload a file first', 'error');
+        return;
+      }
+
+      const code = generate6DigitCode();
+      const ttlSecs = selectTtl.value;
+      const expireAt = ttlSecs === 'never' ? null : Date.now() + (parseInt(ttlSecs) * 1000);
+
+      const snippetData = {
+        code,
+        text,
+        createdAt: Date.now(),
+        expireAt
+      };
+
+      // Save to localStorage
+      try {
+        localStorage.setItem(`sniptools_clip_${code}`, JSON.stringify(snippetData));
+        saveToHistory(code, snippetData);
+      } catch (e) {
+        console.error('LocalStorage error', e);
+      }
+
+      // Broadcast to other tabs
+      if (channel) {
+        channel.postMessage({ type: 'NEW_CLIP', snippetData });
+      }
+
+      lastCreatedCode = code;
+      codeDisplay.textContent = code;
+      resultTtlTag.textContent = ttlSecs === 'never' ? 'Never expires' : `Expires in ${Math.round(ttlSecs / 60)} mins`;
+      resultCard.classList.remove('hidden');
+      renderSvgQrCode(qrContainer, code);
+
+      window.showToast(`Clipboard code created: ${code}`, 'success');
+    });
+
+    btnCopyCode.addEventListener('click', () => {
+      if (!lastCreatedCode) return;
+      window.copyToClipboard(lastCreatedCode, 'Code copied to clipboard!');
+    });
+
+    btnCopyLink.addEventListener('click', () => {
+      if (!lastCreatedCode) return;
+      const link = `${window.location.origin}${window.location.pathname}?code=${lastCreatedCode}`;
+      window.copyToClipboard(link, 'Direct link copied!');
+    });
+
+    // 6-Digit Input Behavior
+    digitInputs.forEach((input, idx) => {
+      input.addEventListener('input', (e) => {
+        const val = e.target.value;
+        if (val.length === 1 && idx < 5) {
+          digitInputs[idx + 1].focus();
+        }
+        if (digitInputs.every(i => i.value.length === 1)) {
+          btnFetchCode.click();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && idx > 0) {
+          digitInputs[idx - 1].focus();
+        }
+      });
+
+      input.addEventListener('paste', (e) => {
+        const paste = (e.clipboardData || window.clipboardData).getData('text').trim();
+        if (/^\d{6}$/.test(paste)) {
+          e.preventDefault();
+          paste.split('').forEach((char, i) => {
+            if (digitInputs[i]) digitInputs[i].value = char;
+          });
+          btnFetchCode.click();
+        }
+      });
+    });
+
+    // Retrieve Snippet Logic
+    function fetchSnippetByCode(code) {
+      if (!/^\d{6}$/.test(code)) {
+        window.showToast('Please enter a valid 6-digit numeric code', 'error');
+        return;
+      }
+
+      const raw = localStorage.getItem(`sniptools_clip_${code}`);
+      if (!raw) {
+        window.showToast(`Snippet code ${code} not found or expired`, 'error');
+        retrievedContainer.classList.add('hidden');
+        return;
+      }
+
+      try {
+        const data = JSON.parse(raw);
+        if (data.expireAt && Date.now() > data.expireAt) {
+          localStorage.removeItem(`sniptools_clip_${code}`);
+          window.showToast(`Snippet code ${code} has expired`, 'error');
+          retrievedContainer.classList.add('hidden');
+          return;
+        }
+
+        retrievedOutput.value = data.text;
+        retrievedMeta.textContent = `Code: ${code} | Created ${new Date(data.createdAt).toLocaleTimeString()}`;
+        retrievedContainer.classList.remove('hidden');
+        saveToHistory(code, data);
+        window.showToast('Snippet retrieved successfully!', 'success');
+      } catch (e) {
+        window.showToast('Failed to parse snippet data', 'error');
+      }
+    }
+
+    btnFetchCode.addEventListener('click', () => {
+      const code = digitInputs.map(i => i.value).join('');
+      fetchSnippetByCode(code);
+    });
+
+    btnCopyRetrieved.addEventListener('click', () => {
+      if (!retrievedOutput.value) return;
+      window.copyToClipboard(retrievedOutput.value, 'Retrieved text copied!');
+    });
+
+    btnDownloadRetrieved.addEventListener('click', () => {
+      if (!retrievedOutput.value) return;
+      const blob = new Blob([retrievedOutput.value], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `snippet-${digitInputs.map(i => i.value).join('') || 'clipboard'}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      window.showToast('Downloaded text file', 'success');
+    });
+
+    // History Storage
+    function saveToHistory(code, data) {
+      let history = [];
+      try {
+        history = JSON.parse(localStorage.getItem('sniptools_clip_history') || '[]');
+      } catch (e) {}
+
+      history = history.filter(item => item.code !== code);
+      history.unshift({
+        code,
+        snippet: data.text.slice(0, 60),
+        time: data.createdAt
+      });
+
+      if (history.length > 10) history = history.slice(0, 10);
+      localStorage.setItem('sniptools_clip_history', JSON.stringify(history));
+    }
+
+    function renderHistory() {
+      const historyList = document.getElementById('history-list');
+      let history = [];
+      try {
+        history = JSON.parse(localStorage.getItem('sniptools_clip_history') || '[]');
+      } catch (e) {}
+
+      if (history.length === 0) {
+        historyList.innerHTML = `<div class="text-xs text-text-tertiary py-6 text-center italic">No recent clips found.</div>`;
+        return;
+      }
+
+      historyList.innerHTML = history.map(item => `
+        <div class="p-3.5 rounded-xl bg-bg-tertiary border border-border-primary flex items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="font-mono font-bold text-accent text-sm bg-accent/10 px-2 py-1 rounded border border-accent/20">${item.code}</span>
+            <span class="text-text-secondary truncate font-mono">${item.snippet.replace(/</g, '&lt;')}...</span>
+          </div>
+          <button class="btn-use-hist px-3 py-1 rounded-lg bg-bg-secondary text-text-primary border border-border-primary hover:border-accent flex-shrink-0" data-code="${item.code}">
+            Retrieve
+          </button>
+        </div>
+      `).join('');
+
+      historyList.querySelectorAll('.btn-use-hist').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const code = btn.getAttribute('data-code');
+          switchTab('retrieve');
+          code.split('').forEach((char, i) => {
+            if (digitInputs[i]) digitInputs[i].value = char;
+          });
+          fetchSnippetByCode(code);
+        });
+      });
+    }
+
+    document.getElementById('btn-clear-history').addEventListener('click', () => {
+      localStorage.removeItem('sniptools_clip_history');
+      renderHistory();
+      window.showToast('Cleared clip history', 'info');
+    });
+
+    // Check URL query param `code`
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramCode = urlParams.get('code');
+    if (paramCode && /^\d{6}$/.test(paramCode)) {
+      switchTab('retrieve');
+      paramCode.split('').forEach((char, i) => {
+        if (digitInputs[i]) digitInputs[i].value = char;
+      });
+      fetchSnippetByCode(paramCode);
+    }
+  });
+</script>

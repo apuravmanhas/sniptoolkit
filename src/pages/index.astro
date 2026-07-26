@@ -1,17 +1,297 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
 
+const tools = [
+  {
+    name: 'JSON Formatter & Validator',
+    slug: '/json-formatter',
+    icon: '{ }',
+    category: 'Data',
+    description: 'Format, validate, beautify, and minify JSON data instantly with line error highlighting.',
+    badge: 'Popular',
+    color: 'from-blue-500/20 to-indigo-500/20 border-blue-500/30'
+  },
+  {
+    name: 'Base64 Encode & Decode',
+    slug: '/base64',
+    icon: '⟨⟩',
+    category: 'Encoding',
+    description: 'Encode text or files to Base64 format and decode Base64 strings back to original format.',
+    badge: 'Essential',
+    color: 'from-purple-500/20 to-pink-500/20 border-purple-500/30'
+  },
+  {
+    name: 'UUID Generator',
+    slug: '/uuid-generator',
+    icon: '#',
+    category: 'Generator',
+    description: 'Generate random UUIDs (v4 & v7) in bulk with custom formatting options.',
+    badge: 'Developer',
+    color: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30'
+  },
+  {
+    name: 'URL Encode & Decode',
+    slug: '/url-encode-decode',
+    icon: '%',
+    category: 'Encoding',
+    description: 'Safely encode special characters for URLs or decode percent-encoded query strings.',
+    badge: 'Fast',
+    color: 'from-amber-500/20 to-orange-500/20 border-amber-500/30'
+  },
+  {
+    name: 'Unix Timestamp Converter',
+    slug: '/timestamp-converter',
+    icon: '⏱',
+    category: 'Converter',
+    description: 'Convert Unix timestamps (epoch) to human-readable date & time and vice-versa.',
+    badge: 'Utility',
+    color: 'from-cyan-500/20 to-blue-500/20 border-cyan-500/30'
+  },
+  {
+    name: 'Hash Generator (MD5 / SHA)',
+    slug: '/hash-generator',
+    icon: '🔒',
+    category: 'Security',
+    description: 'Generate secure cryptographic hashes including MD5, SHA-1, SHA-256, and SHA-512.',
+    badge: 'Security',
+    color: 'from-red-500/20 to-rose-500/20 border-red-500/30'
+  },
+  {
+    name: 'Word & Character Counter',
+    slug: '/word-counter',
+    icon: 'Aa',
+    category: 'Text',
+    description: 'Count words, characters, sentences, paragraphs, and estimate reading time in real time.',
+    badge: 'Writer',
+    color: 'from-violet-500/20 to-purple-500/20 border-violet-500/30'
+  },
+  {
+    name: 'Color Picker & Converter',
+    slug: '/color-picker',
+    icon: '🎨',
+    category: 'Design',
+    description: 'Convert color codes between HEX, RGB, HSL, and HSV formats with interactive color picker.',
+    badge: 'Design',
+    color: 'from-fuchsia-500/20 to-pink-500/20 border-fuchsia-500/30'
+  },
+  {
+    name: 'Lorem Ipsum Generator',
+    slug: '/lorem-ipsum',
+    icon: '¶',
+    category: 'Generator',
+    description: 'Generate placeholder text, paragraphs, words, or lists for UI designs and mockups.',
+    badge: 'Design',
+    color: 'from-sky-500/20 to-blue-500/20 border-sky-500/30'
+  },
+  {
+    name: 'Online Clipboard',
+    slug: '/online-clipboard',
+    icon: '📋',
+    category: 'Utility',
+    description: 'Share text and code snippets seamlessly between multiple devices using a simple 6-digit code.',
+    badge: 'Sharing',
+    color: 'from-green-500/20 to-emerald-500/20 border-green-500/30'
+  }
+];
+
+const faqs = [
+  {
+    question: "Is SnipTools completely free to use?",
+    answer: "Yes, 100% free! All developer tools on SnipTools are available without sign-up, subscriptions, or hidden limits."
+  },
+  {
+    question: "Is my data safe when using SnipTools?",
+    answer: "Absolutely. All processing occurs 100% locally inside your web browser. Your inputs (JSON, passwords, text, files) are never transmitted or stored on any external server."
+  },
+  {
+    question: "Can I use SnipTools offline?",
+    answer: "Yes! SnipTools is built as a lightweight client-side application. Once loaded, most tools function completely offline without an active internet connection."
+  },
+  {
+    question: "How is SnipTools different from other online tool sites?",
+    answer: "SnipTools is designed with a modern Vercel-inspired UI, zero intrusive popup ads, blazing-fast speed, dark-mode first design, and instant command palette navigation (Ctrl+K)."
+  }
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "SnipTools",
+  "url": "https://sniptools.tools",
+  "description": "Fast, free developer & utility tools. 100% client-side, privacy-focused, zero registration.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://sniptools.tools/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+};
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="SnipTools — Fast, Free Developer & Utility Tools"
+  description="Free developer tools hub. JSON formatter, Base64 encoder, UUID generator, URL decoder, Hash generator, Online Clipboard & more. 100% client-side, zero log-in."
+  structuredData={structuredData}
+>
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-24 border-b border-border-primary bg-gradient-to-b from-bg-primary via-bg-secondary/40 to-bg-primary">
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f15_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f15_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 rounded-full border border-border-secondary bg-bg-tertiary/80 px-3.5 py-1 text-xs font-medium text-text-secondary backdrop-blur-md mb-6 animate-fade-in">
+        <span class="inline-block w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+        <span>100% Client-Side & Private</span>
+        <span class="text-border-secondary">|</span>
+        <span class="text-accent font-semibold">Fast & Ad-Light</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary max-w-3xl mx-auto leading-[1.15] mb-6 animate-slide-up">
+        Essential Developer Tools, <span class="bg-gradient-to-r from-accent via-purple to-pink-500 bg-clip-text text-transparent">Simplified.</span>
+      </h1>
+
+      <p class="text-lg sm:text-xl text-text-secondary max-w-2xl mx-auto font-normal leading-relaxed mb-8 animate-slide-up stagger-1">
+        Free, browser-based utility tools for modern developers, designers, and writers. No sign-up required. Your data never leaves your device.
+      </p>
+
+      <!-- Quick Action Bar / Search trigger -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto animate-slide-up stagger-2">
+        <button
+          onclick="document.getElementById('command-palette').classList.remove('hidden'); document.getElementById('cmd-search').focus();"
+          class="w-full sm:w-auto flex items-center justify-between gap-4 px-5 py-3 rounded-xl bg-bg-secondary border border-border-secondary hover:border-accent text-text-secondary hover:text-text-primary shadow-lg shadow-black/20 transition-all duration-200 cursor-pointer group"
+        >
+          <div class="flex items-center gap-2.5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-tertiary group-hover:text-accent transition-colors"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span class="text-sm font-medium">Quick search tools...</span>
+          </div>
+          <kbd class="text-xs font-mono bg-bg-tertiary border border-border-primary rounded px-2 py-0.5 text-text-tertiary">Ctrl + K</kbd>
+        </button>
+      </div>
+
+      <!-- Feature Pills -->
+      <div class="flex flex-wrap items-center justify-center gap-6 mt-12 text-xs font-medium text-text-tertiary animate-fade-in stagger-3">
+        <div class="flex items-center gap-2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-success"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Zero Server Uploads</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Instant Execution</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-purple"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>100% Secure & Private</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools Grid Section -->
+  <section class="py-12 md:py-20 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-10">
+      <div>
+        <h2 class="text-2xl font-bold text-text-primary tracking-tight">Developer Tools Suite</h2>
+        <p class="text-sm text-text-secondary mt-1">Select a utility below to start formatting, generating, or converting.</p>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="flex flex-wrap gap-1.5 p-1 rounded-xl bg-bg-secondary border border-border-primary" id="category-filters">
+        <button class="cat-btn active px-3 py-1.5 text-xs font-semibold rounded-lg bg-bg-tertiary text-text-primary transition-all cursor-pointer" data-cat="all">All Tools</button>
+        <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Data">Data</button>
+        <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Encoding">Encoding</button>
+        <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Generator">Generator</button>
+        <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Security">Security</button>
+        <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Text">Text</button>
+        <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Utility">Utility</button>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="tools-grid">
+      {tools.map((tool, idx) => (
+        <a
+          href={tool.slug}
+          class={`tool-card group relative p-6 rounded-2xl bg-bg-secondary border border-border-primary hover:border-border-hover transition-all duration-300 hover:-translate-y-1 hover:shadow-xl no-underline flex flex-col justify-between overflow-hidden`}
+          data-category={tool.category}
+        >
+          <div class={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${tool.color} rounded-bl-full pointer-events-none opacity-40 group-hover:opacity-80 transition-opacity duration-300`}></div>
+
+          <div>
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg-tertiary border border-border-primary text-xl font-bold text-text-primary group-hover:border-accent group-hover:scale-105 transition-all duration-300 shadow-inner">
+                {tool.icon}
+              </div>
+              <span class="text-[11px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full bg-bg-tertiary border border-border-primary text-text-tertiary group-hover:text-accent group-hover:border-accent/40 transition-colors">
+                {tool.category}
+              </span>
+            </div>
+
+            <!-- Title & Desc -->
+            <h3 class="text-lg font-bold text-text-primary group-hover:text-accent transition-colors duration-200 mb-2">
+              {tool.name}
+            </h3>
+            <p class="text-xs text-text-secondary leading-relaxed line-clamp-2">
+              {tool.description}
+            </p>
+          </div>
+
+          <!-- Bottom Action -->
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-border-primary/60 text-xs font-semibold text-text-tertiary group-hover:text-text-primary transition-colors">
+            <span>Open Tool</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transform group-hover:translate-x-1 transition-transform duration-200"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-16 bg-bg-secondary/40 border-t border-border-primary">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-extrabold text-text-primary tracking-tight mb-3">Frequently Asked Questions</h2>
+        <p class="text-sm text-text-secondary">Everything you need to know about SnipTools performance and privacy.</p>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq, i) => (
+          <div class="rounded-xl border border-border-primary bg-bg-secondary p-5 transition-all duration-200 hover:border-border-secondary">
+            <h3 class="text-base font-semibold text-text-primary mb-2 flex items-center gap-2">
+              <span class="text-accent font-bold">Q:</span> {faq.question}
+            </h3>
+            <p class="text-xs text-text-secondary leading-relaxed pl-6">
+              {faq.answer}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  // Category filter script
+  const buttons = document.querySelectorAll('#category-filters .cat-btn');
+  const cards = document.querySelectorAll('#tools-grid .tool-card');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => {
+        b.classList.remove('active', 'bg-bg-tertiary', 'text-text-primary', 'font-semibold');
+        b.classList.add('text-text-secondary', 'font-medium');
+      });
+      btn.classList.add('active', 'bg-bg-tertiary', 'text-text-primary', 'font-semibold');
+      btn.classList.remove('text-text-secondary');
+
+      const cat = btn.getAttribute('data-cat');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

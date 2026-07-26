@@ -1,0 +1,156 @@
+---
+const tools = [
+  { name: 'JSON Formatter', slug: '/json-formatter', icon: '{ }', category: 'Data' },
+  { name: 'Base64 Encode/Decode', slug: '/base64', icon: '⟨⟩', category: 'Encoding' },
+  { name: 'UUID Generator', slug: '/uuid-generator', icon: '#', category: 'Generator' },
+  { name: 'URL Encode/Decode', slug: '/url-encode-decode', icon: '%', category: 'Encoding' },
+  { name: 'Timestamp Converter', slug: '/timestamp-converter', icon: '⏱', category: 'Converter' },
+  { name: 'Hash Generator', slug: '/hash-generator', icon: '🔒', category: 'Security' },
+  { name: 'Word Counter', slug: '/word-counter', icon: 'Aa', category: 'Text' },
+  { name: 'Color Picker', slug: '/color-picker', icon: '🎨', category: 'Design' },
+  { name: 'Lorem Ipsum', slug: '/lorem-ipsum', icon: '¶', category: 'Generator' },
+  { name: 'Clipboard', slug: '/online-clipboard', icon: '📋', category: 'Utility' },
+];
+
+const categories = [
+  { name: 'All Tools', slug: '/' },
+  { name: 'Data', slug: '/#data' },
+  { name: 'Encoding', slug: '/#encoding' },
+  { name: 'Security', slug: '/#security' },
+  { name: 'Text', slug: '/#text' },
+  { name: 'Generator', slug: '/#generator' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 border-b border-border-primary bg-bg-primary/80 backdrop-blur-xl backdrop-saturate-150">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-14 items-center justify-between gap-4">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2.5 text-text-primary no-underline group">
+        <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-purple text-[10px] font-extrabold text-white shadow-md shadow-accent/25 transition-transform duration-200 group-hover:scale-110">
+          ST
+        </div>
+        <span class="text-[15px] font-bold tracking-tight hidden sm:inline">SnipTools</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
+        {categories.map(cat => (
+          <a
+            href={cat.slug}
+            class={`px-3 py-1.5 text-[13px] font-medium rounded-md transition-all duration-200 ${
+              currentPath === cat.slug
+                ? 'text-text-primary bg-bg-tertiary'
+                : 'text-text-secondary hover:text-text-primary hover:bg-bg-hover'
+            }`}
+          >
+            {cat.name}
+          </a>
+        ))}
+      </nav>
+
+      <!-- Right side -->
+      <div class="flex items-center gap-2">
+        <!-- Command palette trigger -->
+        <button
+          id="cmd-trigger"
+          onclick="document.getElementById('command-palette').classList.remove('hidden'); document.getElementById('cmd-search').focus();"
+          class="hidden sm:flex items-center gap-2 px-3 py-1.5 text-[13px] text-text-tertiary bg-bg-secondary border border-border-primary rounded-lg hover:border-border-secondary hover:text-text-secondary transition-all duration-200 cursor-pointer"
+          aria-label="Search tools"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <span>Search tools...</span>
+          <kbd class="ml-2 text-[11px] font-mono bg-bg-tertiary border border-border-primary rounded px-1.5 py-0.5">⌘K</kbd>
+        </button>
+
+        <!-- Theme toggle -->
+        <button
+          onclick="toggleTheme()"
+          class="flex items-center justify-center w-8 h-8 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-all duration-200 cursor-pointer"
+          aria-label="Toggle theme"
+        >
+          <svg class="dark-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="light-icon hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <!-- Mobile menu -->
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden flex items-center justify-center w-8 h-8 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-all duration-200 cursor-pointer"
+          aria-label="Open menu"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile menu overlay -->
+<div id="mobile-menu" class="fixed inset-0 z-[200] pointer-events-none opacity-0 transition-opacity duration-300 md:hidden">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-backdrop"></div>
+  <div class="absolute right-0 top-0 h-full w-[min(320px,85vw)] bg-bg-secondary border-l border-border-primary transform translate-x-full transition-transform duration-300 ease-out overflow-y-auto" id="mobile-panel">
+    <div class="p-4">
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-[15px] font-bold">SnipTools</span>
+        <button id="mobile-close" class="flex items-center justify-center w-8 h-8 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover cursor-pointer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="space-y-1">
+        {tools.map(tool => (
+          <a
+            href={tool.slug}
+            class={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] transition-all duration-200 ${
+              currentPath === tool.slug
+                ? 'text-text-primary bg-bg-tertiary font-medium'
+                : 'text-text-secondary hover:text-text-primary hover:bg-bg-hover'
+            }`}
+          >
+            <span class="text-base w-6 text-center">{tool.icon}</span>
+            <span>{tool.name}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  // Mobile menu logic
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileBackdrop = document.getElementById('mobile-backdrop');
+  const mobileClose = document.getElementById('mobile-close');
+  const mobilePanel = document.getElementById('mobile-panel');
+
+  function openMobile() {
+    mobileMenu.classList.remove('pointer-events-none', 'opacity-0');
+    mobilePanel.classList.remove('translate-x-full');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobile() {
+    mobileMenu.classList.add('opacity-0');
+    mobilePanel.classList.add('translate-x-full');
+    setTimeout(() => {
+      mobileMenu.classList.add('pointer-events-none');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  if (mobileBtn) mobileBtn.addEventListener('click', openMobile);
+  if (mobileBackdrop) mobileBackdrop.addEventListener('click', closeMobile);
+  if (mobileClose) mobileClose.addEventListener('click', closeMobile);
+
+  // Theme icon toggle
+  function updateThemeIcons() {
+    const isLight = document.documentElement.classList.contains('light');
+    document.querySelectorAll('.dark-icon').forEach(el => el.style.display = isLight ? 'none' : '');
+    document.querySelectorAll('.light-icon').forEach(el => el.classList.toggle('hidden', !isLight));
+  }
+  updateThemeIcons();
+  const observer = new MutationObserver(updateThemeIcons);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+</script>

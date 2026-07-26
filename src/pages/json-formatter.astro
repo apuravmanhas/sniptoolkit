@@ -1,0 +1,667 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "JSON Formatter & Validator",
+  "operatingSystem": "All",
+  "applicationCategory": "DeveloperApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Free online JSON Formatter, Validator, and Beautifier. Format JSON with 2 or 4 spaces, minify JSON, find syntax errors with line numbers, and download formatted code."
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "QAPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is my JSON data kept private when using this online JSON formatter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, 100%. All JSON parsing, formatting, minification, and validation take place client-side inside your web browser using JavaScript. Your JSON string or file is never sent to any remote server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the JSON validator highlight line errors?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When valid JSON is parsed, the validator confirms success. If a syntax error is detected (such as missing quotes, trailing commas, or bracket mismatches), the tool calculates the exact character position, extracts line and column numbers, and visually highlights the faulty line."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between formatting (beautifying) and minifying JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Formatting or beautifying JSON adds line breaks and indentation spaces (e.g., 2 spaces, 4 spaces, or tabs) to make raw JSON readable for humans. Minifying removes all unnecessary spaces and line breaks to compress file size for network transfer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I upload a .json file directly?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, you can click the 'Upload File' button or drag and drop any .json text file into the input area. The file is read directly in your browser without uploading to a cloud server."
+      }
+    }
+  ]
+};
+
+const structuredData = [softwareSchema, faqSchema];
+
+const relatedTools = [
+  {
+    name: 'Base64 Encode & Decode',
+    slug: '/base64',
+    icon: '⟨⟩',
+    category: 'Encoding',
+    description: 'Encode text or files to Base64 format and decode Base64 strings back to original format.'
+  },
+  {
+    name: 'URL Encode & Decode',
+    slug: '/url-encode-decode',
+    icon: '%',
+    category: 'Encoding',
+    description: 'Safely encode special characters for URLs or decode percent-encoded query strings.'
+  },
+  {
+    name: 'UUID Generator',
+    slug: '/uuid-generator',
+    icon: '#',
+    category: 'Generator',
+    description: 'Generate random UUIDs (v4 & v7) in bulk with custom formatting options.'
+  },
+  {
+    name: 'Word & Character Counter',
+    slug: '/word-counter',
+    icon: 'Aa',
+    category: 'Text',
+    description: 'Count words, characters, sentences, paragraphs, and estimate reading time in real time.'
+  }
+];
+---
+
+<BaseLayout
+  title="JSON Formatter & Validator Online — Free & Private | SnipTools"
+  description="Free online JSON Formatter & Validator. Pretty print json, format json with 2/4 spaces, minify json, locate line errors with line numbers. 100% private & client-side."
+  structuredData={structuredData}
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <!-- Breadcrumb & Header -->
+    <nav class="flex items-center gap-2 text-xs font-medium text-text-tertiary mb-4">
+      <a href="/" class="hover:text-text-primary transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-text-secondary">Data</span>
+      <span>/</span>
+      <span class="text-accent font-semibold">JSON Formatter & Validator</span>
+    </nav>
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
+          JSON Formatter & Validator
+        </h1>
+        <p class="text-sm sm:text-base text-text-secondary mt-1 max-w-2xl">
+          Format, beautify, minify, and validate JSON data instantly. Features syntax validation, line error highlights, and file uploads. 100% client-side privacy.
+        </p>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="flex flex-wrap items-center gap-2">
+        <label class="text-xs font-medium text-text-secondary flex items-center gap-1.5 bg-bg-secondary px-3 py-2 rounded-xl border border-border-primary">
+          <span>Indent:</span>
+          <select id="indent-select" class="bg-bg-tertiary text-text-primary text-xs font-medium border border-border-secondary rounded px-2 py-1 focus:outline-none focus:border-accent cursor-pointer">
+            <option value="2" selected>2 Spaces</option>
+            <option value="4">4 Spaces</option>
+            <option value="tab">Tab</option>
+          </select>
+        </label>
+        <button id="btn-sample" class="px-3.5 py-2 text-xs font-medium rounded-xl bg-bg-secondary border border-border-primary hover:border-border-hover text-text-primary transition-all cursor-pointer flex items-center gap-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Sample JSON
+        </button>
+        <button id="btn-upload-trigger" class="px-3.5 py-2 text-xs font-medium rounded-xl bg-bg-secondary border border-border-primary hover:border-border-hover text-text-primary transition-all cursor-pointer flex items-center gap-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload .json
+        </button>
+        <input type="file" id="file-input" accept=".json,application/json,text/plain" class="hidden" />
+        <button id="btn-clear" class="px-3.5 py-2 text-xs font-medium rounded-xl bg-bg-secondary border border-border-primary hover:border-error/40 hover:text-error text-text-tertiary transition-all cursor-pointer flex items-center gap-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Error Alert Container (hidden when no error) -->
+    <div id="error-container" class="hidden mb-6 rounded-xl border border-error/40 bg-error/10 p-4 animate-slide-down">
+      <div class="flex items-start gap-3">
+        <div class="p-1.5 rounded-lg bg-error/20 text-error flex-shrink-0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-error flex items-center gap-2">
+              <span>Invalid JSON Syntax</span>
+              <span id="error-location-badge" class="px-2 py-0.5 rounded text-[11px] font-mono bg-error/20 text-error-light">Line 1, Col 1</span>
+            </h3>
+            <button id="btn-close-error" class="text-text-tertiary hover:text-text-primary text-xs cursor-pointer">✕</button>
+          </div>
+          <p id="error-message" class="text-xs font-mono text-text-primary mt-1.5 leading-relaxed break-all"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Workspace (2 Columns on Desktop) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Left Panel: Input Editor -->
+      <div class="flex flex-col rounded-2xl border border-border-primary bg-bg-secondary overflow-hidden shadow-lg shadow-black/20">
+        <!-- Panel Header -->
+        <div class="flex items-center justify-between px-4 py-3 border-b border-border-primary bg-bg-tertiary/60">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-text-primary">Input JSON</span>
+            <span id="input-stats" class="text-[11px] font-mono text-text-tertiary">0 lines • 0 B</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-format" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-accent hover:bg-accent-hover text-white shadow-sm transition-all cursor-pointer flex items-center gap-1.5">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              Format
+            </button>
+            <button id="btn-minify" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-bg-secondary border border-border-secondary hover:border-accent hover:text-accent text-text-primary transition-all cursor-pointer">
+              Minify
+            </button>
+          </div>
+        </div>
+
+        <!-- Editor with Line Numbers -->
+        <div class="relative flex-1 min-h-[420px] max-h-[600px] flex bg-bg-primary" id="drop-zone">
+          <!-- Line Numbers Gutter -->
+          <div id="input-gutter" class="w-12 py-3 bg-bg-tertiary/40 border-r border-border-primary text-right pr-2 text-xs font-mono text-text-tertiary select-none overflow-hidden leading-6">
+            1
+          </div>
+          <!-- Textarea -->
+          <textarea
+            id="json-input"
+            spellcheck="false"
+            placeholder="Paste raw JSON string or drag & drop a .json file here..."
+            class="flex-1 p-3 bg-transparent text-xs font-mono text-text-primary placeholder:text-text-tertiary focus:outline-none resize-none overflow-y-auto leading-6"
+          ></textarea>
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="px-4 py-2 border-t border-border-primary bg-bg-tertiary/30 flex items-center justify-between text-[11px] text-text-tertiary">
+          <span>Shortcuts: <kbd class="px-1.5 py-0.5 rounded bg-bg-tertiary border border-border-primary font-mono text-[10px]">Ctrl+Enter</kbd> Format</span>
+          <span id="drag-status" class="hidden text-accent font-medium">Drop file to load</span>
+        </div>
+      </div>
+
+      <!-- Right Panel: Output & Validation -->
+      <div class="flex flex-col rounded-2xl border border-border-primary bg-bg-secondary overflow-hidden shadow-lg shadow-black/20">
+        <!-- Panel Header -->
+        <div class="flex items-center justify-between px-4 py-3 border-b border-border-primary bg-bg-tertiary/60">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-text-primary">Formatted Output</span>
+            <span id="status-badge" class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-bg-tertiary text-text-tertiary border border-border-primary">
+              Ready
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-copy" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-bg-secondary border border-border-secondary hover:border-accent hover:text-accent text-text-primary transition-all cursor-pointer flex items-center gap-1.5">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+            <button id="btn-download" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-bg-secondary border border-border-secondary hover:border-accent hover:text-accent text-text-primary transition-all cursor-pointer flex items-center gap-1.5">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+          </div>
+        </div>
+
+        <!-- Output Editor with Line Numbers -->
+        <div class="relative flex-1 min-h-[420px] max-h-[600px] flex bg-bg-primary">
+          <!-- Gutter -->
+          <div id="output-gutter" class="w-12 py-3 bg-bg-tertiary/40 border-r border-border-primary text-right pr-2 text-xs font-mono text-text-tertiary select-none overflow-hidden leading-6">
+            1
+          </div>
+          <!-- Textarea (readonly) -->
+          <textarea
+            id="json-output"
+            readonly
+            spellcheck="false"
+            placeholder="Formatted JSON will appear here..."
+            class="flex-1 p-3 bg-transparent text-xs font-mono text-text-primary placeholder:text-text-tertiary focus:outline-none resize-none overflow-y-auto leading-6 select-all"
+          ></textarea>
+        </div>
+
+        <!-- Panel Footer / Detailed Output Stats -->
+        <div class="px-4 py-2 border-t border-border-primary bg-bg-tertiary/30 flex items-center justify-between text-[11px] text-text-tertiary font-mono">
+          <span id="output-stats">0 lines • 0 B</span>
+          <span id="json-tree-stats">Depth: 0 • Keys: 0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Use Section -->
+    <section class="mt-16 pt-12 border-t border-border-primary">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-text-primary tracking-tight mb-2">How to Use the Online JSON Formatter & Validator</h2>
+        <p class="text-sm text-text-secondary mb-8">Follow these steps to quickly format, repair, or inspect your JSON payload.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="p-5 rounded-2xl bg-bg-secondary border border-border-primary">
+            <div class="w-8 h-8 rounded-lg bg-accent/10 text-accent font-bold flex items-center justify-center text-sm mb-3">1</div>
+            <h3 class="text-sm font-semibold text-text-primary mb-1">Paste or Upload</h3>
+            <p class="text-xs text-text-secondary leading-relaxed">Paste your raw JSON code or drag and drop a .json file directly into the input editor.</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-bg-secondary border border-border-primary">
+            <div class="w-8 h-8 rounded-lg bg-accent/10 text-accent font-bold flex items-center justify-center text-sm mb-3">2</div>
+            <h3 class="text-sm font-semibold text-text-primary mb-1">Select Indentation</h3>
+            <p class="text-xs text-text-secondary leading-relaxed">Choose between 2 spaces, 4 spaces, or tabs, or click "Minify" to strip all whitespace.</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-bg-secondary border border-border-primary">
+            <div class="w-8 h-8 rounded-lg bg-accent/10 text-accent font-bold flex items-center justify-center text-sm mb-3">3</div>
+            <h3 class="text-sm font-semibold text-text-primary mb-1">Check Errors</h3>
+            <p class="text-xs text-text-secondary leading-relaxed">If invalid, the validator highlights the exact line and column number where syntax failed.</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-bg-secondary border border-border-primary">
+            <div class="w-8 h-8 rounded-lg bg-accent/10 text-accent font-bold flex items-center justify-center text-sm mb-3">4</div>
+            <h3 class="text-sm font-semibold text-text-primary mb-1">Copy or Download</h3>
+            <p class="text-xs text-text-secondary leading-relaxed">Copy the formatted output to clipboard with one click or download it as a formatted .json file.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mt-16 pt-12 border-t border-border-primary">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-text-primary tracking-tight mb-2">Frequently Asked Questions</h2>
+        <p class="text-sm text-text-secondary mb-8">Everything you need to know about our browser-based JSON validator.</p>
+
+        <div class="space-y-4">
+          {faqSchema.mainEntity.map((faq) => (
+            <div class="rounded-xl border border-border-primary bg-bg-secondary p-5">
+              <h3 class="text-base font-semibold text-text-primary mb-2 flex items-center gap-2">
+                <span class="text-accent font-bold">Q:</span> {faq.name}
+              </h3>
+              <p class="text-xs text-text-secondary leading-relaxed pl-6">
+                {faq.acceptedAnswer.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Tools Grid -->
+    <section class="mt-16 pt-12 border-t border-border-primary">
+      <h2 class="text-xl font-bold text-text-primary mb-6">Related Developer Tools</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {relatedTools.map((tool) => (
+          <a href={tool.slug} class="group p-5 rounded-xl bg-bg-secondary border border-border-primary hover:border-border-hover transition-all no-underline flex flex-col justify-between">
+            <div>
+              <div class="text-lg font-bold text-text-primary group-hover:text-accent transition-colors mb-1">{tool.name}</div>
+              <p class="text-xs text-text-secondary leading-relaxed line-clamp-2">{tool.description}</p>
+            </div>
+            <div class="mt-4 flex items-center gap-1 text-xs font-semibold text-accent">
+              <span>Try Tool</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const jsonInput = document.getElementById('json-input');
+    const jsonOutput = document.getElementById('json-output');
+    const inputGutter = document.getElementById('input-gutter');
+    const outputGutter = document.getElementById('output-gutter');
+    const indentSelect = document.getElementById('indent-select');
+    const statusBadge = document.getElementById('status-badge');
+    const errorContainer = document.getElementById('error-container');
+    const errorMessage = document.getElementById('error-message');
+    const errorLocationBadge = document.getElementById('error-location-badge');
+    const btnCloseError = document.getElementById('btn-close-error');
+
+    const inputStats = document.getElementById('input-stats');
+    const outputStats = document.getElementById('output-stats');
+    const jsonTreeStats = document.getElementById('json-tree-stats');
+
+    const btnFormat = document.getElementById('btn-format');
+    const btnMinify = document.getElementById('btn-minify');
+    const btnSample = document.getElementById('btn-sample');
+    const btnClear = document.getElementById('btn-clear');
+    const btnCopy = document.getElementById('btn-copy');
+    const btnDownload = document.getElementById('btn-download');
+    const btnUploadTrigger = document.getElementById('btn-upload-trigger');
+    const fileInput = document.getElementById('file-input');
+    const dropZone = document.getElementById('drop-zone');
+    const dragStatus = document.getElementById('drag-status');
+
+    const SAMPLE_JSON = {
+      "name": "SnipTools",
+      "version": "2.0.0",
+      "description": "Fast, private developer tools suite",
+      "isPrivate": true,
+      "features": [
+        "100% Client-Side Processing",
+        "Zero Log-in Required",
+        "Dark Mode First UI",
+        "Instant Keyboard Shortcuts"
+      ],
+      "metrics": {
+        "lighthouseScore": 100,
+        "toolsCount": 10,
+        "supportedFormats": ["JSON", "Base64", "UUID", "Timestamp", "MD5", "SHA256"]
+      },
+      "author": {
+        "name": "SnipTools Developer Team",
+        "contact": null
+      }
+    };
+
+    // Helper: format byte sizes
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    // Helper: Update line numbers in gutter
+    function updateGutter(textarea, gutter, highlightedLine = null) {
+      const lines = textarea.value.split('\n').length || 1;
+      let html = '';
+      for (let i = 1; i <= lines; i++) {
+        if (highlightedLine === i) {
+          html += `<div class="text-error font-bold bg-error/20 text-right pr-1 rounded">${i}</div>`;
+        } else {
+          html += `<div>${i}</div>`;
+        }
+      }
+      gutter.innerHTML = html;
+    }
+
+    // Synchronize scrolling between textarea and line gutter
+    jsonInput.addEventListener('scroll', () => {
+      inputGutter.scrollTop = jsonInput.scrollTop;
+    });
+
+    jsonOutput.addEventListener('scroll', () => {
+      outputGutter.scrollTop = jsonOutput.scrollTop;
+    });
+
+    // Helper: calculate object depth & key count
+    function getJsonMetrics(obj) {
+      let keyCount = 0;
+      let maxDepth = 0;
+
+      function traverse(current, currentDepth) {
+        if (currentDepth > maxDepth) maxDepth = currentDepth;
+
+        if (current !== null && typeof current === 'object') {
+          if (Array.isArray(current)) {
+            current.forEach(item => traverse(item, currentDepth + 1));
+          } else {
+            const keys = Object.keys(current);
+            keyCount += keys.length;
+            keys.forEach(key => traverse(current[key], currentDepth + 1));
+          }
+        }
+      }
+
+      traverse(obj, 1);
+      return { depth: maxDepth, keys: keyCount };
+    }
+
+    // Parse Error Line/Col extraction
+    function findErrorLineCol(jsonStr, errStr) {
+      let line = 1;
+      let col = 1;
+
+      // Check standard V8 "at position 123" pattern
+      const posMatch = errStr.match(/at position (\d+)/i) || errStr.match(/position (\d+)/i);
+      if (posMatch && posMatch[1]) {
+        const pos = parseInt(posMatch[1], 10);
+        const sub = jsonStr.slice(0, pos);
+        const lines = sub.split('\n');
+        line = lines.length;
+        col = lines[lines.length - 1].length + 1;
+        return { line, col };
+      }
+
+      // Check "at line X column Y" pattern
+      const lineColMatch = errStr.match(/line (\d+) column (\d+)/i);
+      if (lineColMatch) {
+        return { line: parseInt(lineColMatch[1], 10), col: parseInt(lineColMatch[2], 10) };
+      }
+
+      // Fallback: simple line scanner
+      return { line: 1, col: 1 };
+    }
+
+    // Primary Action: Format / Beautify or Minify
+    function processJSON(minify = false) {
+      const val = jsonInput.value.trim();
+
+      // Clear error state
+      errorContainer.classList.add('hidden');
+      updateGutter(jsonInput, inputGutter);
+
+      if (!val) {
+        jsonOutput.value = '';
+        updateGutter(jsonOutput, outputGutter);
+        statusBadge.textContent = 'Ready';
+        statusBadge.className = 'px-2 py-0.5 rounded-full text-[11px] font-semibold bg-bg-tertiary text-text-tertiary border border-border-primary';
+        inputStats.textContent = '0 lines • 0 B';
+        outputStats.textContent = '0 lines • 0 B';
+        jsonTreeStats.textContent = 'Depth: 0 • Keys: 0';
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(val);
+
+        // Determine indent
+        let indentOption = indentSelect.value;
+        let spaceParam = 2;
+        if (minify) {
+          spaceParam = 0;
+        } else if (indentOption === '4') {
+          spaceParam = 4;
+        } else if (indentOption === 'tab') {
+          spaceParam = '\t';
+        } else {
+          spaceParam = 2;
+        }
+
+        const formatted = minify ? JSON.stringify(parsed) : JSON.stringify(parsed, null, spaceParam);
+        jsonOutput.value = formatted;
+
+        // Update gutters
+        updateGutter(jsonInput, inputGutter);
+        updateGutter(jsonOutput, outputGutter);
+
+        // Update Status Badges & Stats
+        statusBadge.textContent = '✓ Valid JSON';
+        statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-success/20 text-success border border-success/30';
+
+        const inputBytes = new Blob([val]).size;
+        const inputLines = val.split('\n').length;
+        inputStats.textContent = `${inputLines} lines • ${formatBytes(inputBytes)}`;
+
+        const outputBytes = new Blob([formatted]).size;
+        const outputLines = formatted.split('\n').length;
+        outputStats.textContent = `${outputLines} lines • ${formatBytes(outputBytes)}`;
+
+        const metrics = getJsonMetrics(parsed);
+        jsonTreeStats.textContent = `Depth: ${metrics.depth} • Keys: ${metrics.keys}`;
+
+      } catch (err) {
+        jsonOutput.value = '';
+        updateGutter(jsonOutput, outputGutter);
+
+        const { line, col } = findErrorLineCol(val, err.message);
+
+        // Display error banner
+        errorLocationBadge.textContent = `Line ${line}, Col ${col}`;
+        errorMessage.textContent = err.message;
+        errorContainer.classList.remove('hidden');
+
+        // Highlight line in input gutter
+        updateGutter(jsonInput, inputGutter, line);
+
+        statusBadge.textContent = '✕ Syntax Error';
+        statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-error/20 text-error border border-error/30';
+
+        const inputBytes = new Blob([val]).size;
+        const inputLines = val.split('\n').length;
+        inputStats.textContent = `${inputLines} lines • ${formatBytes(inputBytes)}`;
+        outputStats.textContent = '0 lines • 0 B';
+        jsonTreeStats.textContent = 'Depth: 0 • Keys: 0';
+      }
+    }
+
+    // Input changes
+    jsonInput.addEventListener('input', () => {
+      processJSON(false);
+    });
+
+    indentSelect.addEventListener('change', () => {
+      if (jsonInput.value.trim()) processJSON(false);
+    });
+
+    btnFormat.addEventListener('click', () => {
+      processJSON(false);
+      if (jsonOutput.value) window.showToast('JSON Formatted successfully!', 'success');
+    });
+
+    btnMinify.addEventListener('click', () => {
+      processJSON(true);
+      if (jsonOutput.value) window.showToast('JSON Minified!', 'success');
+    });
+
+    btnSample.addEventListener('click', () => {
+      jsonInput.value = JSON.stringify(SAMPLE_JSON, null, 2);
+      processJSON(false);
+      window.showToast('Sample JSON loaded', 'info');
+    });
+
+    btnClear.addEventListener('click', () => {
+      jsonInput.value = '';
+      jsonOutput.value = '';
+      errorContainer.classList.add('hidden');
+      updateGutter(jsonInput, inputGutter);
+      updateGutter(jsonOutput, outputGutter);
+      statusBadge.textContent = 'Ready';
+      statusBadge.className = 'px-2 py-0.5 rounded-full text-[11px] font-semibold bg-bg-tertiary text-text-tertiary border border-border-primary';
+      inputStats.textContent = '0 lines • 0 B';
+      outputStats.textContent = '0 lines • 0 B';
+      jsonTreeStats.textContent = 'Depth: 0 • Keys: 0';
+      window.showToast('Cleared editor', 'info');
+    });
+
+    btnCloseError.addEventListener('click', () => {
+      errorContainer.classList.add('hidden');
+    });
+
+    btnCopy.addEventListener('click', () => {
+      if (!jsonOutput.value) {
+        window.showToast('Nothing to copy', 'error');
+        return;
+      }
+      window.copyToClipboard(jsonOutput.value, 'Formatted JSON copied!');
+    });
+
+    btnDownload.addEventListener('click', () => {
+      if (!jsonOutput.value) {
+        window.showToast('No output to download', 'error');
+        return;
+      }
+      const blob = new Blob([jsonOutput.value], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'formatted.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      window.showToast('Downloaded formatted.json', 'success');
+    });
+
+    // File Upload handling
+    btnUploadTrigger.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        jsonInput.value = evt.target.result;
+        processJSON(false);
+        window.showToast(`Loaded ${file.name}`, 'success');
+      };
+      reader.onerror = () => window.showToast('Failed to read file', 'error');
+      reader.readAsText(file);
+    });
+
+    // Drag & Drop File handling
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dragStatus.classList.remove('hidden');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dragStatus.classList.add('hidden');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dragStatus.classList.add('hidden');
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        const file = e.dataTransfer.files[0];
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          jsonInput.value = evt.target.result;
+          processJSON(false);
+          window.showToast(`Loaded ${file.name}`, 'success');
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // Global Tool Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Ctrl + Enter or Cmd + Enter => Format
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        processJSON(false);
+      }
+      // Ctrl + Shift + M => Minify
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'M' || e.key === 'm')) {
+        e.preventDefault();
+        processJSON(true);
+      }
+      // Ctrl + Alt + C => Copy Output
+      if ((e.ctrlKey || e.metaKey) && e.altKey && (e.key === 'C' || e.key === 'c')) {
+        e.preventDefault();
+        if (jsonOutput.value) window.copyToClipboard(jsonOutput.value, 'Formatted JSON copied!');
+      }
+    });
+  });
+</script>

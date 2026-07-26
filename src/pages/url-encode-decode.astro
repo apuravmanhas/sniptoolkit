@@ -1,0 +1,600 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "URL Encoder & Decoder",
+  "operatingSystem": "All",
+  "applicationCategory": "DeveloperApplication",
+  "url": "https://sniptools.tools/url-encode-decode",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Free online URL encoder and decoder. Convert special characters to percent-encoded format or decode percent-encoded URLs instantly."
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "QAPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between encodeURI and encodeURIComponent?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "encodeURI is meant for complete URLs and preserves protocol, domain, and query delimiters like 'http://', '?', '=', and '&'. encodeURIComponent is meant for individual parameter values and encodes all special characters including '/', '?', '=', '&', and '#'."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do special characters need to be URL encoded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "URLs can only safely contain standard ASCII characters. Special characters like spaces, non-Latin characters, ampersands, or slashes must be converted into valid percent-encoded formats (like %20 for space or %26 for &) so web servers and web browsers interpret query parameters correctly without breaking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is live URL encoding private and secure on SnipTools?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, 100%. All URL encoding and decoding operations happen locally inside your browser using JavaScript's native string methods. No inputs or URLs are ever logged or transmitted to any server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What causes a 'URI Malformed' error during URL decoding?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 'URI Malformed' error occurs when a percent sign (%) is followed by invalid hexadecimal characters (e.g. %ZZ) or incomplete UTF-8 byte sequences. SnipTools safely catches this error and highlights the invalid percent sequence for you."
+      }
+    }
+  ]
+};
+
+const combinedSchema = [softwareSchema, faqSchema];
+
+const relatedTools = [
+  {
+    name: 'UUID Generator',
+    slug: '/uuid-generator',
+    icon: '#',
+    category: 'Generator',
+    description: 'Generate random UUIDs (v4 & v7) in bulk with custom formatting options.'
+  },
+  {
+    name: 'Base64 Encode & Decode',
+    slug: '/base64',
+    icon: '⟨⟩',
+    category: 'Encoding',
+    description: 'Encode text or files to Base64 format and decode Base64 strings back to original format.'
+  },
+  {
+    name: 'Hash Generator',
+    slug: '/hash-generator',
+    icon: '🔒',
+    category: 'Security',
+    description: 'Generate secure cryptographic hashes including MD5, SHA-1, SHA-256, and SHA-512.'
+  },
+  {
+    name: 'JSON Formatter',
+    slug: '/json-formatter',
+    icon: '{ }',
+    category: 'Data',
+    description: 'Format, validate, beautify, and minify JSON data instantly with line error highlighting.'
+  }
+];
+---
+
+<BaseLayout
+  title="URL Encode & Decode Online — Free Percent Encoder | SnipTools"
+  description="Encode and decode URLs online instantly. Free percent-encoding tool for full URLs or URI components with live preview and special character support."
+  structuredData={combinedSchema}
+>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <!-- Breadcrumb & Header -->
+    <div class="mb-8 animate-fade-in">
+      <nav class="flex items-center gap-2 text-xs text-text-tertiary mb-3">
+        <a href="/" class="hover:text-text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/#encoding" class="hover:text-text-primary transition-colors">Encoding</a>
+        <span>/</span>
+        <span class="text-text-secondary font-medium">URL Encode & Decode</span>
+      </nav>
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-semibold mb-3">
+            <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+            Percent-Encoding & Decoding
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary">
+            URL Encode & Decode Online
+          </h1>
+          <p class="text-sm text-text-secondary mt-2 max-w-2xl">
+            Safely encode special characters for query parameters or decode percent-encoded strings. Supports full URL encoding, component encoding, RFC 3986 strict format, and live preview.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Workspace Card -->
+    <div class="rounded-2xl border border-border-primary bg-bg-secondary p-4 sm:p-6 md:p-8 shadow-xl mb-12 animate-slide-up">
+      <!-- Options & Mode Selector Bar -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-border-primary">
+        <!-- Mode Tabs -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-text-secondary mr-1">Mode:</span>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-1 p-1 bg-bg-tertiary rounded-xl border border-border-primary">
+            <button
+              id="mode-component"
+              class="mode-btn active px-3 py-1.5 text-xs font-semibold rounded-lg bg-bg-secondary text-text-primary border border-border-secondary shadow-sm transition-all cursor-pointer"
+              data-mode="component"
+            >
+              URI Component
+            </button>
+            <button
+              id="mode-full"
+              class="mode-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer"
+              data-mode="full"
+            >
+              Full URL
+            </button>
+            <button
+              id="mode-strict"
+              class="mode-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer col-span-2 sm:col-span-1"
+              data-mode="strict"
+            >
+              RFC 3986 Strict
+            </button>
+          </div>
+        </div>
+
+        <!-- Controls: Live Conversion Toggle & Preset Samples -->
+        <div class="flex flex-wrap items-center gap-4">
+          <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-text-secondary hover:text-text-primary">
+            <input id="toggle-live" type="checkbox" checked class="sr-only peer" />
+            <div class="w-8 h-4.5 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-tertiary peer-checked:after:bg-white after:border-border-primary after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-accent relative"></div>
+            <span>Live Conversion</span>
+          </label>
+
+          <button
+            id="btn-sample"
+            class="px-3 py-1.5 rounded-lg bg-bg-tertiary border border-border-primary hover:border-border-secondary text-text-secondary hover:text-text-primary text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span>Load Sample</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-4 py-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            id="btn-encode"
+            class="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white text-xs font-bold tracking-wide transition-all shadow-md shadow-accent/20 active:scale-95 cursor-pointer flex items-center gap-2"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+            <span>Encode</span>
+            <kbd class="hidden sm:inline-block ml-1 text-[10px] font-mono bg-white/20 px-1.5 py-0.5 rounded text-white font-normal">Ctrl+Enter</kbd>
+          </button>
+
+          <button
+            id="btn-decode"
+            class="px-5 py-2.5 rounded-xl bg-bg-tertiary border border-border-secondary hover:border-accent hover:text-text-primary text-text-primary text-xs font-bold tracking-wide transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 8v12m0 0l4-4m-4 4l-4-4M7 16V4m0 0L3 8m4-4l4 4"/></svg>
+            <span>Decode</span>
+          </button>
+
+          <button
+            id="btn-swap"
+            class="px-3 py-2 rounded-xl bg-bg-tertiary border border-border-primary hover:border-border-secondary text-text-secondary hover:text-text-primary text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
+            title="Swap input and output text"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3L4 7l4 4"/><path d="M4 7h16"/><path d="M16 21l4-4-4-4"/><path d="M20 17H4"/></svg>
+            <span>Swap</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            id="btn-clear"
+            class="px-3 py-2 rounded-xl bg-bg-tertiary border border-border-primary hover:border-error/50 hover:text-error text-text-secondary text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            <span>Clear</span>
+            <kbd class="hidden sm:inline-block text-[10px] font-mono text-text-tertiary bg-bg-secondary px-1 rounded">Esc</kbd>
+          </button>
+
+          <button
+            id="btn-copy"
+            class="px-4 py-2 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent hover:text-text-primary text-text-secondary text-xs font-semibold transition-all cursor-pointer flex items-center gap-2"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy Output</span>
+            <kbd class="hidden sm:inline-block text-[10px] font-mono text-text-tertiary bg-bg-secondary px-1 rounded">Ctrl+Shift+C</kbd>
+          </button>
+        </div>
+      </div>
+
+      <!-- Split Textarea Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-2">
+        <!-- Input Box -->
+        <div class="flex flex-col">
+          <div class="flex items-center justify-between mb-2">
+            <label for="url-input" class="text-xs font-semibold uppercase tracking-wider text-text-secondary flex items-center gap-2">
+              <span>Input String / URL</span>
+              <span id="input-stats" class="text-[11px] font-mono text-text-tertiary font-normal">0 chars (0 bytes)</span>
+            </label>
+          </div>
+          <div class="relative flex-1 rounded-xl border border-border-primary bg-bg-tertiary focus-within:border-accent transition-colors overflow-hidden">
+            <textarea
+              id="url-input"
+              rows="10"
+              class="w-full h-full p-4 bg-transparent font-mono text-sm text-text-primary placeholder-text-tertiary outline-none resize-none leading-relaxed"
+              placeholder="Paste URL or string here (e.g. https://example.com/search?q=hello world & developer)..."
+              spellcheck="false"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Output Box -->
+        <div class="flex flex-col">
+          <div class="flex items-center justify-between mb-2">
+            <label for="url-output" class="text-xs font-semibold uppercase tracking-wider text-text-secondary flex items-center gap-2">
+              <span>Result Output</span>
+              <span id="output-stats" class="text-[11px] font-mono text-text-tertiary font-normal">0 chars (0 bytes)</span>
+            </label>
+            <span id="ratio-badge" class="hidden text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/20">
+              0%
+            </span>
+          </div>
+          <div class="relative flex-1 rounded-xl border border-border-primary bg-bg-tertiary overflow-hidden">
+            <textarea
+              id="url-output"
+              readonly
+              rows="10"
+              class="w-full h-full p-4 bg-transparent font-mono text-sm text-text-primary placeholder-text-tertiary outline-none resize-none select-all leading-relaxed"
+              placeholder="Converted result will appear here..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Alert Banner -->
+      <div id="error-banner" class="hidden mt-4 p-3.5 rounded-xl bg-error/10 border border-error/30 text-error text-xs font-medium flex items-center gap-3 animate-fade-in">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="flex-1 min-w-0" id="error-message">
+          URI Malformed: Invalid percent-encoding sequence detected.
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Use Section -->
+    <section class="mb-12 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        How to Use the URL Encoder & Decoder
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+        <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mb-3">1</div>
+          <h3 class="text-sm font-semibold text-text-primary mb-1">Paste Your String</h3>
+          <p class="text-xs text-text-secondary">Type or paste any URL, query parameter, or text containing special characters into the input box.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mb-3">2</div>
+          <h3 class="text-sm font-semibold text-text-primary mb-1">Select Encoding Mode</h3>
+          <p class="text-xs text-text-secondary">Choose URI Component (encodes all delimiters), Full URL (preserves http/path structure), or RFC 3986 Strict.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mb-3">3</div>
+          <h3 class="text-sm font-semibold text-text-primary mb-1">Encode or Decode</h3>
+          <p class="text-xs text-text-secondary">Click "Encode" to escape characters or "Decode" to convert %20 back to readable spaces. Live mode works automatically!</p>
+        </div>
+        <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mb-3">4</div>
+          <h3 class="text-sm font-semibold text-text-primary mb-1">Copy Result</h3>
+          <p class="text-xs text-text-secondary">Click "Copy Output" or press Ctrl+Shift+C to copy the output directly to your system clipboard.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-12 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <div class="mb-6">
+        <h2 class="text-xl font-bold text-text-primary tracking-tight">Frequently Asked Questions</h2>
+        <p class="text-xs text-text-secondary mt-1">Everything you need to know about percent-encoding, RFC standards, and security.</p>
+      </div>
+
+      <div class="space-y-3">
+        {faqSchema.mainEntity.map(faq => (
+          <details class="group rounded-xl border border-border-primary bg-bg-tertiary p-4 [&_summary::-webkit-details-marker]:hidden transition-all duration-200">
+            <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-sm font-semibold text-text-primary">
+              <span>{faq.name}</span>
+              <span class="shrink-0 rounded-full p-1 text-text-tertiary group-open:-rotate-180 transition-transform duration-200">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
+            </summary>
+            <p class="mt-3 text-xs leading-relaxed text-text-secondary border-t border-border-primary pt-3">
+              {faq.acceptedAnswer.text}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related Tools Section -->
+    <section>
+      <h2 class="text-xl font-bold text-text-primary mb-6">Related Developer Tools</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {relatedTools.map(tool => (
+          <a
+            href={tool.slug}
+            class="group p-5 rounded-xl bg-bg-secondary border border-border-primary hover:border-border-hover transition-all duration-200 no-underline flex flex-col justify-between hover:-translate-y-0.5"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-lg bg-bg-tertiary border border-border-primary flex items-center justify-center font-bold text-text-primary group-hover:border-accent transition-colors">
+                  {tool.icon}
+                </span>
+                <span class="text-[10px] uppercase font-semibold tracking-wider text-text-tertiary px-2 py-0.5 rounded bg-bg-tertiary">
+                  {tool.category}
+                </span>
+              </div>
+              <h3 class="text-sm font-bold text-text-primary group-hover:text-accent transition-colors mb-1">
+                {tool.name}
+              </h3>
+              <p class="text-xs text-text-secondary leading-relaxed line-clamp-2">
+                {tool.description}
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-border-primary text-[11px] font-semibold text-text-tertiary group-hover:text-text-primary flex items-center justify-between">
+              <span>Open Tool</span>
+              <span>→</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  // State
+  let currentMode = 'component'; // 'component', 'full', 'strict'
+  let lastAction = 'encode'; // 'encode', 'decode'
+
+  // DOM Elements
+  const urlInput = document.getElementById('url-input');
+  const urlOutput = document.getElementById('url-output');
+  const toggleLive = document.getElementById('toggle-live');
+  const btnEncode = document.getElementById('btn-encode');
+  const btnDecode = document.getElementById('btn-decode');
+  const btnSwap = document.getElementById('btn-swap');
+  const btnClear = document.getElementById('btn-clear');
+  const btnCopy = document.getElementById('btn-copy');
+  const btnSample = document.getElementById('btn-sample');
+  const inputStats = document.getElementById('input-stats');
+  const outputStats = document.getElementById('output-stats');
+  const ratioBadge = document.getElementById('ratio-badge');
+  const errorBanner = document.getElementById('error-banner');
+  const errorMessage = document.getElementById('error-message');
+
+  const modeBtns = document.querySelectorAll('.mode-btn');
+
+  // Utility to calculate byte length of UTF-8 string
+  function getByteLength(str) {
+    return new Blob([str]).size;
+  }
+
+  // RFC 3986 Strict encode helper
+  function encodeRFC3986(str) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+      return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+    });
+  }
+
+  // Encode function
+  function processEncode() {
+    lastAction = 'encode';
+    hideError();
+    const val = urlInput.value;
+    if (!val) {
+      urlOutput.value = '';
+      updateStats();
+      return;
+    }
+
+    try {
+      let result = '';
+      if (currentMode === 'full') {
+        result = encodeURI(val);
+      } else if (currentMode === 'strict') {
+        result = encodeRFC3986(val);
+      } else {
+        result = encodeURIComponent(val);
+      }
+      urlOutput.value = result;
+      updateStats();
+    } catch (err) {
+      showError('Encoding Error: ' + err.message);
+    }
+  }
+
+  // Decode function
+  function processDecode() {
+    lastAction = 'decode';
+    hideError();
+    const val = urlInput.value;
+    if (!val) {
+      urlOutput.value = '';
+      updateStats();
+      return;
+    }
+
+    try {
+      let result = '';
+      if (currentMode === 'full') {
+        result = decodeURI(val);
+      } else {
+        result = decodeURIComponent(val);
+      }
+      urlOutput.value = result;
+      updateStats();
+    } catch (err) {
+      showError('URI Malformed: Input contains invalid percent-encoding sequence (e.g. %ZZ or incomplete UTF-8).');
+    }
+  }
+
+  function updateStats() {
+    const inVal = urlInput.value;
+    const outVal = urlOutput.value;
+
+    const inChars = inVal.length;
+    const inBytes = getByteLength(inVal);
+    const outChars = outVal.length;
+    const outBytes = getByteLength(outVal);
+
+    inputStats.textContent = `${inChars} chars (${inBytes} bytes)`;
+    outputStats.textContent = `${outChars} chars (${outBytes} bytes)`;
+
+    if (inBytes > 0 && outBytes > 0) {
+      const diff = Math.round(((outBytes - inBytes) / inBytes) * 100);
+      ratioBadge.classList.remove('hidden');
+      if (diff > 0) {
+        ratioBadge.textContent = `+${diff}% size`;
+        ratioBadge.className = 'text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/20';
+      } else if (diff < 0) {
+        ratioBadge.textContent = `${diff}% size`;
+        ratioBadge.className = 'text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-success/10 text-success border border-success/20';
+      } else {
+        ratioBadge.textContent = `0% change`;
+        ratioBadge.className = 'text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-bg-tertiary text-text-tertiary border border-border-primary';
+      }
+    } else {
+      ratioBadge.classList.add('hidden');
+    }
+  }
+
+  function showError(msg) {
+    errorMessage.textContent = msg;
+    errorBanner.classList.remove('hidden');
+  }
+
+  function hideError() {
+    errorBanner.classList.add('hidden');
+  }
+
+  // Event Listeners
+  urlInput.addEventListener('input', () => {
+    if (toggleLive.checked) {
+      if (lastAction === 'decode') {
+        processDecode();
+      } else {
+        processEncode();
+      }
+    } else {
+      updateStats();
+    }
+  });
+
+  btnEncode.addEventListener('click', () => {
+    processEncode();
+    if (window.showToast) window.showToast('URL Encoded successfully!', 'success');
+  });
+
+  btnDecode.addEventListener('click', () => {
+    processDecode();
+    if (!errorBanner.classList.contains('hidden')) return;
+    if (window.showToast) window.showToast('URL Decoded successfully!', 'success');
+  });
+
+  btnSwap.addEventListener('click', () => {
+    const temp = urlInput.value;
+    urlInput.value = urlOutput.value;
+    urlOutput.value = temp;
+    lastAction = lastAction === 'encode' ? 'decode' : 'encode';
+    updateStats();
+    if (window.showToast) window.showToast('Input & Output swapped!', 'info');
+  });
+
+  btnClear.addEventListener('click', () => {
+    urlInput.value = '';
+    urlOutput.value = '';
+    hideError();
+    updateStats();
+    urlInput.focus();
+    if (window.showToast) window.showToast('Cleared text', 'info');
+  });
+
+  btnCopy.addEventListener('click', () => {
+    if (!urlOutput.value) {
+      if (window.showToast) window.showToast('Nothing to copy!', 'info');
+      return;
+    }
+    if (window.copyToClipboard) {
+      window.copyToClipboard(urlOutput.value, 'Output copied to clipboard!');
+    }
+  });
+
+  btnSample.addEventListener('click', () => {
+    urlInput.value = 'https://sniptools.tools/search?q=developer tools & code!&category=dev#tag 🚀';
+    processEncode();
+    if (window.showToast) window.showToast('Sample URL loaded!', 'info');
+  });
+
+  // Mode Selection
+  modeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modeBtns.forEach(b => {
+        b.classList.remove('active', 'bg-bg-secondary', 'text-text-primary', 'border', 'border-border-secondary', 'shadow-sm', 'font-semibold');
+        b.classList.add('text-text-secondary', 'font-medium');
+      });
+      btn.classList.add('active', 'bg-bg-secondary', 'text-text-primary', 'border', 'border-border-secondary', 'shadow-sm', 'font-semibold');
+      btn.classList.remove('text-text-secondary', 'font-medium');
+
+      currentMode = btn.getAttribute('data-mode');
+      if (lastAction === 'decode') {
+        processDecode();
+      } else {
+        processEncode();
+      }
+    });
+  });
+
+  // Keyboard Shortcuts
+  document.addEventListener('keydown', (e) => {
+    // Ctrl + Enter to process
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      if (lastAction === 'decode') {
+        processDecode();
+      } else {
+        processEncode();
+      }
+    }
+    // Ctrl + Shift + C to copy output
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'C' || e.key === 'c')) {
+      e.preventDefault();
+      if (urlOutput.value && window.copyToClipboard) {
+        window.copyToClipboard(urlOutput.value, 'Output copied to clipboard!');
+      }
+    }
+    // Escape to clear
+    if (e.key === 'Escape' && (document.activeElement === urlInput || document.activeElement === urlOutput)) {
+      urlInput.value = '';
+      urlOutput.value = '';
+      hideError();
+      updateStats();
+    }
+  });
+
+  // Initial load
+  updateStats();
+</script>

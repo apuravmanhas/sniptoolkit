@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Privacy Policy - SnipTools",
+  "description": "Privacy policy for SnipTools. All processing is 100% local in your browser."
+};
+---
+
+<BaseLayout
+  title="Privacy Policy — SnipTools"
+  description="SnipTools Privacy Policy. We process all data 100% locally in your web browser. Zero server logs, zero data tracking."
+  structuredData={structuredData}
+>
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <!-- Header -->
+    <div class="mb-10 text-center">
+      <span class="inline-block px-3 py-1 text-xs font-semibold text-accent bg-accent/10 border border-accent/20 rounded-full mb-3">
+        Legal & Privacy
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight mb-3">Privacy Policy</h1>
+      <p class="text-sm text-text-secondary">Last updated: July 2026</p>
+    </div>
+
+    <!-- Content Card -->
+    <div class="rounded-2xl border border-border-primary bg-bg-secondary p-6 sm:p-10 space-y-8 text-sm text-text-secondary leading-relaxed">
+      <section>
+        <h2 class="text-lg font-bold text-text-primary mb-3 flex items-center gap-2">
+          <span class="text-accent font-mono">01.</span> 100% Client-Side Architecture
+        </h2>
+        <p>
+          At SnipTools, privacy is not just a feature—it is our fundamental design principle. All tools provided on <strong class="text-text-primary">sniptools.tools</strong> run 100% locally inside your web browser using JavaScript, WebAssembly, and Web APIs.
+        </p>
+        <p class="mt-2">
+          When you paste JSON, encode Base64 strings, generate passwords or cryptographic hashes, count words, or format code, <strong class="text-text-primary">your data is never sent to any server</strong>. Processing occurs entirely in your device's memory.
+        </p>
+      </section>
+
+      <section class="border-t border-border-primary pt-6">
+        <h2 class="text-lg font-bold text-text-primary mb-3 flex items-center gap-2">
+          <span class="text-accent font-mono">02.</span> Information We Collect
+        </h2>
+        <p>
+          Because our tools run client-side, we do not collect, store, or log any text, source code, tokens, keys, passwords, or files you input into our tools.
+        </p>
+        <ul class="list-disc pl-5 mt-2 space-y-1.5 text-xs text-text-secondary">
+          <li><strong>Zero Input Logging:</strong> We do not log inputs or outputs of any tool.</li>
+          <li><strong>Zero Database Storage:</strong> We do not maintain any user accounts or databases.</li>
+          <li><strong>Local Storage:</strong> Some tools may save temporary preferences (such as dark mode toggle or recent tools list) in your browser's <code class="text-accent font-mono">localStorage</code>. This data never leaves your device.</li>
+        </ul>
+      </section>
+
+      <section class="border-t border-border-primary pt-6">
+        <h2 class="text-lg font-bold text-text-primary mb-3 flex items-center gap-2">
+          <span class="text-accent font-mono">03.</span> Analytics & Performance
+        </h2>
+        <p>
+          To monitor site traffic, performance, and broken links, we use standard, privacy-preserving web analytics (such as Google Analytics / Cloudflare Web Analytics). These services gather aggregated metrics like page views, referrer URLs, browser type, and country. No personally identifiable information (PII) or tool input data is ever collected or tied to analytics logs.
+        </p>
+      </section>
+
+      <section class="border-t border-border-primary pt-6">
+        <h2 class="text-lg font-bold text-text-primary mb-3 flex items-center gap-2">
+          <span class="text-accent font-mono">04.</span> Advertising (Google AdSense)
+        </h2>
+        <p>
+          SnipTools may display third-party advertisements (such as Google AdSense) to keep all tools free. Third-party ad vendors may use cookies or web beacons to serve ads based on prior visits to our site or other websites.
+        </p>
+        <p class="mt-2">
+          You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener" class="text-accent hover:underline">Google Ads Settings</a> or <a href="https://www.aboutads.info" target="_blank" rel="noopener" class="text-accent hover:underline">aboutads.info</a>.
+        </p>
+      </section>
+
+      <section class="border-t border-border-primary pt-6">
+        <h2 class="text-lg font-bold text-text-primary mb-3 flex items-center gap-2">
+          <span class="text-accent font-mono">05.</span> Contact Us
+        </h2>
+        <p>
+          If you have any questions regarding this Privacy Policy or security practices, please contact us via our <a href="/contact" class="text-accent hover:underline">Contact Page</a>.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

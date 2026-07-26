@@ -1,0 +1,773 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Unix Timestamp Converter",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "url": "https://sniptools.tools/timestamp-converter",
+      "description": "Convert Unix epoch timestamps to human-readable date & time (ISO 8601, UTC, Local, Relative time) and convert dates to timestamps instantly in your browser.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a Unix timestamp?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Unix timestamp (also known as Epoch time or POSIX time) is the number of seconds that have elapsed since January 1, 1970, 00:00:00 UTC (excluding leap seconds)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I tell if a timestamp is in seconds or milliseconds?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "10-digit timestamps (e.g., 1700000000) are in seconds, whereas 13-digit timestamps (e.g., 1700000000000) are in milliseconds. SnipTools automatically detects and handles both formats."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Year 2038 problem (Y2K38)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On January 19, 2038 at 03:14:07 UTC, 32-bit signed integer timestamps will overflow. Modern systems use 64-bit integers to represent Unix timestamps safely for billions of years into the future."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this tool upload my date inputs to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. All timestamp conversions occur 100% locally in your web browser using JavaScript's native Date object. Your data never leaves your device."
+          }
+        }
+      ]
+    }
+  ]
+};
+
+const relatedTools = [
+  {
+    name: 'Hash Generator (MD5 / SHA)',
+    slug: '/hash-generator',
+    icon: '🔒',
+    category: 'Security',
+    description: 'Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from text or files.'
+  },
+  {
+    name: 'JSON Formatter & Validator',
+    slug: '/json-formatter',
+    icon: '{ }',
+    category: 'Data',
+    description: 'Format, validate, beautify, and minify JSON data instantly.'
+  },
+  {
+    name: 'Base64 Encode & Decode',
+    slug: '/base64',
+    icon: '⟨⟩',
+    category: 'Encoding',
+    description: 'Encode text or files to Base64 and decode Base64 back to original format.'
+  },
+  {
+    name: 'UUID Generator',
+    slug: '/uuid-generator',
+    icon: '#',
+    category: 'Generator',
+    description: 'Generate random UUIDs (v4 & v7) in bulk with custom formatting options.'
+  }
+];
+---
+
+<BaseLayout
+  title="Unix Timestamp Converter Online — Epoch to Date | SnipTools"
+  description="Convert Unix timestamps (epoch) to human-readable date & time (ISO 8601, UTC, Local, Relative time) and date to timestamp. 100% free client-side tool."
+  canonicalUrl="https://sniptools.tools/timestamp-converter"
+  structuredData={structuredData}
+>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-semibold uppercase tracking-wider mb-3">
+        <span>⏱ Converter</span>
+        <span>•</span>
+        <span>Client-Side</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight mb-2">
+        Unix Timestamp Converter
+      </h1>
+      <p class="text-text-secondary text-sm sm:text-base max-w-3xl">
+        Convert Unix epoch timestamps to human-readable dates (UTC, Local, ISO 8601, Relative) and convert dates to epoch timestamps instantly.
+      </p>
+    </div>
+
+    <!-- Current Live Epoch Banner -->
+    <div class="mb-10 p-5 rounded-2xl bg-bg-secondary border border-border-primary shadow-lg shadow-black/20 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-48 h-48 bg-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="relative flex h-3 w-3">
+            <span id="live-pulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+            <span id="live-dot" class="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
+          </div>
+          <div>
+            <div class="text-xs font-semibold uppercase tracking-wider text-text-tertiary flex items-center gap-2">
+              <span>Current Unix Epoch Time</span>
+              <button id="toggle-ticker-btn" class="text-accent hover:underline text-[11px] font-normal cursor-pointer" title="Pause or resume live clock">
+                (Pause)
+              </button>
+            </div>
+            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mt-1">
+              <span id="current-seconds" class="text-2xl sm:text-3xl font-mono font-bold text-text-primary tracking-tight">
+                1700000000
+              </span>
+              <span class="text-xs text-text-tertiary font-mono">seconds</span>
+              <span class="text-text-tertiary">|</span>
+              <span id="current-millis" class="text-lg sm:text-xl font-mono font-semibold text-accent tracking-tight">
+                1700000000000
+              </span>
+              <span class="text-xs text-text-tertiary font-mono">ms</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Copy Buttons for Current Epoch -->
+        <div class="flex items-center gap-2 self-start md:self-auto">
+          <button
+            id="copy-current-sec-btn"
+            class="px-3.5 py-2 rounded-lg bg-bg-tertiary border border-border-secondary hover:border-accent text-xs font-medium text-text-primary hover:text-accent transition-colors flex items-center gap-1.5 cursor-pointer"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy Sec</span>
+          </button>
+          <button
+            id="copy-current-ms-btn"
+            class="px-3.5 py-2 rounded-lg bg-bg-tertiary border border-border-secondary hover:border-accent text-xs font-medium text-text-primary hover:text-accent transition-colors flex items-center gap-1.5 cursor-pointer"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy Ms</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid: 2 Column Layout (Timestamp -> Date & Date -> Timestamp) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+      
+      <!-- CARD 1: Timestamp to Date -->
+      <div class="p-6 rounded-2xl bg-bg-secondary border border-border-primary flex flex-col justify-between shadow-md">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-text-primary flex items-center gap-2">
+              <span class="text-accent">1.</span> Timestamp to Human Date
+            </h2>
+            <span class="text-xs text-text-tertiary font-mono bg-bg-tertiary px-2 py-0.5 rounded border border-border-primary">Epoch → Date</span>
+          </div>
+
+          <!-- Input -->
+          <div class="mb-4">
+            <label for="timestamp-input" class="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
+              Enter Unix Timestamp (Seconds or Milliseconds)
+            </label>
+            <div class="relative">
+              <input
+                type="text"
+                id="timestamp-input"
+                placeholder="e.g. 1774567890 or 1774567890123"
+                class="w-full px-4 py-3 rounded-xl bg-bg-tertiary border border-border-secondary focus:border-accent text-text-primary font-mono text-sm outline-none transition-all placeholder:text-text-tertiary"
+              />
+              <button
+                id="clear-ts-input"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-primary text-xs px-2 py-1 rounded bg-bg-hover hidden"
+              >
+                Clear
+              </button>
+            </div>
+            <div class="flex items-center justify-between mt-2 text-xs text-text-tertiary">
+              <span id="ts-detected-unit" class="text-accent font-medium">Auto-detected: Seconds</span>
+              <div class="flex items-center gap-3">
+                <span class="text-text-tertiary">Force unit:</span>
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="ts-unit" value="auto" checked class="accent-accent" /> Auto
+                </label>
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="ts-unit" value="sec" class="accent-accent" /> Sec (10d)
+                </label>
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="ts-unit" value="ms" class="accent-accent" /> Ms (13d)
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="mb-6">
+            <span class="block text-xs font-semibold text-text-tertiary uppercase tracking-wider mb-2">Quick Presets</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button class="ts-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-accent hover:text-accent transition-all cursor-pointer" data-preset="now">Now</button>
+              <button class="ts-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-accent hover:text-accent transition-all cursor-pointer" data-preset="start-today">Today 00:00</button>
+              <button class="ts-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-accent hover:text-accent transition-all cursor-pointer" data-preset="end-today">Today 23:59</button>
+              <button class="ts-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-accent hover:text-accent transition-all cursor-pointer" data-preset="start-year">Jan 1 00:00</button>
+              <button class="ts-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-accent hover:text-accent transition-all cursor-pointer" data-preset="epoch-zero">Epoch 0</button>
+            </div>
+          </div>
+
+          <!-- Conversion Output Cards -->
+          <div class="space-y-3">
+            <!-- Relative Time (Featured) -->
+            <div class="p-3.5 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-between">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-accent block">Relative Time</span>
+                <span id="out-relative" class="text-sm font-semibold text-text-primary">Just now</span>
+              </div>
+              <button class="copy-out-btn px-2.5 py-1 rounded bg-accent/20 hover:bg-accent/30 text-accent text-xs font-semibold transition-colors cursor-pointer" data-target="out-relative">Copy</button>
+            </div>
+
+            <!-- ISO 8601 -->
+            <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary flex items-center justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <span class="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider block">ISO 8601 (UTC)</span>
+                <span id="out-iso" class="text-xs font-mono text-text-primary truncate block">--</span>
+              </div>
+              <button class="copy-out-btn px-2.5 py-1 rounded bg-bg-hover hover:bg-border-primary text-text-secondary hover:text-text-primary text-xs transition-colors cursor-pointer" data-target="out-iso">Copy</button>
+            </div>
+
+            <!-- UTC / GMT -->
+            <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary flex items-center justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <span class="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider block">UTC String (GMT)</span>
+                <span id="out-utc" class="text-xs font-mono text-text-primary truncate block">--</span>
+              </div>
+              <button class="copy-out-btn px-2.5 py-1 rounded bg-bg-hover hover:bg-border-primary text-text-secondary hover:text-text-primary text-xs transition-colors cursor-pointer" data-target="out-utc">Copy</button>
+            </div>
+
+            <!-- Local Time -->
+            <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary flex items-center justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <span class="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider block">Your Local Time</span>
+                <span id="out-local" class="text-xs font-mono text-text-primary truncate block">--</span>
+              </div>
+              <button class="copy-out-btn px-2.5 py-1 rounded bg-bg-hover hover:bg-border-primary text-text-secondary hover:text-text-primary text-xs transition-colors cursor-pointer" data-target="out-local">Copy</button>
+            </div>
+
+            <!-- Additional Details Grid -->
+            <div class="grid grid-cols-2 gap-2 pt-2">
+              <div class="p-2.5 rounded-lg bg-bg-tertiary/60 border border-border-primary">
+                <span class="text-[10px] text-text-tertiary uppercase font-medium block">Day of Week</span>
+                <span id="out-dayofweek" class="text-xs font-medium text-text-primary">--</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-bg-tertiary/60 border border-border-primary">
+                <span class="text-[10px] text-text-tertiary uppercase font-medium block">Day of Year</span>
+                <span id="out-dayofyear" class="text-xs font-medium text-text-primary">--</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-bg-tertiary/60 border border-border-primary">
+                <span class="text-[10px] text-text-tertiary uppercase font-medium block">ISO Week Number</span>
+                <span id="out-weeknum" class="text-xs font-medium text-text-primary">--</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-bg-tertiary/60 border border-border-primary">
+                <span class="text-[10px] text-text-tertiary uppercase font-medium block">Leap Year?</span>
+                <span id="out-leapyear" class="text-xs font-medium text-text-primary">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: Date to Timestamp -->
+      <div class="p-6 rounded-2xl bg-bg-secondary border border-border-primary flex flex-col justify-between shadow-md">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-text-primary flex items-center gap-2">
+              <span class="text-purple">2.</span> Date to Unix Timestamp
+            </h2>
+            <span class="text-xs text-text-tertiary font-mono bg-bg-tertiary px-2 py-0.5 rounded border border-border-primary">Date → Epoch</span>
+          </div>
+
+          <!-- Date Picker Input -->
+          <div class="mb-4">
+            <label for="date-picker-input" class="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
+              Select Date & Time (Local Time)
+            </label>
+            <input
+              type="datetime-local"
+              id="date-picker-input"
+              step="1"
+              class="w-full px-4 py-3 rounded-xl bg-bg-tertiary border border-border-secondary focus:border-purple text-text-primary font-mono text-sm outline-none transition-all cursor-pointer"
+            />
+          </div>
+
+          <!-- Quick Date Presets -->
+          <div class="mb-6">
+            <span class="block text-xs font-semibold text-text-tertiary uppercase tracking-wider mb-2">Quick Presets</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button class="date-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-purple hover:text-purple transition-all cursor-pointer" data-datepreset="now">Now</button>
+              <button class="date-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-purple hover:text-purple transition-all cursor-pointer" data-datepreset="today-start">Today 00:00</button>
+              <button class="date-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-purple hover:text-purple transition-all cursor-pointer" data-datepreset="today-end">Today 23:59</button>
+              <button class="date-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-purple hover:text-purple transition-all cursor-pointer" data-datepreset="yesterday">Yesterday</button>
+              <button class="date-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-purple hover:text-purple transition-all cursor-pointer" data-datepreset="tomorrow">Tomorrow</button>
+              <button class="date-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-purple hover:text-purple transition-all cursor-pointer" data-datepreset="start-year">Jan 1 00:00</button>
+              <button class="date-preset-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-bg-tertiary border border-border-primary hover:border-purple hover:text-purple transition-all cursor-pointer" data-datepreset="end-year">Dec 31 23:59</button>
+            </div>
+          </div>
+
+          <!-- Output Timestamp Cards -->
+          <div class="space-y-3">
+            <!-- Seconds Epoch Output -->
+            <div class="p-3.5 rounded-xl bg-purple/10 border border-purple/30 flex items-center justify-between">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-purple block">Unix Timestamp (Seconds)</span>
+                <span id="out-sec-epoch" class="text-xl font-mono font-bold text-text-primary">--</span>
+              </div>
+              <button class="copy-out-btn px-3 py-1.5 rounded bg-purple/20 hover:bg-purple/30 text-purple text-xs font-semibold transition-colors cursor-pointer" data-target="out-sec-epoch">Copy Sec</button>
+            </div>
+
+            <!-- Milliseconds Epoch Output -->
+            <div class="p-3.5 rounded-xl bg-bg-tertiary border border-border-primary flex items-center justify-between">
+              <div>
+                <span class="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider block">Unix Timestamp (Milliseconds)</span>
+                <span id="out-ms-epoch" class="text-base font-mono font-semibold text-text-primary">--</span>
+              </div>
+              <button class="copy-out-btn px-2.5 py-1 rounded bg-bg-hover hover:bg-border-primary text-text-secondary hover:text-text-primary text-xs transition-colors cursor-pointer" data-target="out-ms-epoch">Copy Ms</button>
+            </div>
+
+            <!-- Formatted Date Previews -->
+            <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-text-tertiary">ISO 8601:</span>
+                <span id="out-date-iso" class="font-mono text-text-primary">--</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-text-tertiary">UTC String:</span>
+                <span id="out-date-utc" class="font-mono text-text-primary truncate max-w-[240px]">--</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-text-tertiary">Local String:</span>
+                <span id="out-date-local" class="font-mono text-text-primary truncate max-w-[240px]">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- How to Use Section -->
+    <section class="mb-16 p-8 rounded-2xl bg-bg-secondary border border-border-primary">
+      <h2 class="text-2xl font-bold text-text-primary mb-6 flex items-center gap-2">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        How to Use the Unix Timestamp Converter
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-5 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-8 h-8 rounded-lg bg-accent/20 text-accent font-bold flex items-center justify-center mb-3">1</div>
+          <h3 class="font-semibold text-text-primary mb-2 text-base">Convert Timestamp to Date</h3>
+          <p class="text-xs text-text-secondary leading-relaxed">
+            Enter any 10-digit (seconds) or 13-digit (milliseconds) Unix timestamp into the input box. SnipTools instantly computes the ISO 8601 string, UTC format, local timezone date, and relative time.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-8 h-8 rounded-lg bg-purple/20 text-purple font-bold flex items-center justify-center mb-3">2</div>
+          <h3 class="font-semibold text-text-primary mb-2 text-base">Convert Date to Timestamp</h3>
+          <p class="text-xs text-text-secondary leading-relaxed">
+            Use the date-time picker or click any quick preset button (such as "Now" or "Today 00:00"). The converter will output both the 10-digit seconds timestamp and 13-digit milliseconds timestamp.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-8 h-8 rounded-lg bg-success/20 text-success font-bold flex items-center justify-center mb-3">3</div>
+          <h3 class="font-semibold text-text-primary mb-2 text-base">Copy Results & Shortcuts</h3>
+          <p class="text-xs text-text-secondary leading-relaxed">
+            Click any "Copy" button to instantly copy the value to your clipboard. Use keyboard shortcuts or quick preset buttons for maximum speed while debugging APIs or databases.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-16 p-8 rounded-2xl bg-bg-secondary border border-border-primary">
+      <h2 class="text-2xl font-bold text-text-primary mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        {structuredData['@graph'][1].mainEntity.map((faq) => (
+          <div class="p-5 rounded-xl bg-bg-tertiary border border-border-primary">
+            <h3 class="text-base font-semibold text-text-primary mb-2 flex items-center gap-2">
+              <span class="text-accent font-bold">Q:</span> {faq.name}
+            </h3>
+            <p class="text-xs text-text-secondary leading-relaxed pl-6">
+              {faq.acceptedAnswer.text}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related Tools Section -->
+    <section>
+      <h2 class="text-xl font-bold text-text-primary mb-4">Related Developer Tools</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {relatedTools.map(tool => (
+          <a
+            href={tool.slug}
+            class="p-4 rounded-xl bg-bg-secondary border border-border-primary hover:border-accent transition-all duration-200 no-underline group flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-lg">{tool.icon}</span>
+                <span class="text-xs font-semibold text-text-primary group-hover:text-accent transition-colors">{tool.name}</span>
+              </div>
+              <p class="text-xs text-text-secondary line-clamp-2">{tool.description}</p>
+            </div>
+            <span class="mt-3 text-[11px] font-semibold text-accent flex items-center gap-1">
+              Try tool →
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    // --- Live Ticker ---
+    let tickerPaused = false;
+    const currentSecEl = document.getElementById('current-seconds');
+    const currentMsEl = document.getElementById('current-millis');
+    const toggleTickerBtn = document.getElementById('toggle-ticker-btn');
+    const livePulse = document.getElementById('live-pulse');
+    const liveDot = document.getElementById('live-dot');
+
+    function updateLiveClock() {
+      if (tickerPaused) return;
+      const now = Date.now();
+      if (currentSecEl) currentSecEl.textContent = Math.floor(now / 1000).toString();
+      if (currentMsEl) currentMsEl.textContent = now.toString();
+    }
+
+    setInterval(updateLiveClock, 100);
+    updateLiveClock();
+
+    toggleTickerBtn?.addEventListener('click', () => {
+      tickerPaused = !tickerPaused;
+      if (tickerPaused) {
+        toggleTickerBtn.textContent = '(Resume)';
+        livePulse?.classList.add('hidden');
+        liveDot?.classList.remove('bg-success');
+        liveDot?.classList.add('bg-warning');
+      } else {
+        toggleTickerBtn.textContent = '(Pause)';
+        livePulse?.classList.remove('hidden');
+        liveDot?.classList.remove('bg-warning');
+        liveDot?.classList.add('bg-success');
+        updateLiveClock();
+      }
+    });
+
+    // Copy Live Epoch
+    document.getElementById('copy-current-sec-btn')?.addEventListener('click', () => {
+      const sec = Math.floor(Date.now() / 1000).toString();
+      if (window.copyToClipboard) window.copyToClipboard(sec, 'Timestamp (seconds) copied!');
+    });
+
+    document.getElementById('copy-current-ms-btn')?.addEventListener('click', () => {
+      const ms = Date.now().toString();
+      if (window.copyToClipboard) window.copyToClipboard(ms, 'Timestamp (milliseconds) copied!');
+    });
+
+    // --- Helper Functions ---
+    function getRelativeTimeString(date) {
+      const deltaSec = Math.floor((date.getTime() - Date.now()) / 1000);
+      const absSec = Math.abs(deltaSec);
+      const isPast = deltaSec < 0;
+
+      if (absSec < 5) return 'Just now';
+
+      let unit, count;
+      if (absSec < 60) {
+        unit = 'second';
+        count = absSec;
+      } else if (absSec < 3600) {
+        unit = 'minute';
+        count = Math.floor(absSec / 60);
+      } else if (absSec < 86400) {
+        unit = 'hour';
+        count = Math.floor(absSec / 3600);
+      } else if (absSec < 2592000) {
+        unit = 'day';
+        count = Math.floor(absSec / 86400);
+      } else if (absSec < 31536000) {
+        unit = 'month';
+        count = Math.floor(absSec / 2592000);
+      } else {
+        unit = 'year';
+        count = Math.floor(absSec / 31536000);
+      }
+
+      const plural = count > 1 ? 's' : '';
+      return isPast ? `${count} ${unit}${plural} ago` : `in ${count} ${unit}${plural}`;
+    }
+
+    function getDayOfYear(date) {
+      const start = new Date(date.getFullYear(), 0, 0);
+      const diff = date - start + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
+      const oneDay = 1000 * 60 * 60 * 24;
+      return Math.floor(diff / oneDay);
+    }
+
+    function getISOWeek(date) {
+      const target = new Date(date.valueOf());
+      const dayNr = (date.getDay() + 6) % 7;
+      target.setDate(target.getDate() - dayNr + 3);
+      const firstThursday = target.valueOf();
+      target.setMonth(0, 1);
+      if (target.getDay() !== 4) {
+        target.setMonth(0, 1 + ((4 - target.getDay() + 7) % 7));
+      }
+      return 1 + Math.ceil((firstThursday - target) / 604800000);
+    }
+
+    function isLeapYear(year) {
+      return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    }
+
+    // --- CARD 1: Timestamp to Date Logic ---
+    const tsInput = document.getElementById('timestamp-input');
+    const clearTsBtn = document.getElementById('clear-ts-input');
+    const unitDetectedEl = document.getElementById('ts-detected-unit');
+
+    const outIso = document.getElementById('out-iso');
+    const outUtc = document.getElementById('out-utc');
+    const outLocal = document.getElementById('out-local');
+    const outRelative = document.getElementById('out-relative');
+    const outDayOfWeek = document.getElementById('out-dayofweek');
+    const outDayOfYear = document.getElementById('out-dayofyear');
+    const outWeekNum = document.getElementById('out-weeknum');
+    const outLeapYear = document.getElementById('out-leapyear');
+
+    function updateTimestampToDate() {
+      let raw = tsInput.value.trim();
+      if (!raw) {
+        clearTsBtn?.classList.add('hidden');
+        [outIso, outUtc, outLocal, outDayOfWeek, outDayOfYear, outWeekNum, outLeapYear].forEach(el => {
+          if (el) el.textContent = '--';
+        });
+        if (outRelative) outRelative.textContent = 'Enter a timestamp above';
+        if (unitDetectedEl) unitDetectedEl.textContent = 'Auto-detected: Seconds';
+        return;
+      }
+
+      clearTsBtn?.classList.remove('hidden');
+
+      // Unit selection
+      const unitRadio = document.querySelector('input[name="ts-unit"]:checked')?.value || 'auto';
+      let num = Number(raw);
+
+      if (isNaN(num)) {
+        if (unitDetectedEl) unitDetectedEl.textContent = 'Invalid Timestamp';
+        if (outRelative) outRelative.textContent = 'Invalid Number';
+        [outIso, outUtc, outLocal, outDayOfWeek, outDayOfYear, outWeekNum, outLeapYear].forEach(el => {
+          if (el) el.textContent = 'Invalid Date';
+        });
+        return;
+      }
+
+      let isMs = false;
+      if (unitRadio === 'ms') {
+        isMs = true;
+      } else if (unitRadio === 'sec') {
+        isMs = false;
+      } else {
+        // Auto: 13+ digits or > 30,000,000,000 is milliseconds
+        isMs = raw.length >= 13 || num > 30000000000;
+      }
+
+      if (unitDetectedEl) {
+        unitDetectedEl.textContent = `Auto-detected: ${isMs ? 'Milliseconds (13d)' : 'Seconds (10d)'}`;
+      }
+
+      const dateMs = isMs ? num : num * 1000;
+      const date = new Date(dateMs);
+
+      if (isNaN(date.getTime())) {
+        if (outRelative) outRelative.textContent = 'Out of range';
+        [outIso, outUtc, outLocal, outDayOfWeek, outDayOfYear, outWeekNum, outLeapYear].forEach(el => {
+          if (el) el.textContent = 'Invalid Date';
+        });
+        return;
+      }
+
+      // Render Outputs
+      if (outIso) outIso.textContent = date.toISOString();
+      if (outUtc) outUtc.textContent = date.toUTCString();
+      if (outLocal) outLocal.textContent = date.toLocaleString(undefined, {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short'
+      });
+      if (outRelative) outRelative.textContent = getRelativeTimeString(date);
+
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      if (outDayOfWeek) outDayOfWeek.textContent = days[date.getDay()];
+      if (outDayOfYear) outDayOfYear.textContent = `${getDayOfYear(date)} of 365`;
+      if (outWeekNum) outWeekNum.textContent = `Week ${getISOWeek(date)}`;
+      if (outLeapYear) outLeapYear.textContent = isLeapYear(date.getFullYear()) ? 'Yes (Leap Year)' : 'No (Common Year)';
+    }
+
+    tsInput?.addEventListener('input', updateTimestampToDate);
+    document.querySelectorAll('input[name="ts-unit"]').forEach(r => {
+      r.addEventListener('change', updateTimestampToDate);
+    });
+
+    clearTsBtn?.addEventListener('click', () => {
+      tsInput.value = '';
+      updateTimestampToDate();
+      tsInput.focus();
+    });
+
+    // Timestamp Presets
+    document.querySelectorAll('.ts-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const preset = btn.getAttribute('data-preset');
+        const now = new Date();
+        let targetTs = Math.floor(now.getTime() / 1000);
+
+        if (preset === 'now') {
+          targetTs = Math.floor(now.getTime() / 1000);
+        } else if (preset === 'start-today') {
+          const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+          targetTs = Math.floor(d.getTime() / 1000);
+        } else if (preset === 'end-today') {
+          const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+          targetTs = Math.floor(d.getTime() / 1000);
+        } else if (preset === 'start-year') {
+          const d = new Date(now.getFullYear(), 0, 1, 0, 0, 0);
+          targetTs = Math.floor(d.getTime() / 1000);
+        } else if (preset === 'epoch-zero') {
+          targetTs = 0;
+        }
+
+        tsInput.value = targetTs.toString();
+        updateTimestampToDate();
+      });
+    });
+
+    // --- CARD 2: Date to Timestamp Logic ---
+    const datePickerInput = document.getElementById('date-picker-input');
+    const outSecEpoch = document.getElementById('out-sec-epoch');
+    const outMsEpoch = document.getElementById('out-ms-epoch');
+    const outDateIso = document.getElementById('out-date-iso');
+    const outDateUtc = document.getElementById('out-date-utc');
+    const outDateLocal = document.getElementById('out-date-local');
+
+    function formatLocalDateTimeForInput(d) {
+      const pad = (n) => n.toString().padStart(2, '0');
+      const year = d.getFullYear();
+      const month = pad(d.getMonth() + 1);
+      const day = pad(d.getDate());
+      const hours = pad(d.getHours());
+      const mins = pad(d.getMinutes());
+      const secs = pad(d.getSeconds());
+      return `${year}-${month}-${day}T${hours}:${mins}:${secs}`;
+    }
+
+    function updateDateToTimestamp() {
+      const val = datePickerInput.value;
+      if (!val) {
+        if (outSecEpoch) outSecEpoch.textContent = '--';
+        if (outMsEpoch) outMsEpoch.textContent = '--';
+        if (outDateIso) outDateIso.textContent = '--';
+        if (outDateUtc) outDateUtc.textContent = '--';
+        if (outDateLocal) outDateLocal.textContent = '--';
+        return;
+      }
+
+      const date = new Date(val);
+      if (isNaN(date.getTime())) {
+        if (outSecEpoch) outSecEpoch.textContent = 'Invalid Date';
+        if (outMsEpoch) outMsEpoch.textContent = 'Invalid Date';
+        return;
+      }
+
+      const ms = date.getTime();
+      const sec = Math.floor(ms / 1000);
+
+      if (outSecEpoch) outSecEpoch.textContent = sec.toString();
+      if (outMsEpoch) outMsEpoch.textContent = ms.toString();
+      if (outDateIso) outDateIso.textContent = date.toISOString();
+      if (outDateUtc) outDateUtc.textContent = date.toUTCString();
+      if (outDateLocal) outDateLocal.textContent = date.toLocaleString();
+    }
+
+    datePickerInput?.addEventListener('input', updateDateToTimestamp);
+
+    // Initial default: Now
+    if (datePickerInput) {
+      datePickerInput.value = formatLocalDateTimeForInput(new Date());
+      updateDateToTimestamp();
+    }
+
+    // Default timestamp input preset: Now
+    if (tsInput && !tsInput.value) {
+      tsInput.value = Math.floor(Date.now() / 1000).toString();
+      updateTimestampToDate();
+    }
+
+    // Date Presets
+    document.querySelectorAll('.date-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const preset = btn.getAttribute('data-datepreset');
+        const now = new Date();
+        let targetDate = new Date();
+
+        if (preset === 'now') {
+          targetDate = new Date();
+        } else if (preset === 'today-start') {
+          targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        } else if (preset === 'today-end') {
+          targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+        } else if (preset === 'yesterday') {
+          targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 12, 0, 0);
+        } else if (preset === 'tomorrow') {
+          targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 12, 0, 0);
+        } else if (preset === 'start-year') {
+          targetDate = new Date(now.getFullYear(), 0, 1, 0, 0, 0);
+        } else if (preset === 'end-year') {
+          targetDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
+        }
+
+        datePickerInput.value = formatLocalDateTimeForInput(targetDate);
+        updateDateToTimestamp();
+      });
+    });
+
+    // Copy Output Buttons
+    document.querySelectorAll('.copy-out-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const targetEl = document.getElementById(targetId);
+        if (targetEl && targetEl.textContent && targetEl.textContent !== '--') {
+          if (window.copyToClipboard) {
+            window.copyToClipboard(targetEl.textContent, 'Copied to clipboard!');
+          }
+        }
+      });
+    });
+  });
+</script>

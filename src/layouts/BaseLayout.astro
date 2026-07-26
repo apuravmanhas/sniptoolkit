@@ -1,0 +1,169 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  structuredData?: object;
+}
+
+const { title, description, canonicalUrl, ogImage, structuredData } = Astro.props;
+const siteUrl = 'https://sniptools.tools';
+const fullCanonical = canonicalUrl || `${siteUrl}${Astro.url.pathname}`;
+const fullOgImage = ogImage || `${siteUrl}/og-default.png`;
+
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CommandPalette from '../components/CommandPalette.astro';
+import ToastContainer from '../components/ToastContainer.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href={fullCanonical} />
+
+  <!-- Preconnect to fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <title>{title}</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={fullCanonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content={fullOgImage} />
+  <meta property="og:site_name" content="SnipTools" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={fullOgImage} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Structured Data -->
+  {structuredData && (
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  )}
+
+  <!-- Theme script (prevent flash) -->
+  <script is:inline>
+    (function() {
+      const saved = localStorage.getItem('sniptools-theme');
+      if (saved === 'light') {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      }
+    })();
+  </script>
+</head>
+<body class="bg-bg-primary text-text-primary">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:bg-accent focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+    Skip to content
+  </a>
+
+  <Header />
+  <CommandPalette />
+
+  <main id="main-content" class="min-h-[calc(100vh-140px)]">
+    <slot />
+  </main>
+
+  <Footer />
+  <ToastContainer />
+
+  <!-- Global JS utilities -->
+  <script is:inline>
+    // Theme toggle
+    window.toggleTheme = function() {
+      const html = document.documentElement;
+      const isLight = html.classList.contains('light');
+      if (isLight) {
+        html.classList.remove('light');
+        html.classList.add('dark');
+        localStorage.setItem('sniptools-theme', 'dark');
+      } else {
+        html.classList.remove('dark');
+        html.classList.add('light');
+        localStorage.setItem('sniptools-theme', 'light');
+      }
+    };
+
+    // Toast system
+    window.showToast = function(message, type = 'success', duration = 3000) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      const icons = { success: '✓', error: '✕', info: 'ℹ' };
+      toast.innerHTML = `<span>${icons[type] || '•'}</span><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('removing');
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    };
+
+    // Copy to clipboard
+    window.copyToClipboard = async function(text, label = 'Copied!') {
+      try {
+        await navigator.clipboard.writeText(text);
+        window.showToast(label, 'success');
+        return true;
+      } catch {
+        window.showToast('Failed to copy', 'error');
+        return false;
+      }
+    };
+
+    // Command palette (Ctrl+K)
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const palette = document.getElementById('command-palette');
+        if (palette) {
+          palette.classList.toggle('hidden');
+          if (!palette.classList.contains('hidden')) {
+            const input = palette.querySelector('input');
+            if (input) { input.value = ''; input.focus(); }
+            filterTools('');
+          }
+        }
+      }
+      if (e.key === 'Escape') {
+        const palette = document.getElementById('command-palette');
+        if (palette && !palette.classList.contains('hidden')) {
+          palette.classList.add('hidden');
+        }
+      }
+    });
+
+    function filterTools(query) {
+      const items = document.querySelectorAll('.cmd-tool-item');
+      const q = query.toLowerCase().trim();
+      let firstVisible = null;
+      items.forEach(item => {
+        const name = (item.getAttribute('data-name') || '').toLowerCase();
+        const tags = (item.getAttribute('data-tags') || '').toLowerCase();
+        const match = !q || name.includes(q) || tags.includes(q);
+        item.style.display = match ? '' : 'none';
+        if (match && !firstVisible) firstVisible = item;
+      });
+      // Highlight first match
+      items.forEach(i => i.classList.remove('bg-bg-hover'));
+      if (firstVisible) firstVisible.classList.add('bg-bg-hover');
+    }
+  </script>
+</body>
+</html>

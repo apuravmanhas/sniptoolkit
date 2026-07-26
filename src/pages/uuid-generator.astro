@@ -1,0 +1,564 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "UUID / GUID Generator",
+  "operatingSystem": "All",
+  "applicationCategory": "DeveloperApplication",
+  "url": "https://sniptools.tools/uuid-generator",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Free online UUID and GUID generator supporting v4 random and v7 time-ordered UUIDs in bulk up to 500 records."
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "QAPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between UUID v4 and UUID v7?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "UUID v4 is generated using cryptographically strong random numbers (122 random bits), offering maximum randomness but poor database index locality. UUID v7 combines a 48-bit millisecond timestamp with random bits, making it time-ordered, sortable, and optimized for database primary keys (B-tree indexing)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are UUIDs generated on SnipTools secure and private?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, 100%. All UUIDs are generated locally in your web browser using Web Cryptography API (crypto.getRandomValues and crypto.randomUUID). Your generated keys never leave your machine and are not sent to any backend server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can two generated UUID v4 values collide?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The probability of a collision in UUID v4 is astronomically small. You would need to generate 1 billion UUIDs every second for 85 years to have a 50% chance of a single collision."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many UUIDs can I generate at once in bulk?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can bulk generate anywhere from 1 to 500 UUIDs instantly. You can format them with uppercase letters, hyphens, or curly braces, and download the entire batch as a .txt file."
+      }
+    }
+  ]
+};
+
+const combinedSchema = [softwareSchema, faqSchema];
+
+const relatedTools = [
+  {
+    name: 'URL Encode & Decode',
+    slug: '/url-encode-decode',
+    icon: '%',
+    category: 'Encoding',
+    description: 'Safely encode special characters for URLs or decode percent-encoded query strings.'
+  },
+  {
+    name: 'Base64 Encode & Decode',
+    slug: '/base64',
+    icon: '⟨⟩',
+    category: 'Encoding',
+    description: 'Encode text or files to Base64 format and decode Base64 strings back to original format.'
+  },
+  {
+    name: 'Hash Generator',
+    slug: '/hash-generator',
+    icon: '🔒',
+    category: 'Security',
+    description: 'Generate secure cryptographic hashes including MD5, SHA-1, SHA-256, and SHA-512.'
+  },
+  {
+    name: 'JSON Formatter',
+    slug: '/json-formatter',
+    icon: '{ }',
+    category: 'Data',
+    description: 'Format, validate, beautify, and minify JSON data instantly with line error highlighting.'
+  }
+];
+---
+
+<BaseLayout
+  title="UUID Generator Online — Free Bulk v4 & v7 GUID Generator | SnipTools"
+  description="Free online UUID generator & GUID tool. Generate random UUID v4 and time-ordered UUID v7 in bulk up to 500 items with custom hyphens, uppercase, and curly braces options."
+  structuredData={combinedSchema}
+>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <!-- Breadcrumb & Header -->
+    <div class="mb-8 animate-fade-in">
+      <nav class="flex items-center gap-2 text-xs text-text-tertiary mb-3">
+        <a href="/" class="hover:text-text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/#generator" class="hover:text-text-primary transition-colors">Generators</a>
+        <span>/</span>
+        <span class="text-text-secondary font-medium">UUID Generator</span>
+      </nav>
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-semibold mb-3">
+            <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+            v4 Random & v7 Time-Ordered
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary">
+            UUID / GUID Generator
+          </h1>
+          <p class="text-sm text-text-secondary mt-2 max-w-2xl">
+            Generate cryptographically secure 128-bit universally unique identifiers online. Supports random UUID v4 and time-sortable UUID v7 with customizable formatting and bulk download.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Workspace Card -->
+    <div class="rounded-2xl border border-border-primary bg-bg-secondary p-4 sm:p-6 md:p-8 shadow-xl mb-12 animate-slide-up">
+      <!-- Options Bar -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-6 border-b border-border-primary">
+        <!-- UUID Version Selector -->
+        <div class="lg:col-span-4">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-2">
+            UUID Version
+          </label>
+          <div class="grid grid-cols-2 gap-2 p-1 bg-bg-tertiary rounded-xl border border-border-primary">
+            <button
+              id="btn-version-v4"
+              class="ver-btn active px-3 py-2 text-xs font-semibold rounded-lg bg-bg-secondary text-text-primary border border-border-secondary shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              data-version="v4"
+            >
+              <span>v4 (Random)</span>
+            </button>
+            <button
+              id="btn-version-v7"
+              class="ver-btn px-3 py-2 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              data-version="v7"
+            >
+              <span>v7 (Time-Ordered)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quantity Selector -->
+        <div class="lg:col-span-4">
+          <div class="flex items-center justify-between mb-2">
+            <label for="quantity-input" class="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+              Quantity (1 - 500)
+            </label>
+            <span id="qty-badge" class="text-xs font-mono text-accent font-semibold">1 item</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input
+              id="quantity-input"
+              type="number"
+              min="1"
+              max="500"
+              value="1"
+              class="w-24 bg-bg-tertiary border border-border-primary rounded-xl px-3 py-2 text-sm font-mono text-text-primary text-center focus:border-accent focus:outline-none transition-colors"
+            />
+            <div class="flex flex-wrap gap-1 flex-1">
+              <button class="qty-preset px-2.5 py-1.5 text-xs font-medium bg-bg-tertiary border border-border-primary rounded-lg text-text-secondary hover:text-text-primary hover:border-border-secondary transition-all cursor-pointer" data-qty="1">1</button>
+              <button class="qty-preset px-2.5 py-1.5 text-xs font-medium bg-bg-tertiary border border-border-primary rounded-lg text-text-secondary hover:text-text-primary hover:border-border-secondary transition-all cursor-pointer" data-qty="5">5</button>
+              <button class="qty-preset px-2.5 py-1.5 text-xs font-medium bg-bg-tertiary border border-border-primary rounded-lg text-text-secondary hover:text-text-primary hover:border-border-secondary transition-all cursor-pointer" data-qty="10">10</button>
+              <button class="qty-preset px-2.5 py-1.5 text-xs font-medium bg-bg-tertiary border border-border-primary rounded-lg text-text-secondary hover:text-text-primary hover:border-border-secondary transition-all cursor-pointer" data-qty="50">50</button>
+              <button class="qty-preset px-2.5 py-1.5 text-xs font-medium bg-bg-tertiary border border-border-primary rounded-lg text-text-secondary hover:text-text-primary hover:border-border-secondary transition-all cursor-pointer" data-qty="100">100</button>
+              <button class="qty-preset px-2.5 py-1.5 text-xs font-medium bg-bg-tertiary border border-border-primary rounded-lg text-text-secondary hover:text-text-primary hover:border-border-secondary transition-all cursor-pointer" data-qty="500">500</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formatting Options Toggles -->
+        <div class="lg:col-span-4 flex flex-col justify-end">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-2">
+            Formatting Switches
+          </label>
+          <div class="flex flex-wrap items-center gap-3">
+            <!-- Uppercase Toggle -->
+            <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-text-secondary hover:text-text-primary">
+              <input id="toggle-uppercase" type="checkbox" class="sr-only peer" />
+              <div class="w-8 h-4.5 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-tertiary peer-checked:after:bg-white after:border-border-primary after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-accent relative"></div>
+              <span>Uppercase</span>
+            </label>
+
+            <!-- Hyphens Toggle -->
+            <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-text-secondary hover:text-text-primary">
+              <input id="toggle-hyphens" type="checkbox" checked class="sr-only peer" />
+              <div class="w-8 h-4.5 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-tertiary peer-checked:after:bg-white after:border-border-primary after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-accent relative"></div>
+              <span>Hyphens</span>
+            </label>
+
+            <!-- Curly Braces Toggle -->
+            <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-text-secondary hover:text-text-primary">
+              <input id="toggle-braces" type="checkbox" class="sr-only peer" />
+              <div class="w-8 h-4.5 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-tertiary peer-checked:after:bg-white after:border-border-primary after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-accent relative"></div>
+              <span>Braces &#123; &#125;</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Action & Shortcut Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-4 py-4">
+        <div class="flex items-center gap-3">
+          <button
+            id="btn-generate"
+            class="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white text-xs font-bold tracking-wide transition-all shadow-md shadow-accent/20 active:scale-95 cursor-pointer flex items-center gap-2"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <span>Regenerate UUIDs</span>
+            <kbd class="hidden sm:inline-block ml-1 text-[10px] font-mono bg-white/20 px-1.5 py-0.5 rounded text-white font-normal">Space</kbd>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            id="btn-copy-all"
+            class="px-4 py-2 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent hover:text-text-primary text-text-secondary text-xs font-semibold transition-all cursor-pointer flex items-center gap-2"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy All</span>
+          </button>
+
+          <button
+            id="btn-download"
+            class="px-4 py-2 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent hover:text-text-primary text-text-secondary text-xs font-semibold transition-all cursor-pointer flex items-center gap-2"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download .txt</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Top Primary Preview Box (for single item display) -->
+      <div id="single-preview-card" class="mb-6 p-4 sm:p-5 rounded-xl bg-bg-tertiary/70 border border-border-secondary flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="w-full min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider">Primary Generated UUID</span>
+            <span id="primary-ver-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 text-accent font-semibold">v4</span>
+          </div>
+          <div id="primary-uuid-text" class="text-lg sm:text-xl font-mono font-bold text-text-primary tracking-tight truncate select-all">
+            Generating...
+          </div>
+        </div>
+
+        <button
+          id="btn-copy-primary"
+          class="w-full sm:w-auto flex-shrink-0 px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 text-accent hover:bg-accent hover:text-white text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-2"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>Copy Single</span>
+        </button>
+      </div>
+
+      <!-- Output List / Textarea View -->
+      <div class="relative">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+            Generated Result List (<span id="output-count-label">1</span>)
+          </span>
+          <span class="text-xs text-text-tertiary">
+            Click output box to select all text
+          </span>
+        </div>
+
+        <!-- Scrollable Output Box -->
+        <div class="relative rounded-xl border border-border-primary bg-bg-tertiary overflow-hidden">
+          <textarea
+            id="uuid-output-textarea"
+            readonly
+            rows="10"
+            class="w-full p-4 bg-transparent font-mono text-sm text-text-primary outline-none resize-none select-all leading-relaxed"
+            placeholder="Generated UUIDs will appear here..."
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Use Section -->
+    <section class="mb-12 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        How to Use the Bulk UUID Generator
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+        <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mb-3">1</div>
+          <h3 class="text-sm font-semibold text-text-primary mb-1">Select Version</h3>
+          <p class="text-xs text-text-secondary">Choose between UUID v4 (random) or UUID v7 (time-ordered / sortable).</p>
+        </div>
+        <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mb-3">2</div>
+          <h3 class="text-sm font-semibold text-text-primary mb-1">Choose Quantity</h3>
+          <p class="text-xs text-text-secondary">Select how many UUIDs to generate (from 1 up to 500 in a single batch).</p>
+        </div>
+        <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mb-3">3</div>
+          <h3 class="text-sm font-semibold text-text-primary mb-1">Customize Format</h3>
+          <p class="text-xs text-text-secondary">Toggle uppercase letters, hyphen separators, or surrounding curly braces &#123; &#125;.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mb-3">4</div>
+          <h3 class="text-sm font-semibold text-text-primary mb-1">Copy or Download</h3>
+          <p class="text-xs text-text-secondary">Click "Copy All" to save to clipboard or "Download .txt" for bulk text exports.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-12 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <div class="mb-6">
+        <h2 class="text-xl font-bold text-text-primary tracking-tight">Frequently Asked Questions</h2>
+        <p class="text-xs text-text-secondary mt-1">Common questions regarding UUID v4, v7, collision rates, and privacy.</p>
+      </div>
+
+      <div class="space-y-3">
+        {faqSchema.mainEntity.map(faq => (
+          <details class="group rounded-xl border border-border-primary bg-bg-tertiary p-4 [&_summary::-webkit-details-marker]:hidden transition-all duration-200">
+            <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-sm font-semibold text-text-primary">
+              <span>{faq.name}</span>
+              <span class="shrink-0 rounded-full p-1 text-text-tertiary group-open:-rotate-180 transition-transform duration-200">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
+            </summary>
+            <p class="mt-3 text-xs leading-relaxed text-text-secondary border-t border-border-primary pt-3">
+              {faq.acceptedAnswer.text}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related Tools Section -->
+    <section>
+      <h2 class="text-xl font-bold text-text-primary mb-6">Related Developer Tools</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {relatedTools.map(tool => (
+          <a
+            href={tool.slug}
+            class="group p-5 rounded-xl bg-bg-secondary border border-border-primary hover:border-border-hover transition-all duration-200 no-underline flex flex-col justify-between hover:-translate-y-0.5"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-lg bg-bg-tertiary border border-border-primary flex items-center justify-center font-bold text-text-primary group-hover:border-accent transition-colors">
+                  {tool.icon}
+                </span>
+                <span class="text-[10px] uppercase font-semibold tracking-wider text-text-tertiary px-2 py-0.5 rounded bg-bg-tertiary">
+                  {tool.category}
+                </span>
+              </div>
+              <h3 class="text-sm font-bold text-text-primary group-hover:text-accent transition-colors mb-1">
+                {tool.name}
+              </h3>
+              <p class="text-xs text-text-secondary leading-relaxed line-clamp-2">
+                {tool.description}
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-border-primary text-[11px] font-semibold text-text-tertiary group-hover:text-text-primary flex items-center justify-between">
+              <span>Open Tool</span>
+              <span>→</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  // State
+  let currentVersion = 'v4';
+  let quantity = 1;
+  let options = {
+    uppercase: false,
+    hyphens: true,
+    braces: false
+  };
+  let generatedList = [];
+
+  // DOM Elements
+  const btnV4 = document.getElementById('btn-version-v4');
+  const btnV7 = document.getElementById('btn-version-v7');
+  const qtyInput = document.getElementById('quantity-input');
+  const qtyBadge = document.getElementById('qty-badge');
+  const toggleUppercase = document.getElementById('toggle-uppercase');
+  const toggleHyphens = document.getElementById('toggle-hyphens');
+  const toggleBraces = document.getElementById('toggle-braces');
+  const btnGenerate = document.getElementById('btn-generate');
+  const btnCopyAll = document.getElementById('btn-copy-all');
+  const btnDownload = document.getElementById('btn-download');
+  const btnCopyPrimary = document.getElementById('btn-copy-primary');
+  const primaryText = document.getElementById('primary-uuid-text');
+  const primaryVerBadge = document.getElementById('primary-ver-badge');
+  const outputTextarea = document.getElementById('uuid-output-textarea');
+  const outputCountLabel = document.getElementById('output-count-label');
+
+  // Generator algorithms
+  function generateV4() {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40; // Version 4
+    bytes[8] = (bytes[8] & 0x3f) | 0x80; // Variant 1
+    const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+  }
+
+  function generateV7() {
+    const now = Date.now();
+    const timeHex = now.toString(16).padStart(12, '0');
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+
+    for (let i = 0; i < 6; i++) {
+      bytes[i] = parseInt(timeHex.slice(i * 2, i * 2 + 2), 16);
+    }
+    bytes[6] = (bytes[6] & 0x0f) | 0x70; // Version 7
+    bytes[8] = (bytes[8] & 0x3f) | 0x80; // Variant 1
+
+    const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+  }
+
+  function formatSingle(rawUuid) {
+    let str = rawUuid;
+    if (!options.hyphens) {
+      str = str.replace(/-/g, '');
+    }
+    if (options.uppercase) {
+      str = str.toUpperCase();
+    } else {
+      str = str.toLowerCase();
+    }
+    if (options.braces) {
+      str = `{${str}}`;
+    }
+    return str;
+  }
+
+  function updateGeneration() {
+    generatedList = [];
+    const count = Math.min(Math.max(parseInt(qtyInput.value) || 1, 1), 500);
+    quantity = count;
+    qtyInput.value = count;
+    qtyBadge.textContent = count === 1 ? '1 item' : `${count} items`;
+    outputCountLabel.textContent = count;
+
+    for (let i = 0; i < count; i++) {
+      const raw = currentVersion === 'v7' ? generateV7() : generateV4();
+      generatedList.push(formatSingle(raw));
+    }
+
+    // Render primary
+    primaryText.textContent = generatedList[0];
+    primaryVerBadge.textContent = currentVersion;
+
+    // Render bulk textarea
+    outputTextarea.value = generatedList.join('\n');
+    outputTextarea.rows = Math.min(Math.max(count, 4), 16);
+  }
+
+  // Version Buttons
+  btnV4.addEventListener('click', () => {
+    currentVersion = 'v4';
+    btnV4.classList.add('active', 'bg-bg-secondary', 'text-text-primary', 'border', 'border-border-secondary', 'shadow-sm', 'font-semibold');
+    btnV4.classList.remove('text-text-secondary', 'font-medium');
+    btnV7.classList.remove('active', 'bg-bg-secondary', 'text-text-primary', 'border', 'border-border-secondary', 'shadow-sm', 'font-semibold');
+    btnV7.classList.add('text-text-secondary', 'font-medium');
+    updateGeneration();
+  });
+
+  btnV7.addEventListener('click', () => {
+    currentVersion = 'v7';
+    btnV7.classList.add('active', 'bg-bg-secondary', 'text-text-primary', 'border', 'border-border-secondary', 'shadow-sm', 'font-semibold');
+    btnV7.classList.remove('text-text-secondary', 'font-medium');
+    btnV4.classList.remove('active', 'bg-bg-secondary', 'text-text-primary', 'border', 'border-border-secondary', 'shadow-sm', 'font-semibold');
+    btnV4.classList.add('text-text-secondary', 'font-medium');
+    updateGeneration();
+  });
+
+  // Quantity Presets
+  document.querySelectorAll('.qty-preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = parseInt(btn.getAttribute('data-qty'));
+      qtyInput.value = q;
+      updateGeneration();
+    });
+  });
+
+  qtyInput.addEventListener('input', () => {
+    updateGeneration();
+  });
+
+  // Formatting Toggles
+  toggleUppercase.addEventListener('change', (e) => {
+    options.uppercase = e.target.checked;
+    updateGeneration();
+  });
+
+  toggleHyphens.addEventListener('change', (e) => {
+    options.hyphens = e.target.checked;
+    updateGeneration();
+  });
+
+  toggleBraces.addEventListener('change', (e) => {
+    options.braces = e.target.checked;
+    updateGeneration();
+  });
+
+  // Action listeners
+  btnGenerate.addEventListener('click', () => {
+    updateGeneration();
+    if (window.showToast) window.showToast(`Generated ${quantity} new ${currentVersion.toUpperCase()} UUID(s)`, 'success');
+  });
+
+  btnCopyPrimary.addEventListener('click', () => {
+    if (generatedList[0] && window.copyToClipboard) {
+      window.copyToClipboard(generatedList[0], 'UUID copied to clipboard!');
+    }
+  });
+
+  btnCopyAll.addEventListener('click', () => {
+    if (generatedList.length > 0 && window.copyToClipboard) {
+      const text = generatedList.join('\n');
+      window.copyToClipboard(text, `Copied ${generatedList.length} UUID(s) to clipboard!`);
+    }
+  });
+
+  btnDownload.addEventListener('click', () => {
+    if (generatedList.length === 0) return;
+    const text = generatedList.join('\n');
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `uuids-${currentVersion}-${Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    if (window.showToast) window.showToast('Downloaded TXT file!', 'success');
+  });
+
+  // Keyboard shortcut: Space key regenerates UUIDs
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      updateGeneration();
+      if (window.showToast) window.showToast(`Regenerated ${quantity} ${currentVersion.toUpperCase()} UUID(s)`, 'success');
+    }
+  });
+
+  // Initial generation
+  updateGeneration();
+</script>

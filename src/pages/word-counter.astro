@@ -1,0 +1,561 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Word & Character Counter",
+    "operatingSystem": "All",
+    "applicationCategory": "UtilitiesApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free online real-time word counter, character counter, sentence counter, paragraph counter, reading time calculator, and keyword density analyzer."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How is the estimated reading time calculated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Reading time is calculated based on the standard average adult reading speed of 200 words per minute (WPM). Speaking time is based on 130 WPM."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my text saved or uploaded to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All text processing is conducted 100% client-side inside your web browser. Your data never leaves your device."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the sentence counter identify sentences?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sentences are identified by counting sentence-ending punctuation marks (periods, exclamation marks, and question marks) followed by spaces or line ends."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is keyword density analysis?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Keyword density measures how frequently specific words appear relative to the total word count, excluding common stop words (like 'the', 'and', 'is'). It helps optimize content for SEO and readability."
+        }
+      }
+    ]
+  }
+];
+
+const faqs = [
+  {
+    question: "How is the estimated reading time calculated?",
+    answer: "Reading time is calculated based on the standard average adult reading speed of 200 words per minute (WPM). Speaking time is based on an average rate of 130 WPM."
+  },
+  {
+    question: "Is my text saved or uploaded to a server?",
+    answer: "No. All text processing is conducted 100% client-side inside your web browser. Your data never leaves your device."
+  },
+  {
+    question: "How does the sentence counter identify sentences?",
+    answer: "Sentences are identified by detecting sentence-ending punctuation marks (. ! ?) followed by spaces or line endings, taking into account standard formatting."
+  },
+  {
+    question: "What is keyword density analysis?",
+    answer: "Keyword density measures how frequently specific non-stop words appear relative to total words. It is essential for content creators and SEO professionals to avoid keyword stuffing."
+  }
+];
+
+const relatedTools = [
+  {
+    name: 'Lorem Ipsum Generator',
+    slug: '/lorem-ipsum',
+    icon: '¶',
+    category: 'Generator',
+    description: 'Generate placeholder text, paragraphs, words, or lists for UI designs and mockups.'
+  },
+  {
+    name: 'Online Clipboard',
+    slug: '/online-clipboard',
+    icon: '📋',
+    category: 'Utility',
+    description: 'Share text and code snippets seamlessly between devices with 6-digit codes.'
+  },
+  {
+    name: 'Base64 Encode & Decode',
+    slug: '/base64',
+    icon: '⟨⟩',
+    category: 'Encoding',
+    description: 'Encode text or files to Base64 format and decode Base64 strings back to original format.'
+  }
+];
+---
+
+<BaseLayout
+  title="Word & Character Counter — Free Online Text Analyzer | SnipTools"
+  description="Free real-time word counter, character counter, sentence & paragraph counter, reading time calculator, and keyword density analyzer. 100% client-side & private."
+  structuredData={structuredData}
+>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-accent bg-accent/10 border border-accent/20 mb-3">
+        <span>Aa</span>
+        <span>Text & Writing Utility</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-text-primary tracking-tight mb-3">
+        Word & Character Counter
+      </h1>
+      <p class="text-sm sm:text-base text-text-secondary max-w-2xl mx-auto">
+        Analyze word count, character length, sentences, reading speed, and keyword density instantly as you type.
+      </p>
+    </div>
+
+    <!-- Main Tool Container -->
+    <div class="space-y-6">
+      <!-- Live Metrics Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div class="p-4 rounded-xl bg-bg-secondary border border-border-primary text-center hover:border-accent/40 transition-colors">
+          <div class="text-2xl sm:text-3xl font-extrabold text-accent font-mono" id="stat-words">0</div>
+          <div class="text-xs font-medium text-text-tertiary mt-1 uppercase tracking-wider">Words</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary border border-border-primary text-center hover:border-accent/40 transition-colors">
+          <div class="text-2xl sm:text-3xl font-extrabold text-text-primary font-mono" id="stat-chars">0</div>
+          <div class="text-xs font-medium text-text-tertiary mt-1 uppercase tracking-wider">Chars (Total)</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary border border-border-primary text-center hover:border-accent/40 transition-colors">
+          <div class="text-2xl sm:text-3xl font-extrabold text-text-primary font-mono" id="stat-chars-no-space">0</div>
+          <div class="text-xs font-medium text-text-tertiary mt-1 uppercase tracking-wider">No Spaces</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary border border-border-primary text-center hover:border-accent/40 transition-colors">
+          <div class="text-2xl sm:text-3xl font-extrabold text-text-primary font-mono" id="stat-sentences">0</div>
+          <div class="text-xs font-medium text-text-tertiary mt-1 uppercase tracking-wider">Sentences</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary border border-border-primary text-center hover:border-accent/40 transition-colors">
+          <div class="text-2xl sm:text-3xl font-extrabold text-text-primary font-mono" id="stat-paragraphs">0</div>
+          <div class="text-xs font-medium text-text-tertiary mt-1 uppercase tracking-wider">Paragraphs</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary border border-border-primary text-center hover:border-accent/40 transition-colors">
+          <div class="text-lg sm:text-xl font-bold text-success font-mono mt-1" id="stat-read-time">0s</div>
+          <div class="text-xs font-medium text-text-tertiary mt-1 uppercase tracking-wider">Reading Time</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary border border-border-primary text-center hover:border-accent/40 transition-colors">
+          <div class="text-lg sm:text-xl font-bold text-purple font-mono mt-1" id="stat-speak-time">0s</div>
+          <div class="text-xs font-medium text-text-tertiary mt-1 uppercase tracking-wider">Speaking Time</div>
+        </div>
+      </div>
+
+      <!-- Textarea Input Panel -->
+      <div class="rounded-2xl border border-border-primary bg-bg-secondary p-4 sm:p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold text-text-secondary uppercase tracking-wider">Text Editor</span>
+            <span class="text-xs text-text-tertiary" id="editor-hint">Type or paste text below</span>
+          </div>
+
+          <!-- Actions toolbar -->
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              id="btn-sample"
+              class="px-3 py-1.5 text-xs font-medium rounded-lg bg-bg-tertiary text-text-secondary hover:text-text-primary hover:bg-bg-hover border border-border-primary transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>Load Sample</span>
+            </button>
+
+            <button
+              id="btn-uppercase"
+              class="px-2.5 py-1.5 text-xs font-mono rounded-lg bg-bg-tertiary text-text-secondary hover:text-text-primary hover:bg-bg-hover border border-border-primary transition-all cursor-pointer"
+              title="Convert to UPPERCASE"
+            >
+              UPPER
+            </button>
+
+            <button
+              id="btn-lowercase"
+              class="px-2.5 py-1.5 text-xs font-mono rounded-lg bg-bg-tertiary text-text-secondary hover:text-text-primary hover:bg-bg-hover border border-border-primary transition-all cursor-pointer"
+              title="Convert to lowercase"
+            >
+              lower
+            </button>
+
+            <button
+              id="btn-clear"
+              class="px-3 py-1.5 text-xs font-medium rounded-lg bg-error/10 text-error hover:bg-error/20 border border-error/30 transition-all cursor-pointer flex items-center gap-1.5"
+              title="Clear text (Ctrl+Shift+X)"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              <span>Clear</span>
+            </button>
+
+            <button
+              id="btn-copy"
+              class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-accent text-white hover:bg-accent-hover transition-all cursor-pointer flex items-center gap-1.5 shadow-md shadow-accent/20"
+              title="Copy text (Ctrl+Shift+C)"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy Text</span>
+            </button>
+          </div>
+        </div>
+
+        <textarea
+          id="text-input"
+          rows="10"
+          placeholder="Type or paste your content here... Word and character statistics update in real time."
+          class="w-full rounded-xl bg-bg-tertiary border border-border-primary p-4 text-sm text-text-primary placeholder-text-tertiary focus:border-accent focus:outline-none transition-all resize-y font-sans leading-relaxed"
+          spellcheck="false"
+        ></textarea>
+
+        <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-text-tertiary">
+          <div class="flex items-center gap-4">
+            <span>Avg word length: <strong id="stat-avg-word-len" class="text-text-secondary">0.0</strong> chars</span>
+            <span>Lines: <strong id="stat-lines" class="text-text-secondary">0</strong></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <kbd class="font-mono bg-bg-tertiary border border-border-primary rounded px-1.5 py-0.5">Ctrl + Shift + C</kbd> Copy
+            <span class="mx-1">•</span>
+            <kbd class="font-mono bg-bg-tertiary border border-border-primary rounded px-1.5 py-0.5">Ctrl + Shift + X</kbd> Clear
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyword Density & Insights -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Keyword Density Table -->
+        <div class="lg:col-span-2 rounded-2xl border border-border-primary bg-bg-secondary p-5">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-bold text-text-primary">Top Keyword Density</h2>
+              <span class="text-xs text-text-tertiary">(Excludes stop words)</span>
+            </div>
+            <span class="text-xs font-mono text-accent" id="keyword-count-badge">Top 5</span>
+          </div>
+
+          <div id="keyword-container" class="space-y-3">
+            <div class="text-xs text-text-tertiary py-6 text-center italic">
+              Start typing to view keyword frequency analysis...
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Text Metrics -->
+        <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 space-y-4">
+          <h2 class="text-base font-bold text-text-primary mb-2">Detailed Analysis</h2>
+
+          <div class="space-y-3 text-xs">
+            <div class="flex justify-between items-center py-2 border-b border-border-primary">
+              <span class="text-text-secondary">Longest Word</span>
+              <span id="stat-longest-word" class="font-mono text-accent font-semibold truncate max-w-[150px]">-</span>
+            </div>
+
+            <div class="flex justify-between items-center py-2 border-b border-border-primary">
+              <span class="text-text-secondary">Reading Speed (WPM)</span>
+              <span class="font-mono text-text-primary font-medium">200 WPM</span>
+            </div>
+
+            <div class="flex justify-between items-center py-2 border-b border-border-primary">
+              <span class="text-text-secondary">Speaking Speed (WPM)</span>
+              <span class="font-mono text-text-primary font-medium">130 WPM</span>
+            </div>
+
+            <div class="flex justify-between items-center py-2 border-b border-border-primary">
+              <span class="text-text-secondary">Unique Words</span>
+              <span id="stat-unique-words" class="font-mono text-text-primary font-semibold">0</span>
+            </div>
+
+            <div class="flex justify-between items-center py-2">
+              <span class="text-text-secondary">Punctuation Count</span>
+              <span id="stat-punctuation" class="font-mono text-text-primary font-semibold">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How to Use Section -->
+      <section class="rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+        <h2 class="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          How to Use the Word & Character Counter
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs text-text-secondary">
+          <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+            <div class="font-bold text-text-primary mb-1 text-sm">1. Input Text</div>
+            <p>Paste or type your essay, article, blog post, or code snippet into the editor box above.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+            <div class="font-bold text-text-primary mb-1 text-sm">2. Real-Time Stats</div>
+            <p>Watch word count, character count, sentence length, and reading time update live as you type.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+            <div class="font-bold text-text-primary mb-1 text-sm">3. Density Check</div>
+            <p>Review the top 5 most repeated keywords to optimize SEO and prevent repetitive vocabulary.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+            <div class="font-bold text-text-primary mb-1 text-sm">4. Format & Copy</div>
+            <p>Use UPPERCASE, lowercase conversions, or instant copy buttons with keyboard shortcuts.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+        <h2 class="text-xl font-bold text-text-primary mb-6">Frequently Asked Questions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map(faq => (
+            <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+              <h3 class="text-sm font-bold text-text-primary mb-2 flex items-center gap-2">
+                <span class="text-accent font-bold">Q:</span> {faq.question}
+              </h3>
+              <p class="text-xs text-text-secondary leading-relaxed pl-5">
+                {faq.answer}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools Section -->
+      <section class="pt-6">
+        <h2 class="text-xl font-bold text-text-primary mb-4">Related Developer Tools</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {relatedTools.map(tool => (
+            <a
+              href={tool.slug}
+              class="group p-5 rounded-xl bg-bg-secondary border border-border-primary hover:border-accent/40 transition-all no-underline"
+            >
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-xl">{tool.icon}</span>
+                <span class="font-bold text-text-primary group-hover:text-accent transition-colors text-sm">{tool.name}</span>
+              </div>
+              <p class="text-xs text-text-secondary line-clamp-2">{tool.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const textInput = document.getElementById('text-input');
+    const statWords = document.getElementById('stat-words');
+    const statChars = document.getElementById('stat-chars');
+    const statCharsNoSpace = document.getElementById('stat-chars-no-space');
+    const statSentences = document.getElementById('stat-sentences');
+    const statParagraphs = document.getElementById('stat-paragraphs');
+    const statReadTime = document.getElementById('stat-read-time');
+    const statSpeakTime = document.getElementById('stat-speak-time');
+    const statAvgWordLen = document.getElementById('stat-avg-word-len');
+    const statLines = document.getElementById('stat-lines');
+    const statLongestWord = document.getElementById('stat-longest-word');
+    const statUniqueWords = document.getElementById('stat-unique-words');
+    const statPunctuation = document.getElementById('stat-punctuation');
+    const keywordContainer = document.getElementById('keyword-container');
+
+    const btnSample = document.getElementById('btn-sample');
+    const btnClear = document.getElementById('btn-clear');
+    const btnCopy = document.getElementById('btn-copy');
+    const btnUppercase = document.getElementById('btn-uppercase');
+    const btnLowercase = document.getElementById('btn-lowercase');
+
+    const stopWords = new Set([
+      'a','about','above','after','again','against','all','am','an','and','any','are','aren\'t','as','at',
+      'be','because','been','before','being','below','between','both','but','by','can','can\'t','cannot',
+      'could','couldn\'t','did','didn\'t','do','does','doesn\'t','doing','don\'t','down','during','each',
+      'few','for','from','further','had','hadn\'t','has','hasn\'t','have','haven\'t','having','he','he\'d',
+      'he\'ll','he\'s','her','here','here\'s','hers','herself','him','himself','his','how','how\'s','i',
+      'i\'d','i\'ll','i\'m','i\'ve','if','in','into','is','isn\'t','it','it\'s','its','itself','let\'s',
+      'me','more','most','mustn\'t','my','myself','no','nor','not','of','off','on','once','only','or',
+      'other','ought','our','ours','ourselves','out','over','own','same','shan\'t','she','she\'d','she\'ll',
+      'she\'s','should','shouldn\'t','so','some','such','than','that','that\'s','the','their','theirs',
+      'them','themselves','then','there','there\'s','these','they','they\'d','they\'ll','they\'re','they\'ve',
+      'this','those','through','to','too','under','until','up','very','was','wasn\'t','we','we\'d','we\'ll',
+      'we\'re','we\'ve','were','weren\'t','what','what\'s','when','when\'s','where','where\'s','which',
+      'while','who','who\'s','whom','why','why\'s','with','won\'t','would','wouldn\'t','you','you\'d',
+      'you\'ll','you\'re','you\'ve','your','yours','yourself','yourselves'
+    ]);
+
+    function analyzeText() {
+      const text = textInput.value;
+
+      // Characters
+      const totalChars = text.length;
+      const charsNoSpace = text.replace(/\s/g, '').length;
+
+      // Words
+      const cleanWords = text.trim() === '' ? [] : text.trim().split(/\s+/).filter(w => w.length > 0);
+      const wordCount = cleanWords.length;
+
+      // Sentences
+      const sentenceMatches = text.match(/[^.!?]+[.!?]+(\s|$)/g);
+      const sentenceCount = text.trim() === '' ? 0 : (sentenceMatches ? sentenceMatches.length : (wordCount > 0 ? 1 : 0));
+
+      // Paragraphs
+      const paragraphMatches = text.split(/\n+/).filter(p => p.trim().length > 0);
+      const paragraphCount = text.trim() === '' ? 0 : paragraphMatches.length;
+
+      // Lines
+      const lineCount = text.trim() === '' ? 0 : text.split('\n').length;
+
+      // Reading Time (200 wpm)
+      const readSecs = Math.ceil((wordCount / 200) * 60);
+      const readFormatted = readSecs >= 60
+        ? `${Math.floor(readSecs / 60)}m ${readSecs % 60}s`
+        : `${readSecs}s`;
+
+      // Speaking Time (130 wpm)
+      const speakSecs = Math.ceil((wordCount / 130) * 60);
+      const speakFormatted = speakSecs >= 60
+        ? `${Math.floor(speakSecs / 60)}m ${speakSecs % 60}s`
+        : `${speakSecs}s`;
+
+      // Avg word length & longest word
+      let totalWordLen = 0;
+      let longest = '';
+      const uniqueSet = new Set();
+      const wordFreqMap = {};
+
+      cleanWords.forEach(w => {
+        const normalized = w.toLowerCase().replace(/^[^\w]+|[^\w]+$/g, '');
+        totalWordLen += normalized.length;
+        if (normalized.length > longest.length) longest = normalized;
+        if (normalized.length > 0) {
+          uniqueSet.add(normalized);
+          if (!stopWords.has(normalized) && normalized.length > 2) {
+            wordFreqMap[normalized] = (wordFreqMap[normalized] || 0) + 1;
+          }
+        }
+      });
+
+      const avgWordLen = wordCount > 0 ? (totalWordLen / wordCount).toFixed(1) : '0.0';
+
+      // Punctuation count
+      const punctMatches = text.match(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g);
+      const punctuationCount = punctMatches ? punctMatches.length : 0;
+
+      // Update DOM stats
+      statWords.textContent = wordCount.toLocaleString();
+      statChars.textContent = totalChars.toLocaleString();
+      statCharsNoSpace.textContent = charsNoSpace.toLocaleString();
+      statSentences.textContent = sentenceCount.toLocaleString();
+      statParagraphs.textContent = paragraphCount.toLocaleString();
+      statReadTime.textContent = readFormatted;
+      statSpeakTime.textContent = speakFormatted;
+      statAvgWordLen.textContent = avgWordLen;
+      statLines.textContent = lineCount.toLocaleString();
+      statLongestWord.textContent = longest || '-';
+      statUniqueWords.textContent = uniqueSet.size.toLocaleString();
+      statPunctuation.textContent = punctuationCount.toLocaleString();
+
+      // Top 5 Keywords
+      const sortedKeywords = Object.entries(wordFreqMap)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+      if (sortedKeywords.length === 0) {
+        keywordContainer.innerHTML = `
+          <div class="text-xs text-text-tertiary py-6 text-center italic">
+            ${wordCount > 0 ? 'No significant keywords found. Try adding more content.' : 'Start typing to view keyword frequency analysis...'}
+          </div>
+        `;
+      } else {
+        const maxCount = sortedKeywords[0][1];
+        keywordContainer.innerHTML = sortedKeywords.map(([word, count], idx) => {
+          const pct = wordCount > 0 ? ((count / wordCount) * 100).toFixed(1) : '0';
+          const barWidth = Math.max(10, Math.round((count / maxCount) * 100));
+          return `
+            <div class="p-2.5 rounded-lg bg-bg-tertiary border border-border-primary text-xs flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0 w-1/3">
+                <span class="font-mono text-text-tertiary text-[11px] w-4">#${idx + 1}</span>
+                <span class="font-semibold text-text-primary font-mono truncate">${word}</span>
+              </div>
+              <div class="flex-1 mx-2 bg-bg-primary rounded-full h-2 overflow-hidden border border-border-primary">
+                <div class="bg-accent h-full rounded-full transition-all duration-300" style="width: ${barWidth}%"></div>
+              </div>
+              <div class="flex items-center gap-3 text-right font-mono flex-shrink-0">
+                <span class="text-text-secondary">${count} ${count === 1 ? 'time' : 'times'}</span>
+                <span class="text-accent font-bold w-12 text-right">${pct}%</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Input listeners
+    textInput.addEventListener('input', analyzeText);
+
+    // Sample text
+    const sampleText = `Building high-performance web applications requires clean, maintainable code and robust developer tools. SnipTools provides fast, browser-based utilities that execute entirely client-side without sending data to external servers.
+
+Whether you are formatting JSON payloads, calculating word density, converting color palettes, or sharing code snippets, privacy remains our top priority. Every tool is crafted with dark mode first design, zero intrusive popups, and instant keyboard navigation.
+
+Start optimizing your development workflow today with our suite of modern developer tools.`;
+
+    btnSample.addEventListener('click', () => {
+      textInput.value = sampleText;
+      analyzeText();
+      window.showToast('Sample text loaded', 'info');
+    });
+
+    btnClear.addEventListener('click', () => {
+      textInput.value = '';
+      analyzeText();
+      textInput.focus();
+      window.showToast('Text cleared', 'info');
+    });
+
+    btnCopy.addEventListener('click', () => {
+      if (!textInput.value) {
+        window.showToast('Nothing to copy', 'error');
+        return;
+      }
+      window.copyToClipboard(textInput.value, 'Text copied to clipboard!');
+    });
+
+    btnUppercase.addEventListener('click', () => {
+      if (!textInput.value) return;
+      textInput.value = textInput.value.toUpperCase();
+      analyzeText();
+      window.showToast('Converted to UPPERCASE', 'info');
+    });
+
+    btnLowercase.addEventListener('click', () => {
+      if (!textInput.value) return;
+      textInput.value = textInput.value.toLowerCase();
+      analyzeText();
+      window.showToast('Converted to lowercase', 'info');
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        btnCopy.click();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x') {
+        e.preventDefault();
+        btnClear.click();
+      }
+    });
+
+    // Initial calculation
+    analyzeText();
+  });
+</script>

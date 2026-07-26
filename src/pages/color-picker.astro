@@ -1,0 +1,696 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Color Picker & Converter",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free online color picker and converter. Two-way sync between HEX, RGB, HSL, HSV formats, WCAG contrast ratio checker, and preset swatches."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What color formats does this converter support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This tool supports two-way live conversion between HEX (#RRGGBB), RGB (Red, Green, Blue), HSL (Hue, Saturation, Lightness), and HSV (Hue, Saturation, Value)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is WCAG contrast ratio calculated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Web Content Accessibility Guidelines (WCAG) contrast ratio is calculated using relative luminance values derived from sRGB components. Normal text requires at least 4.5:1 for AA and 7:1 for AAA compliance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I pick colors directly from my screen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! Clicking the native color input or Eyedropper icon opens your operating system's native color picker eyedropper tool."
+        }
+      }
+    ]
+  }
+];
+
+const faqs = [
+  {
+    question: "What color formats does this converter support?",
+    answer: "This tool supports two-way live conversion between HEX (#RRGGBB), RGB (Red, Green, Blue), HSL (Hue, Saturation, Lightness), and HSV (Hue, Saturation, Value)."
+  },
+  {
+    question: "How is WCAG contrast ratio calculated?",
+    answer: "The WCAG contrast ratio is calculated using relative luminance values derived from sRGB components. Normal text requires at least 4.5:1 for AA and 7:1 for AAA compliance."
+  },
+  {
+    question: "Can I pick colors directly from my screen?",
+    answer: "Yes! Modern web browsers support the native EyeDropper API via the color picker input, allowing you to sample any color on your monitor."
+  }
+];
+
+const presetPalettes = [
+  { name: 'Vercel Blue', hex: '#0070f3' },
+  { name: 'Tailwind Sky', hex: '#0ea5e9' },
+  { name: 'Emerald Green', hex: '#10b981' },
+  { name: 'Amber Warning', hex: '#f59e0b' },
+  { name: 'Rose Red', hex: '#f43f5e' },
+  { name: 'Purple Vivid', hex: '#8b5cf6' },
+  { name: 'Fuchsia Pink', hex: '#d946ef' },
+  { name: 'Dark Slate', hex: '#0f172a' },
+  { name: 'Neutral Gray', hex: '#737373' },
+  { name: 'Pure White', hex: '#ffffff' }
+];
+
+const relatedTools = [
+  {
+    name: 'Word & Character Counter',
+    slug: '/word-counter',
+    icon: 'Aa',
+    category: 'Text',
+    description: 'Count words, characters, sentences, paragraphs, and estimate reading time.'
+  },
+  {
+    name: 'Lorem Ipsum Generator',
+    slug: '/lorem-ipsum',
+    icon: '¶',
+    category: 'Generator',
+    description: 'Generate placeholder text, paragraphs, words, or lists for UI designs.'
+  },
+  {
+    name: 'Base64 Encode & Decode',
+    slug: '/base64',
+    icon: '⟨⟩',
+    category: 'Encoding',
+    description: 'Encode text or files to Base64 format and decode Base64 strings back.'
+  }
+];
+---
+
+<BaseLayout
+  title="Color Picker & Converter — HEX, RGB, HSL, HSV & Contrast Checker | SnipTools"
+  description="Free online interactive color picker and converter. Convert HEX, RGB, HSL, and HSV with live two-way sync, WCAG color contrast checker, and swatches."
+  structuredData={structuredData}
+>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-accent bg-accent/10 border border-accent/20 mb-3">
+        <span>🎨</span>
+        <span>Design & CSS Utility</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-text-primary tracking-tight mb-3">
+        Color Picker & Converter
+      </h1>
+      <p class="text-sm sm:text-base text-text-secondary max-w-2xl mx-auto">
+        Convert color codes seamlessly across HEX, RGB, HSL, and HSV formats with instant WCAG contrast ratio verification.
+      </p>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Left Column: Visual Preview & Picker -->
+      <div class="lg:col-span-5 space-y-6">
+        <!-- Main Color Preview Card -->
+        <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 shadow-xl space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-text-secondary uppercase tracking-wider">Color Preview</span>
+            <button
+              id="btn-random"
+              class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-bg-tertiary text-text-primary hover:bg-bg-hover border border-border-primary transition-all cursor-pointer flex items-center gap-1.5"
+              title="Generate random color (Press R or Space)"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span>Random Color</span>
+            </button>
+          </div>
+
+          <!-- Preview Box with Text Contrast Preview -->
+          <div
+            id="color-preview-box"
+            class="w-full h-44 rounded-xl shadow-inner border border-white/10 flex flex-col items-center justify-center p-4 transition-colors duration-200"
+            style="background-color: #3b82f6;"
+          >
+            <!-- White text sample -->
+            <div class="text-white text-center drop-shadow">
+              <span class="text-lg font-bold block" id="preview-hex-display">#3B82F6</span>
+              <span class="text-xs opacity-90">White Text Preview</span>
+            </div>
+
+            <div class="w-24 h-px bg-white/20 my-2"></div>
+
+            <!-- Black text sample -->
+            <div class="text-black text-center">
+              <span class="text-xs font-medium opacity-90">Black Text Preview</span>
+            </div>
+          </div>
+
+          <!-- Color Picker Trigger Input -->
+          <div class="flex items-center gap-3">
+            <label for="native-color-picker" class="flex-1 flex items-center gap-3 p-3 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent cursor-pointer transition-colors">
+              <input
+                type="color"
+                id="native-color-picker"
+                value="#3b82f6"
+                class="w-8 h-8 rounded border-0 bg-transparent cursor-pointer"
+              />
+              <div class="flex flex-col">
+                <span class="text-xs font-bold text-text-primary">Native Color Picker</span>
+                <span class="text-[11px] text-text-tertiary">Click to open eyedropper</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- WCAG Accessibility Contrast Checker -->
+        <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 shadow-xl space-y-4">
+          <h2 class="text-sm font-bold text-text-primary flex items-center justify-between">
+            <span>WCAG Contrast Ratio</span>
+            <span class="text-xs font-normal text-text-tertiary">Standard 4.5:1</span>
+          </h2>
+
+          <div class="grid grid-cols-2 gap-3">
+            <!-- White Background Contrast -->
+            <div class="p-3.5 rounded-xl bg-bg-tertiary border border-border-primary space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-text-secondary font-medium">Vs. White (#FFF)</span>
+                <span id="contrast-white-ratio" class="font-mono text-sm font-bold text-text-primary">4.8:1</span>
+              </div>
+
+              <div class="flex flex-wrap gap-1" id="contrast-white-badges">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-success/20 text-success border border-success/30">AA Pass</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-error/20 text-error border border-error/30">AAA Fail</span>
+              </div>
+            </div>
+
+            <!-- Black Background Contrast -->
+            <div class="p-3.5 rounded-xl bg-bg-tertiary border border-border-primary space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-text-secondary font-medium">Vs. Black (#000)</span>
+                <span id="contrast-black-ratio" class="font-mono text-sm font-bold text-text-primary">4.4:1</span>
+              </div>
+
+              <div class="flex flex-wrap gap-1" id="contrast-black-badges">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-success/20 text-success border border-success/30">AA Pass</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-error/20 text-error border border-error/30">AAA Fail</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preset Swatches -->
+        <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 shadow-xl">
+          <h2 class="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">Popular Swatches</h2>
+          <div class="grid grid-cols-5 gap-2">
+            {presetPalettes.map(swatch => (
+              <button
+                class="swatch-btn group relative aspect-square rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:scale-105 transition-transform"
+                style={`background-color: ${swatch.hex};`}
+                data-hex={swatch.hex}
+                title={`${swatch.name} (${swatch.hex})`}
+              >
+                <span class="sr-only">{swatch.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Color Format Inputs -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 sm:p-6 shadow-xl space-y-5">
+          <h2 class="text-base font-bold text-text-primary mb-1">Color Format Converters</h2>
+          <p class="text-xs text-text-tertiary -mt-3 mb-4">Edit any field to dynamically update all color formats in real time.</p>
+
+          <!-- HEX Input -->
+          <div class="space-y-1.5">
+            <label for="input-hex" class="flex justify-between text-xs font-bold text-text-secondary">
+              <span>HEX Color Code</span>
+              <span class="font-mono text-text-tertiary text-[11px]">#RRGGBB</span>
+            </label>
+            <div class="flex gap-2">
+              <div class="relative flex-1">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary font-mono text-sm">#</span>
+                <input
+                  type="text"
+                  id="input-hex"
+                  value="3b82f6"
+                  class="w-full rounded-xl bg-bg-tertiary border border-border-primary pl-8 pr-3 py-2.5 text-sm font-mono text-text-primary focus:border-accent focus:outline-none transition-all uppercase"
+                />
+              </div>
+              <button
+                id="btn-copy-hex"
+                class="px-4 py-2.5 rounded-xl bg-accent text-white font-semibold text-xs hover:bg-accent-hover transition-colors flex items-center gap-1.5"
+              >
+                Copy HEX
+              </button>
+            </div>
+          </div>
+
+          <!-- RGB Input -->
+          <div class="space-y-1.5">
+            <label for="input-rgb" class="flex justify-between text-xs font-bold text-text-secondary">
+              <span>RGB Color Format</span>
+              <span class="font-mono text-text-tertiary text-[11px]">rgb(R, G, B)</span>
+            </label>
+            <div class="flex gap-2">
+              <input
+                type="text"
+                id="input-rgb"
+                value="rgb(59, 130, 246)"
+                class="flex-1 rounded-xl bg-bg-tertiary border border-border-primary px-3.5 py-2.5 text-sm font-mono text-text-primary focus:border-accent focus:outline-none transition-all"
+              />
+              <button
+                id="btn-copy-rgb"
+                class="px-4 py-2.5 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent text-text-primary font-medium text-xs transition-colors"
+              >
+                Copy RGB
+              </button>
+            </div>
+          </div>
+
+          <!-- HSL Input -->
+          <div class="space-y-1.5">
+            <label for="input-hsl" class="flex justify-between text-xs font-bold text-text-secondary">
+              <span>HSL Color Format</span>
+              <span class="font-mono text-text-tertiary text-[11px]">hsl(H, S%, L%)</span>
+            </label>
+            <div class="flex gap-2">
+              <input
+                type="text"
+                id="input-hsl"
+                value="hsl(217, 91%, 60%)"
+                class="flex-1 rounded-xl bg-bg-tertiary border border-border-primary px-3.5 py-2.5 text-sm font-mono text-text-primary focus:border-accent focus:outline-none transition-all"
+              />
+              <button
+                id="btn-copy-hsl"
+                class="px-4 py-2.5 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent text-text-primary font-medium text-xs transition-colors"
+              >
+                Copy HSL
+              </button>
+            </div>
+          </div>
+
+          <!-- HSV Input -->
+          <div class="space-y-1.5">
+            <label for="input-hsv" class="flex justify-between text-xs font-bold text-text-secondary">
+              <span>HSV Color Format</span>
+              <span class="font-mono text-text-tertiary text-[11px]">hsv(H, S%, V%)</span>
+            </label>
+            <div class="flex gap-2">
+              <input
+                type="text"
+                id="input-hsv"
+                value="hsv(217, 76%, 96%)"
+                class="flex-1 rounded-xl bg-bg-tertiary border border-border-primary px-3.5 py-2.5 text-sm font-mono text-text-primary focus:border-accent focus:outline-none transition-all"
+              />
+              <button
+                id="btn-copy-hsv"
+                class="px-4 py-2.5 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent text-text-primary font-medium text-xs transition-colors"
+              >
+                Copy HSV
+              </button>
+            </div>
+          </div>
+
+          <!-- RGB Components Sliders -->
+          <div class="pt-4 border-t border-border-primary space-y-3">
+            <span class="text-xs font-bold text-text-secondary block">RGB Channel Sliders</span>
+
+            <!-- Red slider -->
+            <div class="flex items-center gap-3 text-xs font-mono">
+              <span class="w-4 font-bold text-red-500">R</span>
+              <input type="range" id="slider-r" min="0" max="255" value="59" class="flex-1 accent-red-500 cursor-pointer" />
+              <span id="slider-r-val" class="w-10 text-right text-text-primary">59</span>
+            </div>
+
+            <!-- Green slider -->
+            <div class="flex items-center gap-3 text-xs font-mono">
+              <span class="w-4 font-bold text-green-500">G</span>
+              <input type="range" id="slider-g" min="0" max="255" value="130" class="flex-1 accent-green-500 cursor-pointer" />
+              <span id="slider-g-val" class="w-10 text-right text-text-primary">130</span>
+            </div>
+
+            <!-- Blue slider -->
+            <div class="flex items-center gap-3 text-xs font-mono">
+              <span class="w-4 font-bold text-blue-500">B</span>
+              <input type="range" id="slider-b" min="0" max="255" value="246" class="flex-1 accent-blue-500 cursor-pointer" />
+              <span id="slider-b-val" class="w-10 text-right text-text-primary">246</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Use Section -->
+    <section class="mt-8 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        How to Use the Color Picker & Converter
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs text-text-secondary">
+        <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="font-bold text-text-primary mb-1 text-sm">1. Choose Color</div>
+          <p>Click the native color picker box, input a HEX string, or hit "Random Color".</p>
+        </div>
+        <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="font-bold text-text-primary mb-1 text-sm">2. Automatic Conversion</div>
+          <p>HEX, RGB, HSL, and HSV fields sync instantly as you modify any component.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="font-bold text-text-primary mb-1 text-sm">3. Verify Contrast</div>
+          <p>Check the WCAG AA/AAA badges against white and black backgrounds for compliance.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+          <div class="font-bold text-text-primary mb-1 text-sm">4. One-Click Copy</div>
+          <p>Click any copy button to copy formatted CSS color values directly to your clipboard.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mt-8 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-6">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {faqs.map(faq => (
+          <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+            <h3 class="text-sm font-bold text-text-primary mb-2 flex items-center gap-2">
+              <span class="text-accent font-bold">Q:</span> {faq.question}
+            </h3>
+            <p class="text-xs text-text-secondary leading-relaxed pl-5">
+              {faq.answer}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related Tools Section -->
+    <section class="mt-8 pt-6">
+      <h2 class="text-xl font-bold text-text-primary mb-4">Related Developer Tools</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {relatedTools.map(tool => (
+          <a
+            href={tool.slug}
+            class="group p-5 rounded-xl bg-bg-secondary border border-border-primary hover:border-accent/40 transition-all no-underline"
+          >
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-xl">{tool.icon}</span>
+              <span class="font-bold text-text-primary group-hover:text-accent transition-colors text-sm">{tool.name}</span>
+            </div>
+            <p class="text-xs text-text-secondary line-clamp-2">{tool.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    // UI Elements
+    const nativePicker = document.getElementById('native-color-picker');
+    const colorPreviewBox = document.getElementById('color-preview-box');
+    const previewHexDisplay = document.getElementById('preview-hex-display');
+
+    const inputHex = document.getElementById('input-hex');
+    const inputRgb = document.getElementById('input-rgb');
+    const inputHsl = document.getElementById('input-hsl');
+    const inputHsv = document.getElementById('input-hsv');
+
+    const sliderR = document.getElementById('slider-r');
+    const sliderG = document.getElementById('slider-g');
+    const sliderB = document.getElementById('slider-b');
+    const sliderRVal = document.getElementById('slider-r-val');
+    const sliderGVal = document.getElementById('slider-g-val');
+    const sliderBVal = document.getElementById('slider-b-val');
+
+    const btnRandom = document.getElementById('btn-random');
+    const btnCopyHex = document.getElementById('btn-copy-hex');
+    const btnCopyRgb = document.getElementById('btn-copy-rgb');
+    const btnCopyHsl = document.getElementById('btn-copy-hsl');
+    const btnCopyHsv = document.getElementById('btn-copy-hsv');
+
+    const contrastWhiteRatio = document.getElementById('contrast-white-ratio');
+    const contrastBlackRatio = document.getElementById('contrast-black-ratio');
+    const contrastWhiteBadges = document.getElementById('contrast-white-badges');
+    const contrastBlackBadges = document.getElementById('contrast-black-badges');
+
+    let currentRGB = { r: 59, g: 130, b: 246 };
+
+    // Conversion Math Utilities
+    function rgbToHex(r, g, b) {
+      return ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+    }
+
+    function hexToRgb(hex) {
+      let clean = hex.replace(/^#/, '');
+      if (clean.length === 3) {
+        clean = clean.split('').map(c => c + c).join('');
+      }
+      if (!/^[0-9A-Fa-f]{6}$/.test(clean)) return null;
+      const num = parseInt(clean, 16);
+      return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+
+      if (max === min) {
+        h = s = 0;
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return {
+        h: Math.round(h * 360),
+        s: Math.round(s * 100),
+        l: Math.round(l * 100)
+      };
+    }
+
+    function rgbToHsv(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, v = max;
+      const d = max - min;
+      s = max === 0 ? 0 : d / max;
+
+      if (max === min) {
+        h = 0;
+      } else {
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return {
+        h: Math.round(h * 360),
+        s: Math.round(s * 100),
+        v: Math.round(v * 100)
+      };
+    }
+
+    // Relative Luminance calculation for WCAG
+    function getLuminance(r, g, b) {
+      const a = [r, g, b].map(v => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      });
+      return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+    }
+
+    function getContrastRatio(l1, l2) {
+      const lighter = Math.max(l1, l2);
+      const darker = Math.min(l1, l2);
+      return (lighter + 0.05) / (darker + 0.05);
+    }
+
+    function updateAllViews(source = 'internal') {
+      const { r, g, b } = currentRGB;
+      const hex = rgbToHex(r, g, b);
+      const hsl = rgbToHsl(r, g, b);
+      const hsv = rgbToHsv(r, g, b);
+
+      // Color Box Preview
+      colorPreviewBox.style.backgroundColor = `#${hex}`;
+      previewHexDisplay.textContent = `#${hex}`;
+
+      // Native Picker
+      if (source !== 'native') {
+        nativePicker.value = `#${hex}`;
+      }
+
+      // Inputs
+      if (source !== 'hex') inputHex.value = hex;
+      if (source !== 'rgb') inputRgb.value = `rgb(${r}, ${g}, ${b})`;
+      if (source !== 'hsl') inputHsl.value = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+      if (source !== 'hsv') inputHsv.value = `hsv(${hsv.h}, ${hsv.s}%, ${hsv.v}%)`;
+
+      // Sliders
+      if (source !== 'slider') {
+        sliderR.value = r;
+        sliderG.value = g;
+        sliderB.value = b;
+      }
+      sliderRVal.textContent = r;
+      sliderGVal.textContent = g;
+      sliderBVal.textContent = b;
+
+      // WCAG Contrast
+      const lum = getLuminance(r, g, b);
+      const lumWhite = getLuminance(255, 255, 255);
+      const lumBlack = getLuminance(0, 0, 0);
+
+      const ratioWhite = getContrastRatio(lum, lumWhite);
+      const ratioBlack = getContrastRatio(lum, lumBlack);
+
+      contrastWhiteRatio.textContent = `${ratioWhite.toFixed(1)}:1`;
+      contrastBlackRatio.textContent = `${ratioBlack.toFixed(1)}:1`;
+
+      // Badges White
+      const whiteAA = ratioWhite >= 4.5;
+      const whiteAAA = ratioWhite >= 7.0;
+      contrastWhiteBadges.innerHTML = `
+        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${whiteAA ? 'bg-success/20 text-success border border-success/30' : 'bg-error/20 text-error border border-error/30'}">
+          AA ${whiteAA ? 'Pass' : 'Fail'}
+        </span>
+        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${whiteAAA ? 'bg-success/20 text-success border border-success/30' : 'bg-error/20 text-error border border-error/30'}">
+          AAA ${whiteAAA ? 'Pass' : 'Fail'}
+        </span>
+      `;
+
+      // Badges Black
+      const blackAA = ratioBlack >= 4.5;
+      const blackAAA = ratioBlack >= 7.0;
+      contrastBlackBadges.innerHTML = `
+        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${blackAA ? 'bg-success/20 text-success border border-success/30' : 'bg-error/20 text-error border border-error/30'}">
+          AA ${blackAA ? 'Pass' : 'Fail'}
+        </span>
+        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${blackAAA ? 'bg-success/20 text-success border border-success/30' : 'bg-error/20 text-error border border-error/30'}">
+          AAA ${blackAAA ? 'Pass' : 'Fail'}
+        </span>
+      `;
+    }
+
+    // Input Event Listeners
+    nativePicker.addEventListener('input', (e) => {
+      const rgb = hexToRgb(e.target.value);
+      if (rgb) {
+        currentRGB = rgb;
+        updateAllViews('native');
+      }
+    });
+
+    inputHex.addEventListener('input', (e) => {
+      const rgb = hexToRgb(e.target.value);
+      if (rgb) {
+        currentRGB = rgb;
+        updateAllViews('hex');
+      }
+    });
+
+    inputRgb.addEventListener('input', (e) => {
+      const match = e.target.value.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/i) ||
+                    e.target.value.match(/^(\d+)\s*,\s*(\d+)\s*,\s*(\d+)$/);
+      if (match) {
+        const r = Math.min(255, parseInt(match[1]));
+        const g = Math.min(255, parseInt(match[2]));
+        const b = Math.min(255, parseInt(match[3]));
+        currentRGB = { r, g, b };
+        updateAllViews('rgb');
+      }
+    });
+
+    // Sliders
+    const handleSlider = () => {
+      currentRGB = {
+        r: parseInt(sliderR.value),
+        g: parseInt(sliderG.value),
+        b: parseInt(sliderB.value)
+      };
+      updateAllViews('slider');
+    };
+    sliderR.addEventListener('input', handleSlider);
+    sliderG.addEventListener('input', handleSlider);
+    sliderB.addEventListener('input', handleSlider);
+
+    // Random Color
+    function setRandomColor() {
+      currentRGB = {
+        r: Math.floor(Math.random() * 256),
+        g: Math.floor(Math.random() * 256),
+        b: Math.floor(Math.random() * 256)
+      };
+      updateAllViews();
+      window.showToast('Generated random color', 'info');
+    }
+    btnRandom.addEventListener('click', setRandomColor);
+
+    // Swatches
+    document.querySelectorAll('.swatch-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const hex = btn.getAttribute('data-hex');
+        const rgb = hexToRgb(hex);
+        if (rgb) {
+          currentRGB = rgb;
+          updateAllViews();
+          window.showToast(`Selected ${hex}`, 'info');
+        }
+      });
+    });
+
+    // Copy Buttons
+    btnCopyHex.addEventListener('click', () => {
+      const hex = `#${rgbToHex(currentRGB.r, currentRGB.g, currentRGB.b)}`;
+      window.copyToClipboard(hex, `Copied ${hex}`);
+    });
+
+    btnCopyRgb.addEventListener('click', () => {
+      window.copyToClipboard(inputRgb.value, `Copied ${inputRgb.value}`);
+    });
+
+    btnCopyHsl.addEventListener('click', () => {
+      window.copyToClipboard(inputHsl.value, `Copied ${inputHsl.value}`);
+    });
+
+    btnCopyHsv.addEventListener('click', () => {
+      window.copyToClipboard(inputHsv.value, `Copied ${inputHsv.value}`);
+    });
+
+    // Keyboard shortcut (R or Space for random)
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+      if (e.key.toLowerCase() === 'r' || e.key === ' ') {
+        e.preventDefault();
+        setRandomColor();
+      }
+    });
+
+    // Initial render
+    updateAllViews();
+  });
+</script>

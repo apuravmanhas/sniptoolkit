@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page Not Found (404) — SnipTools"
+  description="The tool or page you requested could not be found on SnipTools."
+>
+  <div class="mx-auto max-w-xl px-4 py-20 text-center">
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-accent/10 border border-accent/20 text-3xl font-extrabold text-accent mb-6 font-mono">
+      404
+    </div>
+    <h1 class="text-3xl font-extrabold text-text-primary mb-3">Tool or Page Not Found</h1>
+    <p class="text-sm text-text-secondary mb-8 leading-relaxed">
+      Oops! The tool or page you're looking for might have been moved or doesn't exist. Check our list of developer tools below or return home.
+    </p>
+    <div class="flex items-center justify-center gap-3">
+      <a href="/" class="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white text-sm font-semibold transition-all">
+        Back to Home
+      </a>
+      <button
+        onclick="document.getElementById('command-palette').classList.remove('hidden'); document.getElementById('cmd-search').focus();"
+        class="px-5 py-2.5 rounded-xl bg-bg-secondary border border-border-primary hover:border-border-secondary text-text-primary text-sm font-semibold transition-all cursor-pointer"
+      >
+        Search Tools (Ctrl+K)
+      </button>
+    </div>
+  </div>
+</BaseLayout>

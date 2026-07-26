@@ -1,0 +1,93 @@
+---
+const currentYear = new Date().getFullYear();
+
+const toolLinks = [
+  { name: 'JSON Formatter', slug: '/json-formatter' },
+  { name: 'Base64 Encode/Decode', slug: '/base64' },
+  { name: 'UUID Generator', slug: '/uuid-generator' },
+  { name: 'URL Encode/Decode', slug: '/url-encode-decode' },
+  { name: 'Hash Generator', slug: '/hash-generator' },
+];
+
+const moreTools = [
+  { name: 'Timestamp Converter', slug: '/timestamp-converter' },
+  { name: 'Word Counter', slug: '/word-counter' },
+  { name: 'Color Picker', slug: '/color-picker' },
+  { name: 'Lorem Ipsum', slug: '/lorem-ipsum' },
+  { name: 'Online Clipboard', slug: '/online-clipboard' },
+];
+
+const pages = [
+  { name: 'About', slug: '/about' },
+  { name: 'Privacy Policy', slug: '/privacy-policy' },
+  { name: 'Terms of Service', slug: '/terms' },
+  { name: 'Contact', slug: '/contact' },
+];
+---
+
+<footer class="border-t border-border-primary bg-bg-secondary/50 mt-16">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Footer grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
+      <!-- Brand -->
+      <div class="col-span-2 sm:col-span-1">
+        <a href="/" class="flex items-center gap-2 text-text-primary no-underline mb-3">
+          <div class="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-accent to-purple text-[9px] font-extrabold text-white">
+            ST
+          </div>
+          <span class="text-sm font-bold">SnipTools</span>
+        </a>
+        <p class="text-xs text-text-tertiary leading-relaxed max-w-[200px]">
+          Fast, free developer & utility tools. No sign-up. 100% client-side processing.
+        </p>
+      </div>
+
+      <!-- Popular Tools -->
+      <div>
+        <h3 class="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">Popular Tools</h3>
+        <ul class="space-y-2">
+          {toolLinks.map(tool => (
+            <li>
+              <a href={tool.slug} class="text-xs text-text-tertiary hover:text-text-primary transition-colors duration-200">{tool.name}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- More Tools -->
+      <div>
+        <h3 class="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">More Tools</h3>
+        <ul class="space-y-2">
+          {moreTools.map(tool => (
+            <li>
+              <a href={tool.slug} class="text-xs text-text-tertiary hover:text-text-primary transition-colors duration-200">{tool.name}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h3 class="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">Company</h3>
+        <ul class="space-y-2">
+          {pages.map(page => (
+            <li>
+              <a href={page.slug} class="text-xs text-text-tertiary hover:text-text-primary transition-colors duration-200">{page.name}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="border-t border-border-primary pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-xs text-text-tertiary">
+        © {currentYear} SnipTools. All tools are free and process data locally in your browser.
+      </p>
+      <div class="flex items-center gap-1">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-success animate-pulse"></span>
+        <span class="text-xs text-text-tertiary">All systems operational</span>
+      </div>
+    </div>
+  </div>
+</footer>

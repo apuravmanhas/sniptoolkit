@@ -1,0 +1,517 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Lorem Ipsum Generator",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free online Lorem Ipsum generator. Create placeholder text in paragraphs, words, sentences, or bytes with HTML tags and TXT download."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Lorem Ipsum placeholder text?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Lorem Ipsum is standard dummy text used in typesetting and web design since the 1500s. It acts as neutral placeholder content so viewers focus on layout aesthetics rather than readable copy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where does the text come from?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The classic Lorem Ipsum passage comes from sections 1.10.32 and 1.10.33 of 'de Finibus Bonorum et Malorum' (The Extremes of Good and Evil) by Cicero, written in 45 BC."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I export the text with HTML tags?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! Toggle the 'HTML Paragraph Tags' option to automatically wrap paragraphs in <p> tags for easy pasting into HTML templates."
+        }
+      }
+    ]
+  }
+];
+
+const faqs = [
+  {
+    question: "What is Lorem Ipsum placeholder text?",
+    answer: "Lorem Ipsum is standard dummy text used in typesetting and layout design. It provides a natural-looking distribution of letters so designers can focus on visual formatting without being distracted by readable text."
+  },
+  {
+    question: "Where does the text come from?",
+    answer: "The classic text originates from Cicero's 45 BC treatise 'de Finibus Bonorum et Malorum'. The phrase 'Lorem ipsum dolor sit amet' comes from 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet...'."
+  },
+  {
+    question: "Can I export the text with HTML tags?",
+    answer: "Yes! Simply enable the 'Wrap with <p> tags' toggle to automatically enclose every generated paragraph inside valid standard HTML markup."
+  }
+];
+
+const relatedTools = [
+  {
+    name: 'Word & Character Counter',
+    slug: '/word-counter',
+    icon: 'Aa',
+    category: 'Text',
+    description: 'Count words, characters, sentences, paragraphs, and estimate reading time.'
+  },
+  {
+    name: 'Color Picker & Converter',
+    slug: '/color-picker',
+    icon: '🎨',
+    category: 'Design',
+    description: 'Convert color codes between HEX, RGB, HSL, and HSV with WCAG contrast checker.'
+  },
+  {
+    name: 'Online Clipboard',
+    slug: '/online-clipboard',
+    icon: '📋',
+    category: 'Utility',
+    description: 'Share text and code snippets between multiple devices using 6-digit codes.'
+  }
+];
+---
+
+<BaseLayout
+  title="Lorem Ipsum Generator — Free Dummy Text & Paragraphs | SnipTools"
+  description="Free online Lorem Ipsum generator. Instantly generate paragraphs, words, sentences, or bytes of placeholder dummy text with HTML tags and TXT download."
+  structuredData={structuredData}
+>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-accent bg-accent/10 border border-accent/20 mb-3">
+        <span>¶</span>
+        <span>Generator Utility</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-text-primary tracking-tight mb-3">
+        Lorem Ipsum Generator
+      </h1>
+      <p class="text-sm sm:text-base text-text-secondary max-w-2xl mx-auto">
+        Generate clean placeholder dummy text for UI mockups, graphic designs, and web development.
+      </p>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="space-y-6">
+      <!-- Options Toolbar Card -->
+      <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 sm:p-6 shadow-xl space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-border-primary pb-4">
+          <span class="text-xs font-bold text-text-secondary uppercase tracking-wider">Generator Controls</span>
+
+          <!-- Quick Presets -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs text-text-tertiary mr-1">Presets:</span>
+            <button id="preset-standard" class="px-2.5 py-1 text-xs rounded-lg bg-bg-tertiary text-text-secondary hover:text-text-primary border border-border-primary transition-all cursor-pointer">
+              Standard 3 Para
+            </button>
+            <button id="preset-short" class="px-2.5 py-1 text-xs rounded-lg bg-bg-tertiary text-text-secondary hover:text-text-primary border border-border-primary transition-all cursor-pointer">
+              50 Words
+            </button>
+            <button id="preset-html" class="px-2.5 py-1 text-xs rounded-lg bg-bg-tertiary text-text-secondary hover:text-text-primary border border-border-primary transition-all cursor-pointer">
+              HTML Formatted
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Unit type selector -->
+          <div class="space-y-1.5">
+            <label for="select-type" class="text-xs font-bold text-text-secondary block">Generate Unit</label>
+            <select
+              id="select-type"
+              class="w-full rounded-xl bg-bg-tertiary border border-border-primary px-3.5 py-2.5 text-sm text-text-primary focus:border-accent focus:outline-none transition-all cursor-pointer"
+            >
+              <option value="paragraphs" selected>Paragraphs</option>
+              <option value="words">Words</option>
+              <option value="sentences">Sentences</option>
+              <option value="bytes">Bytes</option>
+            </select>
+          </div>
+
+          <!-- Quantity Selector -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-bold text-text-secondary">
+              <label for="input-count">Quantity</label>
+              <span id="count-display" class="font-mono text-accent">5</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <input
+                type="range"
+                id="input-count-slider"
+                min="1"
+                max="50"
+                value="5"
+                class="flex-1 accent-accent cursor-pointer"
+              />
+              <input
+                type="number"
+                id="input-count"
+                min="1"
+                max="50"
+                value="5"
+                class="w-16 rounded-xl bg-bg-tertiary border border-border-primary text-center py-2 text-sm font-mono text-text-primary focus:border-accent focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <!-- Options Toggles -->
+          <div class="space-y-2 lg:col-span-2 flex flex-col justify-center">
+            <label class="flex items-center gap-2.5 text-xs text-text-primary cursor-pointer select-none">
+              <input type="checkbox" id="toggle-start-lorem" checked class="w-4 h-4 accent-accent rounded cursor-pointer" />
+              <span>Start with <strong>"Lorem ipsum dolor sit amet..."</strong></span>
+            </label>
+
+            <label class="flex items-center gap-2.5 text-xs text-text-primary cursor-pointer select-none">
+              <input type="checkbox" id="toggle-html-tags" class="w-4 h-4 accent-accent rounded cursor-pointer" />
+              <span>Wrap paragraphs with HTML <code>&lt;p&gt;</code> tags</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Primary Trigger Action -->
+        <div class="pt-2 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <button
+              id="btn-generate"
+              class="px-5 py-2.5 rounded-xl bg-accent text-white font-semibold text-sm hover:bg-accent-hover transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-accent/20"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span>Generate Text</span>
+            </button>
+            <kbd class="hidden sm:inline-block text-[11px] font-mono text-text-tertiary bg-bg-tertiary border border-border-primary rounded px-2 py-1">Ctrl + Enter</kbd>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="flex items-center gap-2">
+            <button
+              id="btn-download"
+              class="px-4 py-2.5 rounded-xl bg-bg-tertiary border border-border-primary hover:border-text-secondary text-text-primary font-medium text-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Download .TXT</span>
+            </button>
+
+            <button
+              id="btn-copy-lorem"
+              class="px-4 py-2.5 rounded-xl bg-bg-tertiary border border-border-primary hover:border-accent text-accent font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy Text</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generated Text Display Box -->
+      <div class="rounded-2xl border border-border-primary bg-bg-secondary p-5 sm:p-6 shadow-xl space-y-3">
+        <div class="flex items-center justify-between text-xs text-text-tertiary">
+          <span class="font-semibold text-text-secondary uppercase tracking-wider">Output Text</span>
+          <div class="flex items-center gap-4 font-mono">
+            <span>Words: <strong id="out-word-count" class="text-text-primary">0</strong></span>
+            <span>Characters: <strong id="out-char-count" class="text-text-primary">0</strong></span>
+          </div>
+        </div>
+
+        <textarea
+          id="output-text"
+          rows="12"
+          readonly
+          class="w-full rounded-xl bg-bg-tertiary border border-border-primary p-4 text-sm text-text-primary font-sans leading-relaxed focus:outline-none resize-y"
+        ></textarea>
+      </div>
+
+      <!-- How to Use Section -->
+      <section class="rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+        <h2 class="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          How to Use the Lorem Ipsum Generator
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs text-text-secondary">
+          <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+            <div class="font-bold text-text-primary mb-1 text-sm">1. Select Unit</div>
+            <p>Choose whether to generate full paragraphs, individual words, sentences, or exact byte length.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+            <div class="font-bold text-text-primary mb-1 text-sm">2. Set Quantity</div>
+            <p>Adjust the slider or number input from 1 to 50 units based on your design layout needs.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+            <div class="font-bold text-text-primary mb-1 text-sm">3. Toggle HTML Tags</div>
+            <p>Enable HTML tag wrapping to insert ready-to-use <code>&lt;p&gt;</code> blocks straight into code.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-bg-tertiary border border-border-primary">
+            <div class="font-bold text-text-primary mb-1 text-sm">4. Copy or Download</div>
+            <p>Click "Copy Text" for instant clipboard copying or "Download .TXT" to save a plain text file.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+        <h2 class="text-xl font-bold text-text-primary mb-6">Frequently Asked Questions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map(faq => (
+            <div class="p-4 rounded-xl bg-bg-tertiary border border-border-primary">
+              <h3 class="text-sm font-bold text-text-primary mb-2 flex items-center gap-2">
+                <span class="text-accent font-bold">Q:</span> {faq.question}
+              </h3>
+              <p class="text-xs text-text-secondary leading-relaxed pl-5">
+                {faq.answer}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools Section -->
+      <section class="pt-6">
+        <h2 class="text-xl font-bold text-text-primary mb-4">Related Developer Tools</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {relatedTools.map(tool => (
+            <a
+              href={tool.slug}
+              class="group p-5 rounded-xl bg-bg-secondary border border-border-primary hover:border-accent/40 transition-all no-underline"
+            >
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-xl">{tool.icon}</span>
+                <span class="font-bold text-text-primary group-hover:text-accent transition-colors text-sm">{tool.name}</span>
+              </div>
+              <p class="text-xs text-text-secondary line-clamp-2">{tool.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Corpus dictionary for generation
+    const loremWords = [
+      "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit", "sed", "do",
+      "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore", "magna", "aliqua", "ut",
+      "enim", "ad", "minim", "veniam", "quis", "nostrud", "exercitation", "ullamco", "laboris", "nisi",
+      "ut", "aliquip", "ex", "ea", "commodo", "consequat", "duis", "aute", "irure", "dolor",
+      "in", "reprehenderit", "in", "voluptate", "velit", "esse", "cillum", "dolore", "eu", "fugiat",
+      "nulla", "pariatur", "excepteur", "sint", "occaecat", "cupidatat", "non", "proident", "sunt", "in",
+      "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id", "est", "laborum", "curabitur",
+      "pretium", "tincidunt", "lacus", "nulla", "gravida", "orci", "a", "odio", "nullam", "varius",
+      "turpis", "et", "commodo", "pharetra", "eros", "bibendum", "elit", "nec", "luctus", "magna",
+      "felis", "sollicitudin", "mauris", "integer", "in", "mauris", "eu", "nibh", "scelerisque", "quisque"
+    ];
+
+    const standardPrefix = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+    // UI Elements
+    const selectType = document.getElementById('select-type');
+    const inputCount = document.getElementById('input-count');
+    const inputCountSlider = document.getElementById('input-count-slider');
+    const countDisplay = document.getElementById('count-display');
+    const toggleStartLorem = document.getElementById('toggle-start-lorem');
+    const toggleHtmlTags = document.getElementById('toggle-html-tags');
+
+    const btnGenerate = document.getElementById('btn-generate');
+    const btnDownload = document.getElementById('btn-download');
+    const btnCopyLorem = document.getElementById('btn-copy-lorem');
+
+    const outputText = document.getElementById('output-text');
+    const outWordCount = document.getElementById('out-word-count');
+    const outCharCount = document.getElementById('out-char-count');
+
+    const presetStandard = document.getElementById('preset-standard');
+    const presetShort = document.getElementById('preset-short');
+    const presetHtml = document.getElementById('preset-html');
+
+    // Sync Slider & Number input
+    function syncCount(val) {
+      let num = parseInt(val) || 1;
+      num = Math.max(1, Math.min(50, num));
+      inputCount.value = num;
+      inputCountSlider.value = num;
+      countDisplay.textContent = num;
+      generateLorem();
+    }
+
+    inputCount.addEventListener('input', (e) => syncCount(e.target.value));
+    inputCountSlider.addEventListener('input', (e) => syncCount(e.target.value));
+
+    // Helper functions
+    function getRandomWord() {
+      return loremWords[Math.floor(Math.random() * loremWords.length)];
+    }
+
+    function generateSentence(minWords = 8, maxWords = 15) {
+      const len = Math.floor(Math.random() * (maxWords - minWords + 1)) + minWords;
+      const words = [];
+      for (let i = 0; i < len; i++) {
+        words.push(getRandomWord());
+      }
+      let s = words.join(' ');
+      return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+    }
+
+    function generateParagraph(sentenceCount = 5) {
+      const sentences = [];
+      for (let i = 0; i < sentenceCount; i++) {
+        sentences.push(generateSentence());
+      }
+      return sentences.join(' ');
+    }
+
+    function generateLorem() {
+      const type = selectType.value;
+      const count = parseInt(inputCount.value) || 5;
+      const startWithLorem = toggleStartLorem.checked;
+      const wrapHtml = toggleHtmlTags.checked;
+
+      let resultText = '';
+
+      if (type === 'paragraphs') {
+        const paragraphs = [];
+        for (let i = 0; i < count; i++) {
+          if (i === 0 && startWithLorem) {
+            paragraphs.push(`${standardPrefix} ${generateParagraph(4)}`);
+          } else {
+            paragraphs.push(generateParagraph(5));
+          }
+        }
+        if (wrapHtml) {
+          resultText = paragraphs.map(p => `<p>${p}</p>`).join('\n\n');
+        } else {
+          resultText = paragraphs.join('\n\n');
+        }
+      } else if (type === 'words') {
+        const words = [];
+        if (startWithLorem) {
+          const prefixWords = standardPrefix.replace(/[.,]/g, '').toLowerCase().split(' ');
+          for (let i = 0; i < Math.min(count, prefixWords.length); i++) {
+            words.push(prefixWords[i]);
+          }
+        }
+        while (words.length < count) {
+          words.push(getRandomWord());
+        }
+        let formatted = words.join(' ');
+        if (formatted.length > 0) {
+          formatted = formatted.charAt(0).toUpperCase() + formatted.slice(1) + '.';
+        }
+        resultText = wrapHtml ? `<p>${formatted}</p>` : formatted;
+      } else if (type === 'sentences') {
+        const sentences = [];
+        for (let i = 0; i < count; i++) {
+          if (i === 0 && startWithLorem) {
+            sentences.push(standardPrefix);
+          } else {
+            sentences.push(generateSentence());
+          }
+        }
+        const joined = sentences.join(' ');
+        resultText = wrapHtml ? `<p>${joined}</p>` : joined;
+      } else if (type === 'bytes') {
+        let text = '';
+        if (startWithLorem) {
+          text = standardPrefix + ' ';
+        }
+        while (text.length < count) {
+          text += generateParagraph() + ' ';
+        }
+        resultText = text.slice(0, count);
+        if (wrapHtml) resultText = `<p>${resultText}</p>`;
+      }
+
+      outputText.value = resultText;
+
+      // Update counters
+      const words = resultText.trim() === '' ? 0 : resultText.trim().split(/\s+/).length;
+      outWordCount.textContent = words.toLocaleString();
+      outCharCount.textContent = resultText.length.toLocaleString();
+    }
+
+    // Event listeners
+    selectType.addEventListener('change', generateLorem);
+    toggleStartLorem.addEventListener('change', generateLorem);
+    toggleHtmlTags.addEventListener('change', generateLorem);
+    btnGenerate.addEventListener('click', () => {
+      generateLorem();
+      window.showToast('Generated fresh Lorem Ipsum!', 'success');
+    });
+
+    // Copy text
+    btnCopyLorem.addEventListener('click', () => {
+      if (!outputText.value) return;
+      window.copyToClipboard(outputText.value, 'Lorem Ipsum copied to clipboard!');
+    });
+
+    // Download TXT
+    btnDownload.addEventListener('click', () => {
+      if (!outputText.value) return;
+      const blob = new Blob([outputText.value], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'lorem-ipsum.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      window.showToast('Downloaded lorem-ipsum.txt', 'success');
+    });
+
+    // Presets
+    presetStandard.addEventListener('click', () => {
+      selectType.value = 'paragraphs';
+      toggleStartLorem.checked = true;
+      toggleHtmlTags.checked = false;
+      syncCount(3);
+      window.showToast('Loaded Standard 3 Paragraphs preset', 'info');
+    });
+
+    presetShort.addEventListener('click', () => {
+      selectType.value = 'words';
+      toggleStartLorem.checked = true;
+      toggleHtmlTags.checked = false;
+      syncCount(50);
+      window.showToast('Loaded 50 Words preset', 'info');
+    });
+
+    presetHtml.addEventListener('click', () => {
+      selectType.value = 'paragraphs';
+      toggleStartLorem.checked = true;
+      toggleHtmlTags.checked = true;
+      syncCount(3);
+      window.showToast('Loaded HTML Formatted preset', 'info');
+    });
+
+    // Keyboard shortcut (Ctrl + Enter)
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        btnGenerate.click();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        btnCopyLorem.click();
+      }
+    });
+
+    // Initial load
+    generateLorem();
+  });
+</script>
