@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Server Error (500) — SnipTools"
+  description="An unexpected error occurred while processing on SnipTools."
+>
+  <div class="mx-auto max-w-xl px-4 py-20 text-center">
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-error/10 border border-error/20 text-3xl font-extrabold text-error mb-6 font-mono">
+      500
+    </div>
+    <h1 class="text-3xl font-extrabold text-text-primary mb-3">Internal Server Error</h1>
+    <p class="text-sm text-text-secondary mb-8 leading-relaxed">
+      Something went wrong on our end. Because SnipTools runs 100% locally in your browser, refreshing the page or clearing your cache usually resolves the issue immediately.
+    </p>
+    <div class="flex items-center justify-center gap-3">
+      <a href="/" class="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white text-sm font-semibold transition-all">
+        Back to Home
+      </a>
+      <button
+        onclick="window.location.reload();"
+        class="px-5 py-2.5 rounded-xl bg-bg-secondary border border-border-primary hover:border-border-secondary text-text-primary text-sm font-semibold transition-all cursor-pointer"
+      >
+        Refresh Page
+      </button>
+    </div>
+  </div>
+</BaseLayout>
