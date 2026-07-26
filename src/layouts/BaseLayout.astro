@@ -5,9 +5,10 @@ interface Props {
   canonicalUrl?: string;
   ogImage?: string;
   structuredData?: object;
+  gaMeasurementId?: string;
 }
 
-const { title, description, canonicalUrl, ogImage, structuredData } = Astro.props;
+const { title, description, canonicalUrl, ogImage, structuredData, gaMeasurementId = 'G-MEASUREMENT_ID' } = Astro.props;
 const siteUrl = 'https://sniptools.tools';
 const fullCanonical = canonicalUrl || `${siteUrl}${Astro.url.pathname}`;
 const fullOgImage = ogImage || `${siteUrl}/og-default.png`;
@@ -28,14 +29,14 @@ import ToastContainer from '../components/ToastContainer.astro';
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href={fullCanonical} />
 
-  <!-- Preconnect to fonts -->
+  <!-- Preconnect Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <title>{title}</title>
 
-  <!-- Open Graph -->
+  <!-- Open Graph / Facebook -->
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={fullCanonical} />
@@ -43,7 +44,7 @@ import ToastContainer from '../components/ToastContainer.astro';
   <meta property="og:image" content={fullOgImage} />
   <meta property="og:site_name" content="SnipTools" />
 
-  <!-- Twitter -->
+  <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
@@ -52,12 +53,25 @@ import ToastContainer from '../components/ToastContainer.astro';
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-  <!-- Structured Data -->
+  <!-- Structured Data JSON-LD -->
   {structuredData && (
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   )}
 
-  <!-- Theme script (prevent flash) -->
+  <!-- Google Analytics GA4 (Placeholder ready for deployment) -->
+  {gaMeasurementId && (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+      <script is:inline set:html={`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${gaMeasurementId}');
+      `} />
+    </>
+  )}
+
+  <!-- Theme script (Prevent layout shift / flash) -->
   <script is:inline>
     (function() {
       const saved = localStorage.getItem('sniptools-theme');
@@ -68,24 +82,27 @@ import ToastContainer from '../components/ToastContainer.astro';
     })();
   </script>
 </head>
-<body class="bg-bg-primary text-text-primary">
+<body class="bg-bg-primary text-text-primary relative selection:bg-accent/30 selection:text-white">
+  <!-- Ambient background glow effect -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:bg-accent focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
-    Skip to content
+    Skip to main content
   </a>
 
   <Header />
   <CommandPalette />
 
-  <main id="main-content" class="min-h-[calc(100vh-140px)]">
+  <main id="main-content" class="min-h-[calc(100vh-140px)] relative z-10">
     <slot />
   </main>
 
   <Footer />
   <ToastContainer />
 
-  <!-- Global JS utilities -->
+  <!-- Global JavaScript Utilities -->
   <script is:inline>
-    // Theme toggle
+    // Global Theme Switcher
     window.toggleTheme = function() {
       const html = document.documentElement;
       const isLight = html.classList.contains('light');
@@ -100,70 +117,38 @@ import ToastContainer from '../components/ToastContainer.astro';
       }
     };
 
-    // Toast system
-    window.showToast = function(message, type = 'success', duration = 3000) {
+    // Toast Popup Notifications
+    window.showToast = function(message, type = 'success', duration = 2800) {
       const container = document.getElementById('toast-container');
       if (!container) return;
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
       const icons = { success: '✓', error: '✕', info: 'ℹ' };
-      toast.innerHTML = `<span>${icons[type] || '•'}</span><span>${message}</span>`;
+      toast.innerHTML = `<span class="font-bold">${icons[type] || '•'}</span><span>${message}</span>`;
       container.appendChild(toast);
       setTimeout(() => {
-        toast.classList.add('removing');
-        setTimeout(() => toast.remove(), 300);
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.25s ease';
+        setTimeout(() => toast.remove(), 250);
       }, duration);
     };
 
-    // Copy to clipboard
-    window.copyToClipboard = async function(text, label = 'Copied!') {
+    // Copy to Clipboard
+    window.copyToClipboard = async function(text, label = 'Copied to clipboard!') {
+      if (!text) {
+        window.showToast('Nothing to copy!', 'info');
+        return false;
+      }
       try {
         await navigator.clipboard.writeText(text);
         window.showToast(label, 'success');
         return true;
-      } catch {
+      } catch (err) {
         window.showToast('Failed to copy', 'error');
         return false;
       }
     };
-
-    // Command palette (Ctrl+K)
-    document.addEventListener('keydown', function(e) {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        const palette = document.getElementById('command-palette');
-        if (palette) {
-          palette.classList.toggle('hidden');
-          if (!palette.classList.contains('hidden')) {
-            const input = palette.querySelector('input');
-            if (input) { input.value = ''; input.focus(); }
-            filterTools('');
-          }
-        }
-      }
-      if (e.key === 'Escape') {
-        const palette = document.getElementById('command-palette');
-        if (palette && !palette.classList.contains('hidden')) {
-          palette.classList.add('hidden');
-        }
-      }
-    });
-
-    function filterTools(query) {
-      const items = document.querySelectorAll('.cmd-tool-item');
-      const q = query.toLowerCase().trim();
-      let firstVisible = null;
-      items.forEach(item => {
-        const name = (item.getAttribute('data-name') || '').toLowerCase();
-        const tags = (item.getAttribute('data-tags') || '').toLowerCase();
-        const match = !q || name.includes(q) || tags.includes(q);
-        item.style.display = match ? '' : 'none';
-        if (match && !firstVisible) firstVisible = item;
-      });
-      // Highlight first match
-      items.forEach(i => i.classList.remove('bg-bg-hover'));
-      if (firstVisible) firstVisible.classList.add('bg-bg-hover');
-    }
   </script>
 </body>
 </html>
