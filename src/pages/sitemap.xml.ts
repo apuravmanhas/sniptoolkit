@@ -12,7 +12,6 @@ const pages = [
   '/color-picker',
   '/lorem-ipsum',
   '/online-clipboard',
-  '/online-ruler',
   '/about',
   '/privacy-policy',
   '/terms',
