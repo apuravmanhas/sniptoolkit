@@ -154,7 +154,7 @@ const relatedTools = [
             </label>
 
             <!-- Expiration TTL -->
-            <select id="select-ttl" class="px-2.5 py-1.5 text-xs rounded-lg bg-bg-tertiary border border-border-primary text-text-secondary focus:outline-none cursor-pointer">
+            <select id="select-ttl" aria-label="Clipboard expiration time" class="px-2.5 py-1.5 text-xs rounded-lg bg-bg-tertiary border border-border-primary text-text-secondary focus:outline-none cursor-pointer">
               <option value="600">Expires: 10 mins</option>
               <option value="3600" selected>Expires: 1 hour</option>
               <option value="86400">Expires: 24 hours</option>
@@ -259,12 +259,12 @@ const relatedTools = [
 
         <!-- 6 Input Digits -->
         <div class="flex justify-center gap-2 sm:gap-3" id="digit-container">
-          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" aria-label="Code digit 1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" aria-label="Code digit 2" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" aria-label="Code digit 3" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" aria-label="Code digit 4" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" aria-label="Code digit 5" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" maxlength="1" aria-label="Code digit 6" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
         </div>
 
         <button

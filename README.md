@@ -1,43 +1,48 @@
-# Astro Starter Kit: Minimal
+# SnipTools — Free Developer & Utility Tools
 
-```sh
-npm create astro@latest -- --template minimal
+> **Domain**: [sniptoolkit.com](https://sniptoolkit.com)
+> **Stack**: Astro 7 + Tailwind CSS 4 · 100% Static · Cloudflare Pages
+
+Fast, free, privacy-first developer tools that run entirely in your browser. Zero sign-up, zero server uploads, zero tracking.
+
+## Tools Included
+
+| Tool | Description |
+| :--- | :--- |
+| **JSON Formatter & Validator** | Format, beautify, minify, and validate JSON with error highlighting |
+| **Base64 Encode & Decode** | Encode/decode text and files to/from Base64 |
+| **UUID Generator** | Generate UUID v4 & v7 in bulk with formatting options |
+| **URL Encode & Decode** | Percent-encode/decode URLs and query parameters |
+| **Unix Timestamp Converter** | Convert epoch timestamps to human-readable dates |
+| **Hash Generator (SHA/MD5)** | Generate MD5, SHA-1, SHA-256, SHA-512 hashes & HMAC |
+| **Word & Character Counter** | Count words, characters, sentences, reading time |
+| **Color Picker & Converter** | Convert between HEX, RGB, HSL, HSV with WCAG contrast |
+| **Lorem Ipsum Generator** | Generate placeholder text in paragraphs, words, or bytes |
+| **Online Clipboard** | Share text snippets between tabs via 6-digit codes |
+
+## Quick Start
+
+```bash
+npm install        # Install dependencies
+npm run dev        # Start dev server at localhost:4321
+npm run build      # Build production static site to dist/
+npm run preview    # Preview production build locally
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Deploy to Cloudflare Pages
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+npm run deploy     # Build + deploy to Cloudflare Pages
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Architecture
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- **100% Static Output** — No server, no database, no backend
+- **100% Client-Side Processing** — All tools run in the browser via JavaScript & Web Crypto API
+- **Zero Data Collection** — No user inputs are ever transmitted or stored
+- **Dark Mode First** — Vercel-inspired design with light mode toggle
+- **Command Palette** — Press `Ctrl+K` to fuzzy-search all tools instantly
 
-Any static assets, like images, can be placed in the `public/` directory.
+## License
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+© 2026 SnipTools. All rights reserved.

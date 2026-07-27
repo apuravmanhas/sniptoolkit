@@ -1,7 +1,6 @@
 import type { APIRoute } from 'astro';
 
-const pages = [
-  '',
+const toolPages = [
   '/json-formatter',
   '/base64',
   '/uuid-generator',
@@ -12,6 +11,9 @@ const pages = [
   '/color-picker',
   '/lorem-ipsum',
   '/online-clipboard',
+];
+
+const infoPages = [
   '/about',
   '/privacy-policy',
   '/terms',
@@ -22,18 +24,32 @@ export const GET: APIRoute = async () => {
   const siteUrl = 'https://sniptoolkit.com';
   const today = new Date().toISOString().split('T')[0];
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages
-  .map(
-    (page) => `  <url>
+  const homeEntry = `  <url>
+    <loc>${siteUrl}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>`;
+
+  const toolEntries = toolPages.map(page => `  <url>
     <loc>${siteUrl}${page}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>${page === '' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${page === '' ? '1.0' : '0.8'}</priority>
-  </url>`
-  )
-  .join('\n')}
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>`).join('\n');
+
+  const infoEntries = infoPages.map(page => `  <url>
+    <loc>${siteUrl}${page}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>`).join('\n');
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${homeEntry}
+${toolEntries}
+${infoEntries}
 </urlset>`;
 
   return new Response(xml, {

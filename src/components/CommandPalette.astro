@@ -14,7 +14,7 @@ const tools = [
 ---
 
 <!-- Command Palette Overlay -->
-<div id="command-palette" class="hidden fixed inset-0 z-[300]">
+<div id="command-palette" role="dialog" aria-modal="true" class="hidden fixed inset-0 z-[300]">
   <!-- Backdrop -->
   <div
     class="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -30,6 +30,7 @@ const tools = [
         <input
           id="cmd-search"
           type="text"
+          aria-label="Search tools"
           placeholder="Search tools..."
           class="w-full bg-transparent text-sm text-text-primary placeholder-text-tertiary outline-none"
           oninput="filterTools(this.value)"

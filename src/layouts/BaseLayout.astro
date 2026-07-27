@@ -126,7 +126,7 @@ import ToastContainer from '../components/ToastContainer.astro';
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
       const icons = { success: '✓', error: '✕', info: 'ℹ' };
-      toast.innerHTML = `<span class="font-bold">${icons[type] || '•'}</span><span>${message}</span>`;
+      toast.textContent = `${icons[type] || '•'} ${message}`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';

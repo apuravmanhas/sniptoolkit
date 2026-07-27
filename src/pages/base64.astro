@@ -240,7 +240,7 @@ const relatedTools = [
     <!-- File to Base64 Workspace Pane (Hidden by default) -->
     <div id="pane-file-workspace" class="hidden flex-col gap-6">
       <div class="rounded-2xl border border-border-primary bg-bg-secondary p-8 text-center relative overflow-hidden" id="file-drop-zone">
-        <input type="file" id="b64-file-input" class="hidden" />
+        <input type="file" id="b64-file-input" aria-label="Choose file for Base64 encoding" class="hidden" />
 
         <div class="flex flex-col items-center justify-center max-w-md mx-auto">
           <div class="w-16 h-16 rounded-2xl bg-accent-subtle border border-accent/30 text-accent flex items-center justify-center text-2xl mb-4 shadow-lg shadow-accent/10">
@@ -290,6 +290,7 @@ const relatedTools = [
           <div class="p-4 bg-bg-primary flex-1 min-h-[220px]">
             <textarea
               id="file-b64-output"
+              aria-label="Base64 encoded file output"
               readonly
               spellcheck="false"
               class="w-full h-full bg-transparent text-xs font-mono text-text-primary placeholder:text-text-tertiary focus:outline-none resize-none select-all leading-relaxed"

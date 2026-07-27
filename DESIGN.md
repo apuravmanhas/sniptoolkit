@@ -3,7 +3,7 @@
 ## Brand Identity
 - **Name**: SnipTools
 - **Tagline**: "Fast, Free Developer & Utility Tools"
-- **Domain**: sniptools.tools
+- **Domain**: sniptoolkit.com
 - **Personality**: Premium, fast, trustworthy, developer-focused
 
 ## Design Philosophy
