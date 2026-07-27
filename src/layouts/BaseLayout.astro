@@ -8,8 +8,8 @@ interface Props {
   gaMeasurementId?: string;
 }
 
-const { title, description, canonicalUrl, ogImage, structuredData, gaMeasurementId = 'G-MEASUREMENT_ID' } = Astro.props;
-const siteUrl = 'https://sniptools.tools';
+const { title, description, canonicalUrl, ogImage, structuredData, gaMeasurementId } = Astro.props;
+const siteUrl = 'https://sniptoolkit.com';
 const fullCanonical = canonicalUrl || `${siteUrl}${Astro.url.pathname}`;
 const fullOgImage = ogImage || `${siteUrl}/og-default.png`;
 
@@ -27,6 +27,8 @@ import ToastContainer from '../components/ToastContainer.astro';
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content={description} />
   <meta name="robots" content="index, follow" />
+  <meta name="author" content="SnipTools" />
+  <meta name="theme-color" content="#050505" />
   <link rel="canonical" href={fullCanonical} />
 
   <!-- Preconnect Fonts -->
@@ -58,8 +60,8 @@ import ToastContainer from '../components/ToastContainer.astro';
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   )}
 
-  <!-- Google Analytics GA4 (Placeholder ready for deployment) -->
-  {gaMeasurementId && (
+  <!-- Google Analytics GA4 - Set gaMeasurementId prop to activate -->
+  {gaMeasurementId && gaMeasurementId !== '' && (
     <>
       <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
       <script is:inline set:html={`

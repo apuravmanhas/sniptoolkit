@@ -7,7 +7,7 @@ const softwareSchema = {
   "name": "UUID / GUID Generator",
   "operatingSystem": "All",
   "applicationCategory": "DeveloperApplication",
-  "url": "https://sniptools.tools/uuid-generator",
+  "url": "https://sniptoolkit.com/uuid-generator",
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -18,7 +18,7 @@ const softwareSchema = {
 
 const faqSchema = {
   "@context": "https://schema.org",
-  "@type": "QAPage",
+  "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
@@ -92,6 +92,7 @@ const relatedTools = [
 <BaseLayout
   title="UUID Generator Online — Free Bulk v4 & v7 GUID Generator | SnipTools"
   description="Free online UUID generator & GUID tool. Generate random UUID v4 and time-ordered UUID v7 in bulk up to 500 items with custom hyphens, uppercase, and curly braces options."
+  canonicalUrl="https://sniptoolkit.com/uuid-generator"
   structuredData={combinedSchema}
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -274,6 +275,7 @@ const relatedTools = [
         <div class="relative rounded-xl border border-border-primary bg-bg-tertiary overflow-hidden">
           <textarea
             id="uuid-output-textarea"
+            aria-label="UUID Output"
             readonly
             rows="10"
             class="w-full p-4 bg-transparent font-mono text-sm text-text-primary outline-none resize-none select-all leading-relaxed"

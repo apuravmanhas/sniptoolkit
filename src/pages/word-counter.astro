@@ -103,6 +103,7 @@ const relatedTools = [
   title="Word & Character Counter — Free Online Text Analyzer | SnipTools"
   description="Free real-time word counter, character counter, sentence & paragraph counter, reading time calculator, and keyword density analyzer. 100% client-side & private."
   structuredData={structuredData}
+  canonicalUrl="https://sniptoolkit.com/word-counter"
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
     <!-- Header -->
@@ -215,6 +216,7 @@ const relatedTools = [
 
         <textarea
           id="text-input"
+          aria-label="Text input area"
           rows="10"
           placeholder="Type or paste your content here... Word and character statistics update in real time."
           class="w-full rounded-xl bg-bg-tertiary border border-border-primary p-4 text-sm text-text-primary placeholder-text-tertiary focus:border-accent focus:outline-none transition-all resize-y font-sans leading-relaxed"
@@ -429,7 +431,7 @@ const relatedTools = [
       let totalWordLen = 0;
       let longest = '';
       const uniqueSet = new Set();
-      const wordFreqMap = {};
+      const wordFreqMap = Object.create(null);
 
       cleanWords.forEach(w => {
         const normalized = w.toLowerCase().replace(/^[^\w]+|[^\w]+$/g, '');

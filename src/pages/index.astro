@@ -109,21 +109,44 @@ const faqs = [
   },
   {
     question: "How is SnipTools different from other online tool sites?",
-    answer: "SnipTools is designed with a modern Vercel-inspired UI, zero intrusive popup ads, blazing-fast speed, dark-mode first design, and instant command palette navigation (Ctrl+K)."
+    answer: "SnipTools is designed with a modern Vercel-inspired UI, zero intrusive popup ads, blazing-fast speed, dark-mode first design, and instant command palette navigation (Ctrl+K). All tools process data locally — your data never leaves your device."
+  },
+  {
+    question: "What developer tools does SnipTools offer?",
+    answer: "SnipTools offers JSON Formatter & Validator, Base64 Encoder/Decoder, UUID v4 & v7 Generator, URL Encoder/Decoder, Unix Timestamp Converter, SHA-256 & MD5 Hash Generator, Word & Character Counter, Color Picker & Converter, Lorem Ipsum Generator, and Online Clipboard sharing — all free and client-side."
+  },
+  {
+    question: "Does SnipTools work on mobile devices?",
+    answer: "Yes! SnipTools is fully responsive and works beautifully on smartphones, tablets, and desktop browsers. The interface automatically adapts to your screen size for the best experience."
   }
 ];
 
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "SnipTools",
-  "url": "https://sniptools.tools",
-  "description": "Fast, free developer & utility tools. 100% client-side, privacy-focused, zero registration.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://sniptools.tools/?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "SnipTools",
+      "url": "https://sniptoolkit.com",
+      "description": "Fast, free developer & utility tools. 100% client-side, privacy-focused, zero registration.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://sniptoolkit.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    }
+  ]
 };
 ---
 
@@ -201,7 +224,9 @@ const structuredData = {
         <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Encoding">Encoding</button>
         <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Generator">Generator</button>
         <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Security">Security</button>
+        <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Converter">Converter</button>
         <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Text">Text</button>
+        <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Design">Design</button>
         <button class="cat-btn px-3 py-1.5 text-xs font-medium rounded-lg text-text-secondary hover:text-text-primary transition-all cursor-pointer" data-cat="Utility">Utility</button>
       </div>
     </div>

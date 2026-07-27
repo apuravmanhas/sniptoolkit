@@ -71,9 +71,39 @@ const tools = [
 </div>
 
 <script is:inline>
-  function handleCmdKeydown(e) {
+  // Fuzzy search filter for command palette
+  function filterTools(query) {
     const results = document.getElementById('cmd-results');
     if (!results) return;
+    const items = results.querySelectorAll('.cmd-tool-item');
+    const q = query.toLowerCase().trim();
+    let visibleCount = 0;
+
+    items.forEach(item => {
+      const name = (item.getAttribute('data-name') || '').toLowerCase();
+      const tags = (item.getAttribute('data-tags') || '').toLowerCase();
+      const match = !q || name.includes(q) || tags.includes(q);
+      item.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+
+    // Auto-highlight first visible result
+    items.forEach(i => i.classList.remove('bg-bg-hover'));
+    const firstVisible = results.querySelector('.cmd-tool-item:not([style*="display: none"])');
+    if (firstVisible) firstVisible.classList.add('bg-bg-hover');
+  }
+
+  function handleCmdKeydown(e) {
+    const palette = document.getElementById('command-palette');
+    const results = document.getElementById('cmd-results');
+    if (!results) return;
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      palette?.classList.add('hidden');
+      return;
+    }
+
     const items = Array.from(results.querySelectorAll('.cmd-tool-item')).filter(el => el.style.display !== 'none');
     const active = results.querySelector('.cmd-tool-item.bg-bg-hover');
     let idx = items.indexOf(active);
@@ -96,4 +126,27 @@ const tools = [
       if (highlighted) window.location.href = highlighted.getAttribute('href');
     }
   }
+
+  // Global Ctrl+K / Cmd+K shortcut
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      const palette = document.getElementById('command-palette');
+      const searchInput = document.getElementById('cmd-search');
+      if (palette) {
+        palette.classList.remove('hidden');
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus();
+          filterTools('');
+        }
+      }
+    }
+    if (e.key === 'Escape') {
+      const palette = document.getElementById('command-palette');
+      if (palette && !palette.classList.contains('hidden')) {
+        palette.classList.add('hidden');
+      }
+    }
+  });
 </script>

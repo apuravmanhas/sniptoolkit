@@ -91,6 +91,7 @@ const relatedTools = [
   title="Lorem Ipsum Generator — Free Dummy Text & Paragraphs | SnipTools"
   description="Free online Lorem Ipsum generator. Instantly generate paragraphs, words, sentences, or bytes of placeholder dummy text with HTML tags and TXT download."
   structuredData={structuredData}
+  canonicalUrl="https://sniptoolkit.com/lorem-ipsum"
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
     <!-- Header -->
@@ -230,6 +231,7 @@ const relatedTools = [
 
         <textarea
           id="output-text"
+          aria-label="Output text"
           rows="12"
           readonly
           class="w-full rounded-xl bg-bg-tertiary border border-border-primary p-4 text-sm text-text-primary font-sans leading-relaxed focus:outline-none resize-y"
@@ -342,7 +344,8 @@ const relatedTools = [
     // Sync Slider & Number input
     function syncCount(val) {
       let num = parseInt(val) || 1;
-      num = Math.max(1, Math.min(50, num));
+      const maxVal = selectType.value === 'bytes' ? 5000 : 50;
+      num = Math.max(1, Math.min(maxVal, num));
       inputCount.value = num;
       inputCountSlider.value = num;
       countDisplay.textContent = num;
@@ -445,7 +448,18 @@ const relatedTools = [
     }
 
     // Event listeners
-    selectType.addEventListener('change', generateLorem);
+    selectType.addEventListener('change', () => {
+      const isBytes = selectType.value === 'bytes';
+      const maxVal = isBytes ? 5000 : 50;
+      inputCount.max = maxVal;
+      inputCountSlider.max = maxVal;
+      if (!isBytes && parseInt(inputCount.value) > 50) {
+        inputCount.value = 50;
+        inputCountSlider.value = 50;
+        countDisplay.textContent = 50;
+      }
+      generateLorem();
+    });
     toggleStartLorem.addEventListener('change', generateLorem);
     toggleHtmlTags.addEventListener('change', generateLorem);
     btnGenerate.addEventListener('click', () => {

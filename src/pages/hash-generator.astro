@@ -9,7 +9,7 @@ const structuredData = {
       "name": "SHA256 & MD5 Hash Generator",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "All",
-      "url": "https://sniptools.tools/hash-generator",
+      "url": "https://sniptoolkit.com/hash-generator",
       "description": "Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from text strings or files up to 100MB. Client-side Web Crypto API with HMAC support.",
       "offers": {
         "@type": "Offer",
@@ -100,7 +100,7 @@ const relatedTools = [
 <BaseLayout
   title="SHA256 & MD5 Hash Generator Online — Free Hash Tool | SnipTools"
   description="Generate MD5, SHA-1, SHA-256, and SHA-512 hashes simultaneously from text or files up to 100MB. HMAC support, uppercase toggle, 100% client-side privacy."
-  canonicalUrl="https://sniptools.tools/hash-generator"
+  canonicalUrl="https://sniptoolkit.com/hash-generator"
   structuredData={structuredData}
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -494,7 +494,7 @@ const relatedTools = [
     if (keyBytes.length > 64) {
       let kMd5Hex = md5Uint8Array(keyBytes);
       for (let i = 0; i < 16; i++) {
-        blockKey[i] = parseInt(kMd5Hex.substr(i * 2, 2), 16);
+        blockKey[i] = parseInt(kMd5Hex.substring(i * 2, i * 2 + 2), 16);
       }
     } else {
       blockKey.set(keyBytes);
@@ -512,7 +512,7 @@ const relatedTools = [
 
     let innerHashBytes = new Uint8Array(16);
     for (let i = 0; i < 16; i++) {
-      innerHashBytes[i] = parseInt(innerHashHex.substr(i * 2, 2), 16);
+      innerHashBytes[i] = parseInt(innerHashHex.substring(i * 2, i * 2 + 2), 16);
     }
 
     let outerData = new Uint8Array(64 + 16);
@@ -630,6 +630,16 @@ const relatedTools = [
 
       const isHmac = enableHmacCheckbox ? enableHmacCheckbox.checked : false;
       const secretKeyStr = hmacSecretInput ? hmacSecretInput.value : '';
+      
+      if (isHmac && secretKeyStr.length === 0) {
+        if (window.showToast) window.showToast('Please enter an HMAC Secret Key', 'error');
+        if (outMd5) outMd5.textContent = '--';
+        if (outSha1) outSha1.textContent = '--';
+        if (outSha256) outSha256.textContent = '--';
+        if (outSha512) outSha512.textContent = '--';
+        return;
+      }
+      
       const keyBytes = new TextEncoder().encode(secretKeyStr);
 
       try {

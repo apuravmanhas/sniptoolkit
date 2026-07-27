@@ -91,6 +91,7 @@ const relatedTools = [
   title="Online Clipboard — Share Text & Code Snippets P2P | SnipTools"
   description="Free 100% client-side online clipboard. Share text, code snippets, and files across tabs and mobile devices using 6-digit codes and QR code scanner."
   structuredData={structuredData}
+  canonicalUrl="https://sniptoolkit.com/online-clipboard"
 >
   <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
     <!-- Header -->
@@ -166,6 +167,7 @@ const relatedTools = [
         <div id="drop-zone" class="relative rounded-xl border border-border-primary bg-bg-tertiary transition-all duration-200">
           <textarea
             id="send-input"
+            aria-label="Snippet content"
             rows="10"
             placeholder="Type or paste your snippet here, or drag & drop a code/text file directly..."
             class="w-full bg-transparent p-4 text-sm font-mono text-text-primary placeholder-text-tertiary focus:outline-none resize-y leading-relaxed"
@@ -301,6 +303,7 @@ const relatedTools = [
 
         <textarea
           id="retrieved-output"
+          aria-label="Retrieved snippet content"
           rows="12"
           readonly
           class="w-full rounded-xl bg-bg-tertiary border border-border-primary p-4 text-sm font-mono text-text-primary focus:outline-none resize-y leading-relaxed"
@@ -745,7 +748,7 @@ const relatedTools = [
         <div class="p-3.5 rounded-xl bg-bg-tertiary border border-border-primary flex items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-3 min-w-0">
             <span class="font-mono font-bold text-accent text-sm bg-accent/10 px-2 py-1 rounded border border-accent/20">${item.code}</span>
-            <span class="text-text-secondary truncate font-mono">${item.snippet.replace(/</g, '&lt;')}...</span>
+            <span class="text-text-secondary truncate font-mono">${item.snippet.replace(/[&<>"']/g, (m) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[m]))}...</span>
           </div>
           <button class="btn-use-hist px-3 py-1 rounded-lg bg-bg-secondary text-text-primary border border-border-primary hover:border-accent flex-shrink-0" data-code="${item.code}">
             Retrieve
