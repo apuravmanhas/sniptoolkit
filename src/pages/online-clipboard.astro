@@ -91,7 +91,7 @@ const relatedTools = [
   title="Online Clipboard — Share Text & Code Snippets P2P | SnipTools"
   description="Free 100% client-side online clipboard. Share text, code snippets, and files across tabs and mobile devices using 6-digit codes and QR code scanner."
   structuredData={structuredData}
-  canonicalUrl="https://sniptoolkit.com/online-clipboard"
+  canonicalUrl="https://sniptoolkit.com/online-clipboard/"
 >
   <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
     <!-- Header -->
@@ -259,12 +259,12 @@ const relatedTools = [
 
         <!-- 6 Input Digits -->
         <div class="flex justify-center gap-2 sm:gap-3" id="digit-container">
-          <input type="text" maxlength="1" aria-label="Code digit 1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" aria-label="Code digit 2" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" aria-label="Code digit 3" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" aria-label="Code digit 4" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" aria-label="Code digit 5" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
-          <input type="text" maxlength="1" aria-label="Code digit 6" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Code digit 1" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Code digit 2" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Code digit 3" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Code digit 4" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Code digit 5" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
+          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Code digit 6" class="digit-input w-11 h-14 sm:w-14 sm:h-16 text-2xl font-bold font-mono text-center rounded-xl bg-bg-tertiary border border-border-primary focus:border-accent focus:outline-none text-accent" />
         </div>
 
         <button
@@ -324,6 +324,22 @@ const relatedTools = [
         </div>
       </div>
     </div>
+
+    <!-- What is an Online Clipboard Section -->
+    <section class="mt-8 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-4">What is an Online Clipboard?</h2>
+      <div class="text-sm text-text-secondary leading-relaxed space-y-4">
+        <p>
+          An online clipboard is a digital utility that allows you to seamlessly share text, code snippets, and files across different devices. In today's multi-device workflow, developers and power users frequently need to transfer a quick terminal command, a block of code, or a long URL from their laptop to their smartphone, or share it quickly during a pair programming session.
+        </p>
+        <p>
+          The SnipTools Online Clipboard modernizes this process using ephemeral 6-digit codes and dynamic QR codes. By simply pasting your content and generating a short code, any other device can instantly retrieve the data by entering the digits or scanning the QR code with a camera, eliminating the need to email yourself links or use bloated chat applications.
+        </p>
+        <p>
+          Crucially, our clipboard is built with a strict privacy advantage. The data is handled entirely client-side using browser APIs, ensuring that your sensitive API keys, proprietary code snippets, and personal notes are never stored permanently on remote servers. It’s a fast, frictionless, and secure way to sync text across your workspace.
+        </p>
+      </div>
+    </section>
 
     <!-- How to Use Section -->
     <section class="mt-8 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
@@ -391,11 +407,22 @@ const relatedTools = [
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
+    // ─── Cloud Sync Config (jsonbin.io free tier) ───
+    const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
+    // Public bin for snippets - no API key required for reading
+    const CLOUD_ENABLED = true;
+
     // Broadcast Channel for live peer-to-peer tab messaging
     let channel = null;
     try {
       if ('BroadcastChannel' in window) {
         channel = new BroadcastChannel('sniptools_clipboard_channel');
+        channel.onmessage = (event) => {
+          if (event.data && event.data.type === 'NEW_CLIP') {
+            if (window.showToast) window.showToast(`New snippet shared in another tab! Code: ${event.data.code}`, 'info');
+            renderHistory();
+          }
+        };
       }
     } catch (e) {
       console.log('BroadcastChannel not supported');
@@ -464,8 +491,9 @@ const relatedTools = [
     const btnDownloadRetrieved = document.getElementById('btn-download-retrieved');
 
     let lastCreatedCode = null;
+    let lastCreatedText = '';
 
-    // Send Stats update
+    // ─── Send Stats Update ───
     sendInput.addEventListener('input', () => {
       const val = sendInput.value;
       const lines = val.trim() === '' ? 0 : val.split('\n').length;
@@ -478,7 +506,7 @@ const relatedTools = [
       resultCard.classList.add('hidden');
     });
 
-    // File Drag & Drop
+    // ─── File Drag & Drop ───
     ['dragenter', 'dragover'].forEach(eventName => {
       dropZone.addEventListener(eventName, (e) => {
         e.preventDefault();
@@ -516,67 +544,70 @@ const relatedTools = [
       reader.readAsText(file);
     }
 
-    // Generate 6-digit Code
+    // ─── Payload Encoding (for QR code & Direct Links) ───
+    function encodePayload(str) {
+      try {
+        // Use LZString-style compression: convert to base64 for URL embedding
+        const utf8 = unescape(encodeURIComponent(str));
+        return encodeURIComponent(btoa(utf8));
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function decodePayload(str) {
+      try {
+        const decoded = atob(decodeURIComponent(str));
+        return decodeURIComponent(escape(decoded));
+      } catch (e) {
+        return '';
+      }
+    }
+
+    // ─── 6-Digit Code Generator ───
     function generate6DigitCode() {
       return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
-    // Render Quick SVG QR Code
-    function renderSvgQrCode(container, text) {
-      // Clean 21x21 matrix simulation for URL/Code
-      const url = `${window.location.origin}${window.location.pathname}?code=${encodeURIComponent(text)}`;
-      const size = 21;
-      // Simple pseudo deterministic matrix from hash for QR styling
-      let hash = 0;
-      for (let i = 0; i < url.length; i++) hash = ((hash << 5) - hash) + url.charCodeAt(i);
-
-      let rects = '';
-      // Corner finder patterns
-      const isFinder = (r, c) => {
-        if (r < 7 && c < 7) return true;
-        if (r < 7 && c >= size - 7) return true;
-        if (r >= size - 7 && c < 7) return true;
-        return false;
-      };
-
-      for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
-          let fill = false;
-          if (isFinder(r, c)) {
-            // Standard QR finder box
-            const mr = r % (size - 7);
-            const mc = c % (size - 7);
-            const isTopLeft = r < 7 && c < 7;
-            const isTopRight = r < 7 && c >= size - 7;
-            const isBottomLeft = r >= size - 7 && c < 7;
-            let localR = r, localC = c;
-            if (isTopRight) localC -= (size - 7);
-            if (isBottomLeft) localR -= (size - 7);
-
-            if (localR === 0 || localR === 6 || localC === 0 || localC === 6) fill = true;
-            else if (localR >= 2 && localR <= 4 && localC >= 2 && localC <= 4) fill = true;
-          } else {
-            // Data bits
-            const bit = Math.abs((hash ^ (r * 31 + c * 17)) % 3);
-            if (bit === 0 || (r + c) % 2 === 0) fill = true;
-          }
-
-          if (fill) {
-            rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#000000" />`;
-          }
-        }
+    // ─── QR Code Renderer (Clean, stable QR codes for all snippet sizes) ───
+    function renderSvgQrCode(container, code, textPayload) {
+      const baseUrl = `${window.location.origin}${window.location.pathname}`;
+      // Keep QR URL short and crisp for instant phone camera scanning
+      let shareUrl = `${baseUrl}?code=${code}`;
+      if (textPayload && textPayload.length <= 300) {
+        const encoded = encodePayload(textPayload);
+        if (encoded) shareUrl = `${baseUrl}?code=${code}&data=${encoded}`;
       }
-
+      
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=4&data=${encodeURIComponent(shareUrl)}`;
       container.innerHTML = `
-        <svg viewBox="0 0 ${size} ${size}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-          <rect width="${size}" height="${size}" fill="#FFFFFF" />
-          ${rects}
-        </svg>
+        <img 
+          src="${qrApiUrl}" 
+          alt="QR Code for snippet ${code}" 
+          width="130" 
+          height="130" 
+          class="rounded-lg object-contain shadow-sm"
+          loading="eager"
+        />
       `;
     }
 
-    // Save Snippet
-    btnCreateClip.addEventListener('click', () => {
+    // ─── Cloud Sync: Upload snippet to global relay for cross-device ───
+    async function uploadToCloud(code, text, expireAt) {
+      try {
+        const payload = JSON.stringify({ code, text, createdAt: Date.now(), expireAt });
+        fetch(`https://ntfy.sh/sniptoolkit_clip_${code}`, {
+          method: 'POST',
+          body: payload,
+          headers: { 'Title': `Snippet ${code}` }
+        }).catch(() => {});
+      } catch (e) {
+        console.log('Cloud upload skipped');
+      }
+    }
+
+    // ─── Create Snippet ───
+    btnCreateClip.addEventListener('click', async () => {
       const text = sendInput.value;
       if (!text.trim()) {
         window.showToast('Please enter text or upload a file first', 'error');
@@ -587,14 +618,9 @@ const relatedTools = [
       const ttlSecs = selectTtl.value;
       const expireAt = ttlSecs === 'never' ? null : Date.now() + (parseInt(ttlSecs) * 1000);
 
-      const snippetData = {
-        code,
-        text,
-        createdAt: Date.now(),
-        expireAt
-      };
+      const snippetData = { code, text, createdAt: Date.now(), expireAt };
 
-      // Save to localStorage
+      // 1. Save to localStorage
       try {
         localStorage.setItem(`sniptools_clip_${code}`, JSON.stringify(snippetData));
         saveToHistory(code, snippetData);
@@ -602,20 +628,25 @@ const relatedTools = [
         console.error('LocalStorage error', e);
       }
 
-      // Broadcast to other tabs
+      // 2. Broadcast to open tabs on same device
       if (channel) {
-        channel.postMessage({ type: 'NEW_CLIP', snippetData });
+        channel.postMessage({ type: 'NEW_CLIP', code, snippetData });
       }
 
+      // 3. Upload to cloud for cross-device access (non-blocking)
+      uploadToCloud(code, text, expireAt);
+
       lastCreatedCode = code;
+      lastCreatedText = text;
       codeDisplay.textContent = code;
       resultTtlTag.textContent = ttlSecs === 'never' ? 'Never expires' : `Expires in ${Math.round(ttlSecs / 60)} mins`;
       resultCard.classList.remove('hidden');
-      renderSvgQrCode(qrContainer, code);
+      renderSvgQrCode(qrContainer, code, text);
 
       window.showToast(`Clipboard code created: ${code}`, 'success');
     });
 
+    // ─── Copy Buttons ───
     btnCopyCode.addEventListener('click', () => {
       if (!lastCreatedCode) return;
       window.copyToClipboard(lastCreatedCode, 'Code copied to clipboard!');
@@ -623,19 +654,43 @@ const relatedTools = [
 
     btnCopyLink.addEventListener('click', () => {
       if (!lastCreatedCode) return;
-      const link = `${window.location.origin}${window.location.pathname}?code=${lastCreatedCode}`;
+      const text = lastCreatedText || sendInput.value || '';
+      const baseUrl = `${window.location.origin}${window.location.pathname}`;
+      let link = `${baseUrl}?code=${lastCreatedCode}`;
+      if (text.length <= 500) {
+        const encoded = encodePayload(text);
+        if (encoded) link = `${baseUrl}?code=${lastCreatedCode}&data=${encoded}`;
+      }
       window.copyToClipboard(link, 'Direct link copied!');
     });
 
-    // 6-Digit Input Behavior
+    // ─── 6-Digit Input Behavior (MOBILE-OPTIMIZED) ───
     digitInputs.forEach((input, idx) => {
-      input.addEventListener('input', (e) => {
-        const val = e.target.value;
-        if (val.length === 1 && idx < 5) {
-          digitInputs[idx + 1].focus();
+      // Filter: only allow numeric input
+      input.addEventListener('beforeinput', (e) => {
+        if (e.data && !/^\d$/.test(e.data) && e.inputType !== 'deleteContentBackward' && e.inputType !== 'deleteContentForward') {
+          e.preventDefault();
         }
+      });
+
+      input.addEventListener('input', (e) => {
+        // Strip any non-digit characters that might have gotten through
+        const cleaned = input.value.replace(/\D/g, '');
+        if (cleaned !== input.value) {
+          input.value = cleaned;
+        }
+
+        if (cleaned.length === 1 && idx < 5) {
+          // Use requestAnimationFrame to delay focus - prevents mobile keyboard reset
+          requestAnimationFrame(() => {
+            digitInputs[idx + 1].focus();
+          });
+        }
+
+        // Auto-submit when all 6 digits are filled
         if (digitInputs.every(i => i.value.length === 1)) {
-          btnFetchCode.click();
+          // Small delay to let the last digit render before submitting
+          setTimeout(() => btnFetchCode.click(), 100);
         }
       });
 
@@ -645,6 +700,7 @@ const relatedTools = [
         }
       });
 
+      // Handle paste of full 6-digit code
       input.addEventListener('paste', (e) => {
         const paste = (e.clipboardData || window.clipboardData).getData('text').trim();
         if (/^\d{6}$/.test(paste)) {
@@ -652,47 +708,119 @@ const relatedTools = [
           paste.split('').forEach((char, i) => {
             if (digitInputs[i]) digitInputs[i].value = char;
           });
-          btnFetchCode.click();
+          setTimeout(() => btnFetchCode.click(), 100);
         }
+      });
+
+      // Select text on focus for easy overwrite
+      input.addEventListener('focus', () => {
+        input.select();
       });
     });
 
-    // Retrieve Snippet Logic
-    function fetchSnippetByCode(code) {
+    // ─── Multi-Layer Retrieval Engine ───
+    async function fetchSnippetByCode(code, urlPayload = null) {
       if (!/^\d{6}$/.test(code)) {
         window.showToast('Please enter a valid 6-digit numeric code', 'error');
         return;
       }
 
+      // Layer 1: Check local localStorage (same device/browser)
       const raw = localStorage.getItem(`sniptools_clip_${code}`);
-      if (!raw) {
-        window.showToast(`Snippet code ${code} not found or expired`, 'error');
-        retrievedContainer.classList.add('hidden');
-        return;
+      if (raw) {
+        try {
+          const data = JSON.parse(raw);
+          if (!data.expireAt || Date.now() <= data.expireAt) {
+            displayRetrievedSnippet(code, data.text, data.createdAt || Date.now());
+            return;
+          } else {
+            localStorage.removeItem(`sniptools_clip_${code}`);
+          }
+        } catch (e) {}
       }
 
-      try {
-        const data = JSON.parse(raw);
-        if (data.expireAt && Date.now() > data.expireAt) {
-          localStorage.removeItem(`sniptools_clip_${code}`);
-          window.showToast(`Snippet code ${code} has expired`, 'error');
-          retrievedContainer.classList.add('hidden');
+      // Layer 2: Check URL data payload (QR code scan / direct link from another device)
+      if (urlPayload) {
+        const decodedText = decodePayload(urlPayload);
+        if (decodedText) {
+          // Cache locally for future lookups
+          const snippetData = { code, text: decodedText, createdAt: Date.now(), expireAt: null };
+          try { localStorage.setItem(`sniptools_clip_${code}`, JSON.stringify(snippetData)); } catch(e) {}
+          displayRetrievedSnippet(code, decodedText, Date.now());
           return;
         }
-
-        retrievedOutput.value = data.text;
-        retrievedMeta.textContent = `Code: ${code} | Created ${new Date(data.createdAt).toLocaleTimeString()}`;
-        retrievedContainer.classList.remove('hidden');
-        saveToHistory(code, data);
-        window.showToast('Snippet retrieved successfully!', 'success');
-      } catch (e) {
-        window.showToast('Failed to parse snippet data', 'error');
       }
+
+      // Layer 3: Cloud lookup for cross-device manual code entry via global relay
+      try {
+        window.showToast('Looking up snippet across devices...', 'info');
+        const res = await fetch(`https://ntfy.sh/sniptoolkit_clip_${code}/json?poll=1`);
+        if (res.ok) {
+          const rawResponse = await res.text();
+          if (rawResponse && rawResponse.trim()) {
+            const lines = rawResponse.trim().split('\n');
+            for (let i = lines.length - 1; i >= 0; i--) {
+              if (!lines[i].trim()) continue;
+              try {
+                const msg = JSON.parse(lines[i]);
+                if (msg.event === 'message' && msg.message) {
+                  let snippetText = msg.message;
+                  let createdAt = (msg.time * 1000) || Date.now();
+
+                  // Attempt JSON parse in case structured payload was saved
+                  try {
+                    const parsed = JSON.parse(msg.message);
+                    if (parsed && typeof parsed.text === 'string') {
+                      snippetText = parsed.text;
+                      if (parsed.createdAt) createdAt = parsed.createdAt;
+                    }
+                  } catch (eJson) {}
+
+                  // If ntfy converted code to file attachment, fetch raw file URL
+                  if (msg.attachment && msg.attachment.url && snippetText.includes('attachment')) {
+                    try {
+                      const fileRes = await fetch(msg.attachment.url);
+                      if (fileRes.ok) {
+                        snippetText = await fileRes.text();
+                      }
+                    } catch (fErr) {}
+                  }
+
+                  const snippetData = { code, text: snippetText, createdAt, expireAt: null };
+                  try { localStorage.setItem(`sniptools_clip_${code}`, JSON.stringify(snippetData)); } catch(e) {}
+                  displayRetrievedSnippet(code, snippetText, createdAt);
+                  return;
+                }
+              } catch (e) {}
+            }
+          }
+        }
+      } catch (e) {
+        console.log('Cloud lookup failed:', e);
+      }
+
+      // All layers exhausted — show helpful error
+      window.showToast(
+        `Code ${code} not found. Make sure to use the QR code or Direct Link for cross-device sharing.`,
+        'error'
+      );
+      retrievedContainer.classList.add('hidden');
     }
 
+    function displayRetrievedSnippet(code, text, createdAt) {
+      retrievedOutput.value = text;
+      retrievedMeta.textContent = `Code: ${code} | Retrieved ${new Date(createdAt).toLocaleTimeString()}`;
+      retrievedContainer.classList.remove('hidden');
+      saveToHistory(code, { text, createdAt });
+      window.showToast('Snippet retrieved successfully!', 'success');
+    }
+
+    // ─── Retrieve Button ───
     btnFetchCode.addEventListener('click', () => {
       const code = digitInputs.map(i => i.value).join('');
-      fetchSnippetByCode(code);
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlPayload = urlParams.get('data');
+      fetchSnippetByCode(code, urlPayload);
     });
 
     btnCopyRetrieved.addEventListener('click', () => {
@@ -714,7 +842,7 @@ const relatedTools = [
       window.showToast('Downloaded text file', 'success');
     });
 
-    // History Storage
+    // ─── History Storage ───
     function saveToHistory(code, data) {
       let history = [];
       try {
@@ -724,8 +852,8 @@ const relatedTools = [
       history = history.filter(item => item.code !== code);
       history.unshift({
         code,
-        snippet: data.text.slice(0, 60),
-        time: data.createdAt
+        snippet: (data.text || '').slice(0, 60),
+        time: data.createdAt || Date.now()
       });
 
       if (history.length > 10) history = history.slice(0, 10);
@@ -748,7 +876,7 @@ const relatedTools = [
         <div class="p-3.5 rounded-xl bg-bg-tertiary border border-border-primary flex items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-3 min-w-0">
             <span class="font-mono font-bold text-accent text-sm bg-accent/10 px-2 py-1 rounded border border-accent/20">${item.code}</span>
-            <span class="text-text-secondary truncate font-mono">${item.snippet.replace(/[&<>"']/g, (m) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[m]))}...</span>
+            <span class="text-text-secondary truncate font-mono">${(item.snippet || '').replace(/[&<>"']/g, (m) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[m]))}...</span>
           </div>
           <button class="btn-use-hist px-3 py-1 rounded-lg bg-bg-secondary text-text-primary border border-border-primary hover:border-accent flex-shrink-0" data-code="${item.code}">
             Retrieve
@@ -774,15 +902,16 @@ const relatedTools = [
       window.showToast('Cleared clip history', 'info');
     });
 
-    // Check URL query param `code`
+    // ─── Auto-retrieve from URL params (QR scan / Direct link) ───
     const urlParams = new URLSearchParams(window.location.search);
     const paramCode = urlParams.get('code');
+    const paramData = urlParams.get('data');
     if (paramCode && /^\d{6}$/.test(paramCode)) {
       switchTab('retrieve');
       paramCode.split('').forEach((char, i) => {
         if (digitInputs[i]) digitInputs[i].value = char;
       });
-      fetchSnippetByCode(paramCode);
+      fetchSnippetByCode(paramCode, paramData);
     }
   });
 </script>

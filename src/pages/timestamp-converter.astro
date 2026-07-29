@@ -92,7 +92,7 @@ const relatedTools = [
 <BaseLayout
   title="Unix Timestamp Converter Online — Epoch to Date | SnipTools"
   description="Convert Unix timestamps (epoch) to human-readable date & time (ISO 8601, UTC, Local, Relative time) and date to timestamp. 100% free client-side tool."
-  canonicalUrl="https://sniptoolkit.com/timestamp-converter"
+  canonicalUrl="https://sniptoolkit.com/timestamp-converter/"
   structuredData={structuredData}
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -362,6 +362,25 @@ const relatedTools = [
 
     </div>
 
+    <!-- What is a Unix Timestamp? Section -->
+    <section class="mb-16 p-8 rounded-2xl bg-bg-secondary border border-border-primary">
+      <h2 class="text-2xl font-bold text-text-primary mb-6">What is a Unix Timestamp?</h2>
+      <div class="space-y-4 text-sm text-text-secondary leading-relaxed">
+        <p>
+          A Unix timestamp (also known as Epoch time or POSIX time) is a system for describing a point in time. It is defined as the number of seconds that have elapsed since January 1, 1970, at 00:00:00 UTC, minus leap seconds. This seemingly arbitrary starting point is known as the Unix Epoch.
+        </p>
+        <p>
+          Developers universally rely on Unix timestamps because they provide a standardized, absolute way to track time independent of time zones or geographical locations. Storing dates as a single integer makes it incredibly efficient for databases to sort, index, and query records. It also eliminates the complexity of parsing various date formats across different programming languages and API responses. Whether a user is in Tokyo or New York, the Unix timestamp for a given moment is exactly the same, ensuring cross-timezone consistency.
+        </p>
+        <p>
+          Timestamps are typically represented as either 10-digit integers (seconds) or 13-digit integers (milliseconds, standard in JavaScript). A known limitation of the 32-bit timestamp format is the "Year 2038 problem", where the integer capacity will overflow. However, modern systems now use 64-bit integers, pushing the overflow limit billions of years into the future.
+        </p>
+        <p>
+          Using SnipTools for timestamp conversion offers a strict privacy advantage: all conversions are processed securely in your local browser. Your data inputs are never transmitted to or stored on an external server, keeping your workflow fast and completely private.
+        </p>
+      </div>
+    </section>
+
     <!-- How to Use Section -->
     <section class="mb-16 p-8 rounded-2xl bg-bg-secondary border border-border-primary">
       <h2 class="text-2xl font-bold text-text-primary mb-6 flex items-center gap-2">
@@ -624,8 +643,9 @@ const relatedTools = [
       if (outRelative) outRelative.textContent = getRelativeTimeString(date);
 
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const totalDaysInYear = isLeapYear(date.getFullYear()) ? 366 : 365;
       if (outDayOfWeek) outDayOfWeek.textContent = days[date.getDay()];
-      if (outDayOfYear) outDayOfYear.textContent = `${getDayOfYear(date)} of 365`;
+      if (outDayOfYear) outDayOfYear.textContent = `${getDayOfYear(date)} of ${totalDaysInYear}`;
       if (outWeekNum) outWeekNum.textContent = `Week ${getISOWeek(date)}`;
       if (outLeapYear) outLeapYear.textContent = isLeapYear(date.getFullYear()) ? 'Yes (Leap Year)' : 'No (Common Year)';
     }

@@ -92,7 +92,7 @@ const relatedTools = [
 <BaseLayout
   title="UUID Generator Online — Free Bulk v4 & v7 GUID Generator | SnipTools"
   description="Free online UUID generator & GUID tool. Generate random UUID v4 and time-ordered UUID v7 in bulk up to 500 items with custom hyphens, uppercase, and curly braces options."
-  canonicalUrl="https://sniptoolkit.com/uuid-generator"
+  canonicalUrl="https://sniptoolkit.com/uuid-generator/"
   structuredData={combinedSchema}
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -284,6 +284,22 @@ const relatedTools = [
         </div>
       </div>
     </div>
+
+    <!-- What is a UUID Section -->
+    <section class="mb-12 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-4">What is a UUID?</h2>
+      <div class="space-y-4 text-sm text-text-secondary leading-relaxed">
+        <p>
+          A UUID (Universally Unique Identifier), also known as a GUID (Globally Unique Identifier), is a 128-bit label used to uniquely identify information in computer systems. They are widely used in software development because they can be generated independently without a central registry while almost guaranteeing uniqueness.
+        </p>
+        <p>
+          There are different versions of UUIDs tailored for specific use cases. <strong>UUID v4</strong> is completely random, making it excellent for general-purpose identifiers, session IDs, and transaction references. However, its randomness can lead to fragmentation in database indexes. <strong>UUID v7</strong> solves this by combining a time-based sortable prefix with random data. This makes v7 time-ordered, sortable, and highly optimized for use as database primary keys.
+        </p>
+        <p>
+          SnipTools generates all UUIDs directly on your device using secure cryptographic APIs. This privacy advantage means your generated identifiers never leave your browser, ensuring complete security for your distributed systems and applications.
+        </p>
+      </div>
+    </section>
 
     <!-- How to Use Section -->
     <section class="mb-12 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
@@ -554,7 +570,8 @@ const relatedTools = [
 
   // Keyboard shortcut: Space key regenerates UUIDs
   document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    if (['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT'].includes(document.activeElement?.tagName)) return;
+    if (e.code === 'Space') {
       e.preventDefault();
       updateGeneration();
       if (window.showToast) window.showToast(`Regenerated ${quantity} ${currentVersion.toUpperCase()} UUID(s)`, 'success');

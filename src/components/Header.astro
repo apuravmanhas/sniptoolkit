@@ -13,7 +13,6 @@ const tools = [
 ];
 
 const categories = [
-  { name: 'All Tools', slug: '/' },
   { name: 'Data', slug: '/#data' },
   { name: 'Encoding', slug: '/#encoding' },
   { name: 'Security', slug: '/#security' },
@@ -32,18 +31,30 @@ const currentPath = Astro.url.pathname;
     <div class="flex h-14 items-center justify-between gap-4">
       <!-- Logo -->
       <a href="/" class="flex items-center gap-2.5 text-text-primary no-underline group">
-        <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-purple text-[10px] font-extrabold text-white shadow-md shadow-accent/25 transition-transform duration-200 group-hover:scale-110">
-          ST
-        </div>
+        <img src="/favicon-48x48.png" alt="SnipTools Logo" width="28" height="28" class="h-7 w-7 rounded-lg shadow-md shadow-accent/25 transition-transform duration-200 group-hover:scale-110 object-contain" />
         <span class="text-[15px] font-bold tracking-tight hidden sm:inline">SnipTools</span>
       </a>
 
       <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
+      <nav class="hidden md:flex items-center gap-1" aria-label="Main navigation">
+        <!-- Dedicated Home Button -->
+        <a
+          href="/"
+          class={`flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-semibold rounded-lg transition-all duration-200 no-underline ${
+            currentPath === '/'
+              ? 'text-white bg-accent shadow-md shadow-accent/25'
+              : 'text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-tertiary border border-border-primary/80'
+          }`}
+          aria-label="Homepage"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+
         {categories.map(cat => (
           <a
             href={cat.slug}
-            class={`px-3 py-1.5 text-[13px] font-medium rounded-md transition-all duration-200 ${
+            class={`px-2.5 py-1.5 text-[13px] font-medium rounded-md transition-all duration-200 ${
               currentPath === cat.slug
                 ? 'text-text-primary bg-bg-tertiary'
                 : 'text-text-secondary hover:text-text-primary hover:bg-bg-hover'
@@ -56,7 +67,16 @@ const currentPath = Astro.url.pathname;
 
       <!-- Right side -->
       <div class="flex items-center gap-2">
-        <!-- Command palette trigger -->
+        <!-- Mobile Search Button -->
+        <button
+          onclick="document.getElementById('command-palette').classList.remove('hidden'); document.getElementById('cmd-search').focus();"
+          class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-all duration-200 cursor-pointer"
+          aria-label="Search tools"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+
+        <!-- Desktop Command palette trigger -->
         <button
           id="cmd-trigger"
           onclick="document.getElementById('command-palette').classList.remove('hidden'); document.getElementById('cmd-search').focus();"
@@ -102,6 +122,49 @@ const currentPath = Astro.url.pathname;
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
+      <div class="mb-4 pb-4 border-b border-border-primary space-y-2">
+        <a
+          href="/"
+          onclick="closeMobile()"
+          class={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all no-underline ${
+            currentPath === '/'
+              ? 'text-white bg-accent shadow-md shadow-accent/25'
+              : 'text-text-primary bg-bg-tertiary border border-border-primary hover:border-accent'
+          }`}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+
+        <button
+          onclick="closeMobile(); document.getElementById('command-palette').classList.remove('hidden'); document.getElementById('cmd-search').focus();"
+          class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-bg-tertiary border border-border-primary text-text-secondary text-xs font-medium cursor-pointer"
+        >
+          <span class="flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span>Search tools...</span>
+          </span>
+          <kbd class="text-[10px] font-mono bg-bg-secondary px-1.5 py-0.5 rounded border border-border-primary">⌘K</kbd>
+        </button>
+      </div>
+
+      <!-- Category Filter Shortcuts for Mobile -->
+      <div class="mb-4 pb-4 border-b border-border-primary">
+        <div class="text-[11px] font-bold text-text-tertiary uppercase tracking-wider mb-2">Categories</div>
+        <div class="flex flex-wrap gap-1.5">
+          {categories.map(cat => (
+            <a
+              href={cat.slug}
+              onclick="closeMobile()"
+              class="px-2.5 py-1 text-xs font-medium rounded-md bg-bg-tertiary border border-border-primary text-text-secondary hover:text-text-primary hover:border-accent transition-colors no-underline"
+            >
+              {cat.name}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="text-[11px] font-bold text-text-tertiary uppercase tracking-wider mb-2">All Tools</div>
       <div class="space-y-1">
         {tools.map(tool => (
           <a

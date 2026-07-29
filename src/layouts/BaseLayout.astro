@@ -10,7 +10,8 @@ interface Props {
 
 const { title, description, canonicalUrl, ogImage, structuredData, gaMeasurementId } = Astro.props;
 const siteUrl = 'https://sniptoolkit.com';
-const fullCanonical = canonicalUrl || `${siteUrl}${Astro.url.pathname}`;
+const rawCanonical = canonicalUrl || `${siteUrl}${Astro.url.pathname}`;
+const fullCanonical = rawCanonical.endsWith('/') ? rawCanonical : `${rawCanonical}/`;
 const fullOgImage = ogImage || `${siteUrl}/og-default.png`;
 
 import '../styles/global.css';
@@ -24,7 +25,7 @@ import ToastContainer from '../components/ToastContainer.astro';
 <html lang="en" class="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
   <meta name="description" content={description} />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="SnipTools" />
@@ -45,33 +46,43 @@ import ToastContainer from '../components/ToastContainer.astro';
   <meta property="og:type" content="website" />
   <meta property="og:image" content={fullOgImage} />
   <meta property="og:site_name" content="SnipTools" />
+  <meta property="og:locale" content="en_US" />
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={fullOgImage} />
+  <meta name="twitter:site" content="@SnipTools" />
+  <meta name="twitter:creator" content="@SnipTools" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- Security & Privacy Meta Headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <!-- Favicons (Google Search & Mobile Specification) -->
+  <link rel="icon" type="image/png" sizes="48x48" href="https://sniptoolkit.com/favicon-48x48.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="https://sniptoolkit.com/favicon-192x192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="https://sniptoolkit.com/favicon-512x512.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://sniptoolkit.com/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="https://sniptoolkit.com/favicon.ico" />
+  <link rel="manifest" href="/manifest.json" />
 
   <!-- Structured Data JSON-LD -->
   {structuredData && (
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   )}
 
-  <!-- Google Analytics GA4 - Set gaMeasurementId prop to activate -->
-  {gaMeasurementId && gaMeasurementId !== '' && (
-    <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
-      <script is:inline set:html={`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '${gaMeasurementId}');
-      `} />
-    </>
-  )}
+  <!-- Google Analytics GA4 (Measurement ID: G-CH9Q7ZP4DD) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CH9Q7ZP4DD"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CH9Q7ZP4DD');
+  </script>
 
   <!-- Theme script (Prevent layout shift / flash) -->
   <script is:inline>

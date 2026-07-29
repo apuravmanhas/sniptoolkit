@@ -25,7 +25,7 @@ const tools = [
   <div class="absolute inset-0 flex items-start justify-center pt-[15vh]">
     <div class="w-full max-w-lg bg-bg-secondary border border-border-secondary rounded-xl shadow-2xl animate-scale-in overflow-hidden">
       <!-- Search input -->
-      <div class="flex items-center gap-3 px-4 py-3 border-b border-border-primary">
+      <div class="flex items-center gap-2 sm:gap-3 px-3.5 py-3 border-b border-border-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-tertiary flex-shrink-0"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input
           id="cmd-search"
@@ -38,7 +38,27 @@ const tools = [
           autocomplete="off"
           spellcheck="false"
         />
-        <kbd class="text-[11px] font-mono text-text-tertiary bg-bg-tertiary border border-border-primary rounded px-1.5 py-0.5 flex-shrink-0">ESC</kbd>
+        <!-- Clear Text Button -->
+        <button
+          id="cmd-clear-btn"
+          type="button"
+          aria-label="Clear search text"
+          class="hidden p-1 text-text-tertiary hover:text-text-primary rounded-md bg-bg-tertiary hover:bg-bg-hover transition-colors cursor-pointer flex-shrink-0"
+          onclick="const input = document.getElementById('cmd-search'); input.value = ''; filterTools(''); input.focus();"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <!-- Mobile Close Button -->
+        <button
+          type="button"
+          aria-label="Close search"
+          class="px-2 py-1 text-xs font-bold text-text-secondary hover:text-text-primary rounded-md bg-bg-tertiary hover:bg-bg-hover transition-colors cursor-pointer flex-shrink-0 flex items-center gap-1"
+          onclick="document.getElementById('command-palette').classList.add('hidden')"
+        >
+          <span>✕</span>
+          <span class="text-[10px] sm:hidden">Close</span>
+        </button>
+        <kbd class="hidden sm:inline-block text-[11px] font-mono text-text-tertiary bg-bg-tertiary border border-border-primary rounded px-1.5 py-0.5 flex-shrink-0">ESC</kbd>
       </div>
 
       <!-- Results -->
@@ -75,6 +95,11 @@ const tools = [
   // Fuzzy search filter for command palette
   function filterTools(query) {
     const results = document.getElementById('cmd-results');
+    const clearBtn = document.getElementById('cmd-clear-btn');
+    if (clearBtn) {
+      if (query && query.length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
     if (!results) return;
     const items = results.querySelectorAll('.cmd-tool-item');
     const q = query.toLowerCase().trim();

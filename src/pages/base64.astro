@@ -91,7 +91,7 @@ const relatedTools = [
 <BaseLayout
   title="Base64 Encode & Decode Online — Free Converter | SnipTools"
   description="Free online Base64 Encoder & Decoder. Convert text to Base64, decode Base64 to text, convert images & files to Base64 data URIs. 100% private, client-side."
-  canonicalUrl="https://sniptoolkit.com/base64"
+  canonicalUrl="https://sniptoolkit.com/base64/"
   structuredData={structuredData}
 >
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -300,6 +300,22 @@ const relatedTools = [
       </div>
     </div>
 
+    <!-- What is Base64 Encoding Section -->
+    <section class="mt-16 pt-12 border-t border-border-primary">
+      <div class="max-w-4xl mx-auto space-y-4">
+        <h2 class="text-2xl font-bold text-text-primary tracking-tight mb-2">What is Base64 Encoding?</h2>
+        <p class="text-sm text-text-secondary leading-relaxed">
+          Base64 encoding is a method used to convert binary data into an ASCII string format by translating it into a radix-64 representation. It ensures that data remains intact without modification during transport across systems that typically only handle text data.
+        </p>
+        <p class="text-sm text-text-secondary leading-relaxed">
+          Developers commonly use Base64 to embed binary data in environments that require readable text. Frequent use cases include embedding images directly into HTML/CSS files as data URIs (reducing HTTP requests), safely transferring email attachments, and encoding JSON Web Tokens (JWT) for authentication. It prevents binary data from being corrupted when sent over text-based protocols.
+        </p>
+        <p class="text-sm text-text-secondary leading-relaxed">
+          When you use SnipTools to encode or decode Base64, your privacy is completely guaranteed. Our converter works locally in your browser. This means your sensitive tokens, text, and files are never sent to external servers, providing maximum security for your data.
+        </p>
+      </div>
+    </section>
+
     <!-- How to Use Section -->
     <section class="mt-16 pt-12 border-t border-border-primary">
       <div class="max-w-4xl mx-auto">
@@ -461,14 +477,13 @@ const relatedTools = [
       if (!str || typeof str !== 'string') return false;
       const s = str.trim();
       if (s.length < 8) return false;
-      if (s.length % 4 !== 0 && !s.includes('-') && !s.includes('_')) {
-        // Might be unpadded urlsafe or invalid
-        return false;
-      }
-      // Regex check for standard base64 or URL safe base64
+      // Standard Base64 regex
       const regex = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/;
-      const urlSafeRegex = /^[A-Za-z0-9_-]+$/;
-      return regex.test(s) || urlSafeRegex.test(s);
+      if (!regex.test(s)) return false;
+      // Explicit base64 indicators: padding '=' or base64 characters '+' or '/'
+      if (s.includes('=') || s.includes('+') || s.includes('/')) return true;
+      // For plain letters/digits without base64 symbols, length must be multiple of 4 and at least 16 chars
+      return s.length % 4 === 0 && s.length >= 16;
     }
 
     // Convert function

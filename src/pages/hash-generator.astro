@@ -100,7 +100,7 @@ const relatedTools = [
 <BaseLayout
   title="SHA256 & MD5 Hash Generator Online — Free Hash Tool | SnipTools"
   description="Generate MD5, SHA-1, SHA-256, and SHA-512 hashes simultaneously from text or files up to 100MB. HMAC support, uppercase toggle, 100% client-side privacy."
-  canonicalUrl="https://sniptoolkit.com/hash-generator"
+  canonicalUrl="https://sniptoolkit.com/hash-generator/"
   structuredData={structuredData}
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -321,6 +321,25 @@ const relatedTools = [
       </div>
     </div>
 
+    <!-- What is Cryptographic Hashing? Section -->
+    <section class="mt-16 mb-16 p-8 rounded-2xl bg-bg-secondary border border-border-primary">
+      <h2 class="text-2xl font-bold text-text-primary mb-6">What is Cryptographic Hashing?</h2>
+      <div class="space-y-4 text-sm text-text-secondary leading-relaxed">
+        <p>
+          A cryptographic hash function is a mathematical algorithm that maps input data of any size to a fixed-size string of characters, typically representing a hexadecimal number. The resulting output, known as the hash value or digest, serves as a unique digital fingerprint for the original data. Hash functions are designed to be deterministic (the same input always produces the exact same hash) and one-way (it's computationally infeasible to reverse-engineer the original input from the hash).
+        </p>
+        <p>
+          These properties make hashing essential for numerous real-world applications. Developers rely on hashes for file integrity verification (checksums) to ensure downloads aren't corrupted or tampered with. They are also crucial for digital signatures, securing blockchain transactions, and safely handling passwords. By comparing hash values instead of raw text, systems can verify data authenticity without exposing sensitive information.
+        </p>
+        <p>
+          The difference between common algorithms lies in their bit length and security level. <strong>MD5</strong> (128-bit) and <strong>SHA-1</strong> (160-bit) are extremely fast but are considered cryptographically vulnerable to collision attacks; they remain popular solely for non-security checksums. <strong>SHA-256</strong> (256-bit) and <strong>SHA-512</strong> (512-bit) belong to the more robust SHA-2 family and are the current enterprise standard for cryptographic security.
+        </p>
+        <p>
+          With SnipTools, privacy is guaranteed. All hash calculations are performed strictly client-side using the Web Crypto API, meaning your sensitive text and files never leave your browser or get uploaded to any external server.
+        </p>
+      </div>
+    </section>
+
     <!-- How to Use Section -->
     <section class="mt-16 mb-16 p-8 rounded-2xl bg-bg-secondary border border-border-primary">
       <h2 class="text-2xl font-bold text-text-primary mb-6 flex items-center gap-2">
@@ -403,16 +422,7 @@ const relatedTools = [
 
   // Standard UTF-8 / Uint8Array MD5 Implementation (RFC 1321)
   function md5Uint8Array(bytes) {
-    const k = [
-      0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
-      0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfdae0813, 0x9d392124, 0x4bdecfa9,
-      0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x04881d05, 0xd9d4d039, 0xe6db99e5,
-      0x1fa27cf8, 0xc4ac5665, 0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92,
-      0xffeff47d, 0x85845dd1, 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235,
-      0x2ad7d2bb, 0xeb86d391, 0x679f4213, 0x8d2a4c8a, 0xfe600999, 0x00105d8c, 0xd7a8227b, 0x514656e2,
-      0xe93765d4, 0x73744407, 0x24b5465d, 0x2ccc924d, 0x59a35d2c, 0x0f2c7007, 0x923f82a4, 0xab1c5ed5,
-      0xd807aa98, 0x12835b01, 0x243185be, 0x47830566, 0x8583531c, 0x6f4e3730, 0x736b99bf, 0xbfd59871
-    ];
+    const k = Array.from({length: 64}, (_, i) => Math.floor(Math.abs(Math.sin(i + 1)) * 4294967296) >>> 0);
     const s = [
       7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
       5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,

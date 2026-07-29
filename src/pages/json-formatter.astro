@@ -18,17 +18,26 @@ const structuredData = {
         {
           "@type": "Question",
           "name": "How does the online JSON formatter work?",
-          "text": "Paste your raw JSON string into the input area and select your formatting preference (2 spaces, 4 spaces, or tab). Our tool validates the syntax using native browser parsing and formats the output instantly."
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Paste your raw JSON string into the input area and select your formatting preference (2 spaces, 4 spaces, or tab). Our tool validates the syntax using native browser parsing and formats the output instantly."
+          }
         },
         {
           "@type": "Question",
           "name": "Is my JSON data secure when using this tool?",
-          "text": "Yes, 100% safe! All parsing and formatting occur locally inside your web browser. Your JSON data is never uploaded to any server."
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, 100% safe! All parsing and formatting occur locally inside your web browser. Your JSON data is never uploaded to any server."
+          }
         },
         {
           "@type": "Question",
           "name": "What happens if my JSON has syntax errors?",
-          "text": "The validator highlights the exact line number and character offset of the error, showing a clear error message to help you fix missing quotes, commas, or brackets."
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The validator highlights the exact line number and character offset of the error, showing a clear error message to help you fix missing quotes, commas, or brackets."
+          }
         }
       ]
     }
@@ -45,7 +54,7 @@ const relatedTools = [
 <BaseLayout
   title="JSON Formatter & Validator Online — Free & Private | SnipTools"
   description="Format, validate, beautify, and minify JSON online. Features line error highlighting, file upload, 100% client-side privacy, and zero server logging."
-  canonicalUrl="https://sniptoolkit.com/json-formatter"
+  canonicalUrl="https://sniptoolkit.com/json-formatter/"
   structuredData={structuredData}
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -144,6 +153,20 @@ const relatedTools = [
           ></textarea>
         </div>
       </div>
+    </div>
+
+    <!-- What is JSON Formatting Section -->
+    <div class="rounded-2xl border border-border-primary bg-bg-secondary p-6 sm:p-10 mb-12 space-y-6 text-sm text-text-secondary leading-relaxed">
+      <h2 class="text-2xl font-bold text-text-primary tracking-tight">What is JSON Formatting?</h2>
+      <p>
+        JSON (JavaScript Object Notation) is a lightweight data-interchange format that is easy for humans to read and write, and easy for machines to parse and generate. JSON formatting, often referred to as beautifying or pretty-printing, is the process of organizing raw JSON strings by adding proper indentation, line breaks, and spacing. 
+      </p>
+      <p>
+        Proper formatting and validation are crucial for developers debugging API responses, managing configuration files, or inspecting complex data structures. Minified JSON is great for saving bandwidth during network transfers, but it is nearly impossible to read manually. By formatting JSON, you can quickly spot syntax errors, nested object structures, and missing keys. 
+      </p>
+      <p>
+        SnipTools provides a secure environment for this process. Everything happens 100% client-side in your browser, ensuring your sensitive API payloads, configuration files, and personal data never leave your device.
+      </p>
     </div>
 
     <!-- SEO Content Section -->
@@ -288,7 +311,9 @@ const relatedTools = [
     const a = document.createElement('a');
     a.href = url;
     a.download = 'formatted.json';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
 

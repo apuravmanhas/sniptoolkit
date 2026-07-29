@@ -25,21 +25,21 @@ export const GET: APIRoute = async () => {
   const today = new Date().toISOString().split('T')[0];
 
   const homeEntry = `  <url>
-    <loc>${siteUrl}</loc>
+    <loc>${siteUrl}/</loc>
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>`;
 
   const toolEntries = toolPages.map(page => `  <url>
-    <loc>${siteUrl}${page}</loc>
+    <loc>${siteUrl}${page}/</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>`).join('\n');
 
   const infoEntries = infoPages.map(page => `  <url>
-    <loc>${siteUrl}${page}</loc>
+    <loc>${siteUrl}${page}/</loc>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

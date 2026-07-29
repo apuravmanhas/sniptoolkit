@@ -92,7 +92,7 @@ const relatedTools = [
 <BaseLayout
   title="URL Encode & Decode Online — Free Percent Encoder | SnipTools"
   description="Encode and decode URLs online instantly. Free percent-encoding tool for full URLs or URI components with live preview and special character support."
-  canonicalUrl="https://sniptoolkit.com/url-encode-decode"
+  canonicalUrl="https://sniptoolkit.com/url-encode-decode/"
   structuredData={combinedSchema}
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -276,6 +276,25 @@ const relatedTools = [
       </div>
     </div>
 
+    <!-- What is URL Encoding? Section -->
+    <section class="mb-12 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-4">What is URL Encoding?</h2>
+      <div class="space-y-4 text-sm text-text-secondary leading-relaxed">
+        <p>
+          URL encoding, formally known as percent-encoding, is a mechanism for safely transmitting data via Uniform Resource Identifiers (URIs). The internet strictly limits the characters that can be used in a URL to a subset of the ASCII character set. Any character outside this permitted range—including spaces, emojis, non-Latin scripts, and certain symbols—must be translated into a valid format before the URL can be transmitted over the internet.
+        </p>
+        <p>
+          This conversion is crucial because characters like <code>?</code>, <code>=</code>, and <code>&amp;</code> have special meanings in web addresses (they delimit queries and parameters). If your form data or query parameter naturally contains an ampersand, it will break the URL structure unless it is percent-encoded as <code>%26</code>. Encoding ensures that web servers and browsers correctly interpret the data without confusing it for structural URL components.
+        </p>
+        <p>
+          The standard governing this process is defined in <strong>RFC 3986</strong>, which specifies exactly which characters are safe ("unreserved") and which must be encoded. Functions like JavaScript's <code>encodeURIComponent</code> are commonly used by developers to safely encode these special characters.
+        </p>
+        <p>
+          When you use SnipTools for URL encoding, you benefit from strict privacy. All encoding and decoding operations are executed entirely client-side within your browser. Your potentially sensitive query parameters and URL strings are never sent to or logged by any external server.
+        </p>
+      </div>
+    </section>
+
     <!-- How to Use Section -->
     <section class="mb-12 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
       <h2 class="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
@@ -449,6 +468,8 @@ const relatedTools = [
       urlOutput.value = result;
       updateStats();
     } catch (err) {
+      urlOutput.value = '';
+      updateStats();
       showError('URI Malformed: Input contains invalid percent-encoding sequence (e.g. %ZZ or incomplete UTF-8).');
     }
   }

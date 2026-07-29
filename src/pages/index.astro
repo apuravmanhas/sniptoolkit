@@ -127,13 +127,21 @@ const structuredData = {
     {
       "@type": "WebSite",
       "name": "SnipTools",
-      "url": "https://sniptoolkit.com",
+      "alternateName": ["Snip Tools", "SnipTool", "Snip Toolkit", "SnipTools Developer Suite"],
+      "url": "https://sniptoolkit.com/",
       "description": "Fast, free developer & utility tools. 100% client-side, privacy-focused, zero registration.",
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://sniptoolkit.com/?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
+    },
+    {
+      "@type": "Organization",
+      "name": "SnipTools",
+      "alternateName": ["Snip Tools", "Snip Toolkit"],
+      "url": "https://sniptoolkit.com/",
+      "logo": "https://sniptoolkit.com/favicon-512x512.png"
     },
     {
       "@type": "FAQPage",
@@ -151,8 +159,8 @@ const structuredData = {
 ---
 
 <BaseLayout
-  title="SnipTools — Fast, Free Developer & Utility Tools"
-  description="Free developer tools hub. JSON formatter, Base64 encoder, UUID generator, URL decoder, Hash generator, Online Clipboard & more. 100% client-side, zero log-in."
+  title="SnipTools (Snip Tools) — Fast, Free Developer & Utility Suite"
+  description="SnipTools (Snip Tools) is a free developer utility suite. JSON formatter, Base64 encoder, UUID generator, URL decoder, Hash generator, Online Clipboard & more. 100% client-side, zero log-in."
   structuredData={structuredData}
 >
   <!-- Hero Section -->
@@ -178,17 +186,30 @@ const structuredData = {
       </p>
 
       <!-- Quick Action Bar / Search trigger -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto animate-slide-up stagger-2">
+      <div class="flex flex-col items-center justify-center gap-3 max-w-xl mx-auto animate-slide-up stagger-2">
         <button
           onclick="document.getElementById('command-palette').classList.remove('hidden'); document.getElementById('cmd-search').focus();"
-          class="w-full sm:w-auto flex items-center justify-between gap-4 px-5 py-3 rounded-xl bg-bg-secondary border border-border-secondary hover:border-accent text-text-secondary hover:text-text-primary shadow-lg shadow-black/20 transition-all duration-200 cursor-pointer group"
+          class="w-full flex items-center justify-between gap-4 px-5 py-3 rounded-xl bg-bg-secondary border border-border-secondary hover:border-accent text-text-secondary hover:text-text-primary shadow-lg shadow-black/20 transition-all duration-200 cursor-pointer group"
         >
           <div class="flex items-center gap-2.5">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-tertiary group-hover:text-accent transition-colors"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <span class="text-sm font-medium">Quick search tools...</span>
+            <span class="text-sm font-medium">Search tools...</span>
           </div>
           <kbd class="text-xs font-mono bg-bg-tertiary border border-border-primary rounded px-2 py-0.5 text-text-tertiary">Ctrl + K</kbd>
         </button>
+
+        <!-- Category Interlink Pills -->
+        <div class="flex flex-wrap items-center justify-center gap-1.5 pt-1">
+          <span class="text-xs text-text-tertiary font-medium mr-1">Popular:</span>
+          <a href="#data" class="px-2.5 py-1 rounded-lg bg-bg-secondary/80 border border-border-primary text-xs font-medium text-text-secondary hover:text-text-primary hover:border-accent transition-all no-underline">Data</a>
+          <a href="#encoding" class="px-2.5 py-1 rounded-lg bg-bg-secondary/80 border border-border-primary text-xs font-medium text-text-secondary hover:text-text-primary hover:border-accent transition-all no-underline">Encoding</a>
+          <a href="#security" class="px-2.5 py-1 rounded-lg bg-bg-secondary/80 border border-border-primary text-xs font-medium text-text-secondary hover:text-text-primary hover:border-accent transition-all no-underline">Security</a>
+          <a href="#text" class="px-2.5 py-1 rounded-lg bg-bg-secondary/80 border border-border-primary text-xs font-medium text-text-secondary hover:text-text-primary hover:border-accent transition-all no-underline">Text</a>
+          <a href="#generator" class="px-2.5 py-1 rounded-lg bg-bg-secondary/80 border border-border-primary text-xs font-medium text-text-secondary hover:text-text-primary hover:border-accent transition-all no-underline">Generator</a>
+          <a href="#converter" class="px-2.5 py-1 rounded-lg bg-bg-secondary/80 border border-border-primary text-xs font-medium text-text-secondary hover:text-text-primary hover:border-accent transition-all no-underline">Converter</a>
+          <a href="#design" class="px-2.5 py-1 rounded-lg bg-bg-secondary/80 border border-border-primary text-xs font-medium text-text-secondary hover:text-text-primary hover:border-accent transition-all no-underline">Design</a>
+          <a href="#utility" class="px-2.5 py-1 rounded-lg bg-bg-secondary/80 border border-border-primary text-xs font-medium text-text-secondary hover:text-text-primary hover:border-accent transition-all no-underline">Utility</a>
+        </div>
       </div>
 
       <!-- Feature Pills -->
@@ -270,6 +291,43 @@ const structuredData = {
       ))}
     </div>
   </section>
+  <!-- SEO Content: What is SnipTools -->
+  <section class="py-16 border-t border-border-primary">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-10">
+        <div>
+          <h2 class="text-2xl font-bold text-text-primary tracking-tight mb-4">What is SnipTools (Snip Tools)?</h2>
+          <p class="text-sm text-text-secondary leading-relaxed mb-3">
+            SnipTools (also known as Snip Tools) is a free, privacy-first collection of essential developer and utility tools that run entirely inside your web browser. Unlike traditional online utilities that upload your data to remote servers for processing, every Snip Tools operation — from JSON formatting and Base64 encoding to cryptographic hashing and UUID generation — executes locally within your browser's memory using standard Web APIs.
+          </p>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Built with the Astro static framework and hosted on Cloudflare's global edge network, SnipTools delivers sub-second page loads with zero tracking, zero advertisements, and zero data retention. Whether you are debugging API payloads, encoding configuration files, or generating test data, your sensitive information never leaves your device.
+          </p>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-text-primary tracking-tight mb-4">Why Developers Choose SnipTools</h2>
+          <ul class="space-y-3 text-sm text-text-secondary">
+            <li class="flex items-start gap-2">
+              <span class="text-success font-bold mt-0.5">&#10003;</span>
+              <span><strong class="text-text-primary">Client-Side Privacy</strong> — All data processing happens locally in your browser memory. No payloads are transmitted to or stored on external servers, making SnipTools safe for handling API keys, tokens, and sensitive configuration data.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-success font-bold mt-0.5">&#10003;</span>
+              <span><strong class="text-text-primary">Keyboard-First Navigation</strong> — Press <kbd>Ctrl+K</kbd> or <kbd>Cmd+K</kbd> to open the integrated command palette and instantly search, switch, and navigate between tools without reaching for a mouse.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-success font-bold mt-0.5">&#10003;</span>
+              <span><strong class="text-text-primary">Cross-Device Clipboard</strong> — Share code snippets and text between your desktop and mobile devices instantly using ephemeral 6-digit codes and QR codes, without creating accounts or installing applications.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-success font-bold mt-0.5">&#10003;</span>
+              <span><strong class="text-text-primary">Ad-Free and Lightweight</strong> — No popup banners, no tracking scripts, no cookie consent dialogs. SnipTools loads instantly with minimal JavaScript overhead, keeping your workflow fast and uninterrupted.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- FAQ Section -->
   <section class="py-16 bg-bg-secondary/40 border-t border-border-primary">
@@ -296,27 +354,57 @@ const structuredData = {
 </BaseLayout>
 
 <script is:inline>
-  // Category filter script
-  const buttons = document.querySelectorAll('#category-filters .cat-btn');
-  const cards = document.querySelectorAll('#tools-grid .tool-card');
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('#category-filters .cat-btn');
+    const cards = document.querySelectorAll('#tools-grid .tool-card');
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      buttons.forEach(b => {
-        b.classList.remove('active', 'bg-bg-tertiary', 'text-text-primary', 'font-semibold');
-        b.classList.add('text-text-secondary', 'font-medium');
+    function filterByCategory(catName) {
+      if (!catName) catName = 'all';
+      const targetCat = catName.toLowerCase().replace('#', '');
+
+      buttons.forEach(btn => {
+        const btnCat = (btn.getAttribute('data-cat') || '').toLowerCase();
+        if (btnCat === targetCat || (targetCat === '' && btnCat === 'all')) {
+          btn.classList.add('active', 'bg-bg-tertiary', 'text-text-primary', 'font-semibold');
+          btn.classList.remove('text-text-secondary');
+        } else {
+          btn.classList.remove('active', 'bg-bg-tertiary', 'text-text-primary', 'font-semibold');
+          btn.classList.add('text-text-secondary', 'font-medium');
+        }
       });
-      btn.classList.add('active', 'bg-bg-tertiary', 'text-text-primary', 'font-semibold');
-      btn.classList.remove('text-text-secondary');
 
-      const cat = btn.getAttribute('data-cat');
       cards.forEach(card => {
-        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+        const cardCat = (card.getAttribute('data-category') || '').toLowerCase();
+        if (targetCat === 'all' || targetCat === '' || cardCat === targetCat) {
           card.style.display = 'flex';
         } else {
           card.style.display = 'none';
         }
       });
+    }
+
+    function checkHashFilter() {
+      const hash = window.location.hash.replace('#', '').trim();
+      filterByCategory(hash);
+      if (hash && hash !== 'all') {
+        const section = document.getElementById('category-filters');
+        if (section) section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.getAttribute('data-cat');
+        filterByCategory(cat);
+        if (cat.toLowerCase() === 'all') {
+          history.replaceState(null, '', window.location.pathname);
+        } else {
+          window.location.hash = cat.toLowerCase();
+        }
+      });
     });
+
+    window.addEventListener('hashchange', checkHashFilter);
+    checkHashFilter();
   });
 </script>

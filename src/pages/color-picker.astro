@@ -104,7 +104,7 @@ const relatedTools = [
   title="Color Picker & Converter — HEX, RGB, HSL, HSV & Contrast Checker | SnipTools"
   description="Free online interactive color picker and converter. Convert HEX, RGB, HSL, and HSV with live two-way sync, WCAG color contrast checker, and swatches."
   structuredData={structuredData}
-  canonicalUrl="https://sniptoolkit.com/color-picker"
+  canonicalUrl="https://sniptoolkit.com/color-picker/"
 >
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-14">
     <!-- Header -->
@@ -361,6 +361,22 @@ const relatedTools = [
         </div>
       </div>
     </div>
+
+    <!-- What are Color Spaces Section -->
+    <section class="mt-8 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
+      <h2 class="text-xl font-bold text-text-primary mb-4">What are Color Spaces?</h2>
+      <div class="text-sm text-text-secondary leading-relaxed space-y-4">
+        <p>
+          Color spaces are mathematical models used to represent colors in digital design and programming. The most common formats include HEX (hexadecimal codes used primarily in HTML/CSS), RGB (Red, Green, Blue combinations for screens), HSL (Hue, Saturation, Lightness for intuitive human readability), and HSV (Hue, Saturation, Value used in digital art).
+        </p>
+        <p>
+          Designers and developers constantly rely on color converters to translate these values. A brand identity might provide CMYK or HEX codes, but developers often need RGB or HSL formats to apply dynamic CSS styling, opacity adjustments, and maintain cross-platform brand consistency. Additionally, checking these colors against WCAG contrast guidelines is crucial for ensuring your text is readable and your application is fully accessible to visually impaired users.
+        </p>
+        <p>
+          With SnipTools, all color manipulation and contrast calculations happen instantly and 100% locally on your device. This privacy advantage ensures your unreleased brand palettes, proprietary design systems, and workflow data are never sent to external servers or stored in third-party databases.
+        </p>
+      </div>
+    </section>
 
     <!-- How to Use Section -->
     <section class="mt-8 rounded-2xl border border-border-primary bg-bg-secondary p-6 md:p-8">
@@ -760,7 +776,7 @@ const relatedTools = [
 
     // Keyboard shortcut (R or Space for random)
     document.addEventListener('keydown', (e) => {
-      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+      if (['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT'].includes(document.activeElement?.tagName)) return;
       if (e.key.toLowerCase() === 'r' || e.key === ' ') {
         e.preventDefault();
         setRandomColor();
