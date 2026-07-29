@@ -1,0 +1,6 @@
+Contact: mailto:security@sniptoolkit.com
+Contact: https://sniptoolkit.com/contact/
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://sniptoolkit.com/.well-known/security.txt
+Policy: https://sniptoolkit.com/terms/
