@@ -128,6 +128,7 @@ const relatedTools = [
 
       <button
         id="tab-btn-history"
+        aria-label="Recent Clips"
         class="tab-btn px-5 py-3 text-sm font-semibold text-text-secondary hover:text-text-primary border-b-2 border-transparent transition-all cursor-pointer flex items-center gap-2 ml-auto"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -142,7 +143,7 @@ const relatedTools = [
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-text-secondary uppercase tracking-wider">Snippet Content</span>
-            <span class="text-xs text-text-tertiary">Type or drop file below</span>
+            <span class="text-xs text-text-secondary">Type or drop file below</span>
           </div>
 
           <div class="flex items-center gap-2">
@@ -170,7 +171,7 @@ const relatedTools = [
             aria-label="Snippet content"
             rows="10"
             placeholder="Type or paste your snippet here, or drag & drop a code/text file directly..."
-            class="w-full bg-transparent p-4 text-sm font-mono text-text-primary placeholder-text-tertiary focus:outline-none resize-y leading-relaxed"
+            class="w-full bg-transparent p-4 text-sm font-mono text-text-primary placeholder-text-secondary focus:outline-none resize-y leading-relaxed"
             spellcheck="false"
           ></textarea>
 
@@ -198,7 +199,7 @@ const relatedTools = [
             </button>
           </div>
 
-          <span class="text-xs text-text-tertiary font-mono" id="send-stats">0 lines | 0 chars</span>
+          <span class="text-xs text-text-secondary font-mono" id="send-stats">0 lines | 0 chars</span>
         </div>
       </div>
 
@@ -211,7 +212,7 @@ const relatedTools = [
             </span>
             <h2 class="text-lg font-bold text-text-primary mt-1">Your 6-Digit Retrieval Code</h2>
           </div>
-          <span class="text-xs text-text-tertiary" id="result-ttl-tag">Expires in 1 hour</span>
+          <span class="text-xs text-text-secondary" id="result-ttl-tag">Expires in 1 hour</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -282,7 +283,7 @@ const relatedTools = [
             <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-success/20 text-success border border-success/30 uppercase">
               Snippet Found
             </span>
-            <span class="text-xs font-mono text-text-tertiary" id="retrieved-meta">Code: ------</span>
+            <span class="text-xs font-mono text-text-secondary" id="retrieved-meta">Code: ------</span>
           </div>
 
           <div class="flex items-center gap-2">
@@ -868,7 +869,7 @@ const relatedTools = [
       } catch (e) {}
 
       if (history.length === 0) {
-        historyList.innerHTML = `<div class="text-xs text-text-tertiary py-6 text-center italic">No recent clips found.</div>`;
+        historyList.innerHTML = `<div class="text-xs text-text-secondary py-6 text-center italic">No recent clips found.</div>`;
         return;
       }
 

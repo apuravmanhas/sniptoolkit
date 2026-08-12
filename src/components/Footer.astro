@@ -2,26 +2,26 @@
 const currentYear = new Date().getFullYear();
 
 const toolLinks = [
-  { name: 'JSON Formatter', slug: '/json-formatter' },
-  { name: 'Base64 Encode/Decode', slug: '/base64' },
-  { name: 'UUID Generator', slug: '/uuid-generator' },
-  { name: 'URL Encode/Decode', slug: '/url-encode-decode' },
-  { name: 'Hash Generator', slug: '/hash-generator' },
+  { name: 'JSON Formatter', slug: '/json-formatter/' },
+  { name: 'Base64 Encode/Decode', slug: '/base64/' },
+  { name: 'UUID Generator', slug: '/uuid-generator/' },
+  { name: 'URL Encode/Decode', slug: '/url-encode-decode/' },
+  { name: 'Hash Generator', slug: '/hash-generator/' },
 ];
 
 const moreTools = [
-  { name: 'Timestamp Converter', slug: '/timestamp-converter' },
-  { name: 'Word Counter', slug: '/word-counter' },
-  { name: 'Color Picker', slug: '/color-picker' },
-  { name: 'Lorem Ipsum', slug: '/lorem-ipsum' },
-  { name: 'Online Clipboard', slug: '/online-clipboard' },
+  { name: 'Timestamp Converter', slug: '/timestamp-converter/' },
+  { name: 'Word Counter', slug: '/word-counter/' },
+  { name: 'Color Picker', slug: '/color-picker/' },
+  { name: 'Lorem Ipsum', slug: '/lorem-ipsum/' },
+  { name: 'Online Clipboard', slug: '/online-clipboard/' },
 ];
 
 const pages = [
-  { name: 'About', slug: '/about' },
-  { name: 'Privacy Policy', slug: '/privacy-policy' },
-  { name: 'Terms of Service', slug: '/terms' },
-  { name: 'Contact', slug: '/contact' },
+  { name: 'About', slug: '/about/' },
+  { name: 'Privacy Policy', slug: '/privacy-policy/' },
+  { name: 'Terms of Service', slug: '/terms/' },
+  { name: 'Contact', slug: '/contact/' },
 ];
 ---
 
@@ -37,7 +37,7 @@ const pages = [
           </div>
           <span class="text-sm font-bold">SnipTools</span>
         </a>
-        <p class="text-xs text-text-tertiary leading-relaxed max-w-[200px]">
+        <p class="text-xs text-text-secondary leading-relaxed max-w-[200px]">
           Fast, free developer & utility tools. No sign-up. 100% client-side processing.
         </p>
       </div>
@@ -48,7 +48,7 @@ const pages = [
         <ul class="space-y-2">
           {toolLinks.map(tool => (
             <li>
-              <a href={tool.slug} class="text-xs text-text-tertiary hover:text-text-primary transition-colors duration-200">{tool.name}</a>
+              <a href={tool.slug} class="text-xs text-text-secondary hover:text-text-primary transition-colors duration-200">{tool.name}</a>
             </li>
           ))}
         </ul>
@@ -60,7 +60,7 @@ const pages = [
         <ul class="space-y-2">
           {moreTools.map(tool => (
             <li>
-              <a href={tool.slug} class="text-xs text-text-tertiary hover:text-text-primary transition-colors duration-200">{tool.name}</a>
+              <a href={tool.slug} class="text-xs text-text-secondary hover:text-text-primary transition-colors duration-200">{tool.name}</a>
             </li>
           ))}
         </ul>
@@ -72,7 +72,7 @@ const pages = [
         <ul class="space-y-2">
           {pages.map(page => (
             <li>
-              <a href={page.slug} class="text-xs text-text-tertiary hover:text-text-primary transition-colors duration-200">{page.name}</a>
+              <a href={page.slug} class="text-xs text-text-secondary hover:text-text-primary transition-colors duration-200">{page.name}</a>
             </li>
           ))}
         </ul>
@@ -81,12 +81,12 @@ const pages = [
 
     <!-- Bottom bar -->
     <div class="border-t border-border-primary pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <p class="text-xs text-text-tertiary">
+      <p class="text-xs text-text-secondary">
         © {currentYear} SnipTools. All tools are free and process data locally in your browser.
       </p>
       <div class="flex items-center gap-1">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-success animate-pulse"></span>
-        <span class="text-xs text-text-tertiary">All systems operational</span>
+        <span class="text-xs text-text-secondary">All systems operational</span>
       </div>
     </div>
   </div>

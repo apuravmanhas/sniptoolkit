@@ -35,7 +35,11 @@ import ToastContainer from '../components/ToastContainer.astro';
   <!-- Preconnect Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  </noscript>
 
   <title>{title}</title>
 
@@ -56,10 +60,7 @@ import ToastContainer from '../components/ToastContainer.astro';
   <meta name="twitter:site" content="@SnipTools" />
   <meta name="twitter:creator" content="@SnipTools" />
 
-  <!-- Security & Privacy Meta Headers -->
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload" />
-  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <!-- Security & Privacy Headers (HTTP headers served via Cloudflare _headers file) -->
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <!-- Favicons (Google Search & Mobile Specification) -->
@@ -76,12 +77,25 @@ import ToastContainer from '../components/ToastContainer.astro';
   )}
 
   <!-- Google Analytics GA4 (Measurement ID: G-CH9Q7ZP4DD) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CH9Q7ZP4DD"></script>
   <script is:inline>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-CH9Q7ZP4DD');
+    // Defer loading GA4 until main thread is idle or after 2.5 seconds to prevent render blocking
+    const loadGA = () => {
+      const script = document.createElement('script');
+      script.src = "https://www.googletagmanager.com/gtag/js?id=G-CH9Q7ZP4DD";
+      script.async = true;
+      document.head.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CH9Q7ZP4DD');
+    };
+    
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(loadGA, { timeout: 2500 });
+    } else {
+      setTimeout(loadGA, 2500);
+    }
   </script>
 
   <!-- Theme script (Prevent layout shift / flash) -->
