@@ -1,43 +1,25 @@
-# Astro Starter Kit: Minimal
+# SnipToolkit
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A fast, private, 100% client-side suite of developer utilities.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+SnipToolkit was built to solve a simple problem: developers constantly need to format JSON, decode Base64, or generate UUIDs, but doing so on ad-filled, tracking-heavy websites is a massive privacy risk. SnipToolkit brings all essential utilities into a single, lightning-fast workspace where **your data never leaves your browser**.
 
-## 🚀 Project Structure
+## 🛡️ Core Philosophy
 
-Inside of your Astro project, you'll see the following folders and files:
+* **100% Client-Side:** No backend databases. No server-side processing. Your data is processed entirely by your own local machine.
+* **Zero Tracking:** No analytics logging your inputs, no cookies tracking your behavior.
+* **Ad-Free Workspace:** A clean, distraction-free environment designed for developers.
+* **Instant Execution:** Because everything runs locally, tools execute with zero network latency.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## 🛠️ Available Utilities
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+* **Data:** JSON Formatter & Validator
+* **Encoding:** Base64 Encode/Decode, URL Encode/Decode
+* **Security:** Hash Generator (MD5, SHA), Password & UUID Generators
+* **Text & Design:** Lorem Ipsum, Word Counter, Color Picker
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## 🔒 Security Guarantee
+All tools strictly utilize local browser APIs (such as the Web Crypto API for secure generation). We do not collect, store, or transmit any user input data to any external servers.
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+---
+*Built for developers, by developers.*
