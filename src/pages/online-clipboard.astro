@@ -171,7 +171,8 @@ const relatedTools = [
             aria-label="Snippet content"
             rows="10"
             placeholder="Type or paste your snippet here, or drag & drop a code/text file directly..."
-            class="w-full bg-transparent p-4 text-sm font-mono text-text-primary placeholder-text-secondary focus:outline-none resize-y leading-relaxed"
+            class="w-full bg-transparent p-4 text-sm font-mono text-text-primary placeholder-text-secondary focus:outline-none resize-y leading-relaxed whitespace-pre-wrap font-normal"
+            style="tab-size: 2;"
             spellcheck="false"
           ></textarea>
 
@@ -305,9 +306,11 @@ const relatedTools = [
         <textarea
           id="retrieved-output"
           aria-label="Retrieved snippet content"
-          rows="12"
+          rows="14"
           readonly
-          class="w-full rounded-xl bg-bg-tertiary border border-border-primary p-4 text-sm font-mono text-text-primary focus:outline-none resize-y leading-relaxed"
+          class="w-full rounded-xl bg-bg-tertiary border border-border-primary p-4 text-sm font-mono text-text-primary focus:outline-none resize-y leading-relaxed whitespace-pre-wrap font-normal"
+          style="tab-size: 2;"
+          spellcheck="false"
         ></textarea>
       </div>
     </div>
@@ -494,11 +497,22 @@ const relatedTools = [
     let lastCreatedCode = null;
     let lastCreatedText = '';
 
-    // ─── Send Stats Update ───
+    // ─── Send Stats Update & Tab Indent Support ───
     sendInput.addEventListener('input', () => {
       const val = sendInput.value;
       const lines = val.trim() === '' ? 0 : val.split('\n').length;
       sendStats.textContent = `${lines.toLocaleString()} lines | ${val.length.toLocaleString()} chars`;
+    });
+
+    sendInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = sendInput.selectionStart;
+        const end = sendInput.selectionEnd;
+        sendInput.value = sendInput.value.substring(0, start) + '  ' + sendInput.value.substring(end);
+        sendInput.selectionStart = sendInput.selectionEnd = start + 2;
+        sendInput.dispatchEvent(new Event('input'));
+      }
     });
 
     btnClearSend.addEventListener('click', () => {
@@ -545,12 +559,67 @@ const relatedTools = [
       reader.readAsText(file);
     }
 
-    // ─── Payload Encoding (for QR code & Direct Links) ───
+    // ─── Clean / Unwrap Snippet Text Helper ───
+    // Recursively extracts raw text if accidentally wrapped in JSON metadata
+    function unwrapSnippetText(input) {
+      if (typeof input !== 'string') return '';
+      let current = input;
+
+      for (let depth = 0; depth < 5; depth++) {
+        const trimmed = current.trim();
+        if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('"') && trimmed.endsWith('"'))) {
+          try {
+            const parsed = JSON.parse(trimmed);
+            if (typeof parsed === 'string') {
+              current = parsed;
+              continue;
+            }
+            if (parsed && typeof parsed === 'object') {
+              if (typeof parsed.text === 'string' && (parsed.code !== undefined || parsed.createdAt !== undefined || parsed.expireAt !== undefined || Object.keys(parsed).length <= 2)) {
+                current = parsed.text;
+                continue;
+              }
+            }
+            break;
+          } catch (e) {
+            // Handle cut-off / truncated JSON safely
+            if (trimmed.includes('"text"')) {
+              const match = trimmed.match(/"text"\s*:\s*"((?:[^"\\]|\\.)*)/s);
+              if (match && match[1]) {
+                try {
+                  current = JSON.parse('"' + match[1] + '"');
+                  continue;
+                } catch (e2) {
+                  current = match[1]
+                    .replace(/\\n/g, '\n')
+                    .replace(/\\r/g, '\r')
+                    .replace(/\\t/g, '\t')
+                    .replace(/\\"/g, '"')
+                    .replace(/\\\\/g, '\\');
+                  continue;
+                }
+              }
+            }
+            break;
+          }
+        } else {
+          break;
+        }
+      }
+      return current;
+    }
+
+    // ─── UTF-8 Safe Payload Encoding (for QR code & Direct Links) ───
     function encodePayload(str) {
       try {
-        // Use LZString-style compression: convert to base64 for URL embedding
-        const utf8 = unescape(encodeURIComponent(str));
-        return encodeURIComponent(btoa(utf8));
+        const clean = unwrapSnippetText(str);
+        const bytes = new TextEncoder().encode(clean);
+        let binary = '';
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return encodeURIComponent(btoa(binary));
       } catch (e) {
         return '';
       }
@@ -558,8 +627,13 @@ const relatedTools = [
 
     function decodePayload(str) {
       try {
-        const decoded = atob(decodeURIComponent(str));
-        return decodeURIComponent(escape(decoded));
+        const binary = atob(decodeURIComponent(str));
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        const decoded = new TextDecoder().decode(bytes);
+        return unwrapSnippetText(decoded);
       } catch (e) {
         return '';
       }
@@ -573,13 +647,12 @@ const relatedTools = [
     // ─── QR Code Renderer (Clean, stable QR codes for all snippet sizes) ───
     function renderSvgQrCode(container, code, textPayload) {
       const baseUrl = `${window.location.origin}${window.location.pathname}`;
-      // Keep QR URL short and crisp for instant phone camera scanning
       let shareUrl = `${baseUrl}?code=${code}`;
-      if (textPayload && textPayload.length <= 300) {
+      if (textPayload && textPayload.length <= 500) {
         const encoded = encodePayload(textPayload);
         if (encoded) shareUrl = `${baseUrl}?code=${code}&data=${encoded}`;
       }
-      
+
       const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=4&data=${encodeURIComponent(shareUrl)}`;
       container.innerHTML = `
         <img 
@@ -596,32 +669,37 @@ const relatedTools = [
     // ─── Cloud Sync: Upload snippet to global relay for cross-device ───
     async function uploadToCloud(code, text, expireAt) {
       try {
-        const payload = JSON.stringify({ code, text, createdAt: Date.now(), expireAt });
-        fetch(`https://ntfy.sh/sniptoolkit_clip_${code}`, {
+        const cleanText = unwrapSnippetText(text);
+        const payload = JSON.stringify({ code, text: cleanText, createdAt: Date.now(), expireAt });
+        await fetch(`https://ntfy.sh/sniptoolkit_clip_${code}`, {
           method: 'POST',
           body: payload,
-          headers: { 'Title': `Snippet ${code}` }
-        }).catch(() => {});
+          headers: {
+            'Title': `Snippet ${code}`,
+            'Priority': 'urgent'
+          }
+        });
       } catch (e) {
-        console.log('Cloud upload skipped');
+        console.log('Cloud upload skipped', e);
       }
     }
 
     // ─── Create Snippet ───
     btnCreateClip.addEventListener('click', async () => {
-      const text = sendInput.value;
-      if (!text.trim()) {
+      const rawText = sendInput.value;
+      if (!rawText.trim()) {
         window.showToast('Please enter text or upload a file first', 'error');
         return;
       }
 
+      const text = unwrapSnippetText(rawText);
       const code = generate6DigitCode();
       const ttlSecs = selectTtl.value;
       const expireAt = ttlSecs === 'never' ? null : Date.now() + (parseInt(ttlSecs) * 1000);
 
       const snippetData = { code, text, createdAt: Date.now(), expireAt };
 
-      // 1. Save to localStorage
+      // 1. Save clean text to localStorage
       try {
         localStorage.setItem(`sniptools_clip_${code}`, JSON.stringify(snippetData));
         saveToHistory(code, snippetData);
@@ -658,7 +736,7 @@ const relatedTools = [
       const text = lastCreatedText || sendInput.value || '';
       const baseUrl = `${window.location.origin}${window.location.pathname}`;
       let link = `${baseUrl}?code=${lastCreatedCode}`;
-      if (text.length <= 500) {
+      if (text.length <= 1500) {
         const encoded = encodePayload(text);
         if (encoded) link = `${baseUrl}?code=${lastCreatedCode}&data=${encoded}`;
       }
@@ -667,7 +745,6 @@ const relatedTools = [
 
     // ─── 6-Digit Input Behavior (MOBILE-OPTIMIZED) ───
     digitInputs.forEach((input, idx) => {
-      // Filter: only allow numeric input
       input.addEventListener('beforeinput', (e) => {
         if (e.data && !/^\d$/.test(e.data) && e.inputType !== 'deleteContentBackward' && e.inputType !== 'deleteContentForward') {
           e.preventDefault();
@@ -675,22 +752,18 @@ const relatedTools = [
       });
 
       input.addEventListener('input', (e) => {
-        // Strip any non-digit characters that might have gotten through
         const cleaned = input.value.replace(/\D/g, '');
         if (cleaned !== input.value) {
           input.value = cleaned;
         }
 
         if (cleaned.length === 1 && idx < 5) {
-          // Use requestAnimationFrame to delay focus - prevents mobile keyboard reset
           requestAnimationFrame(() => {
             digitInputs[idx + 1].focus();
           });
         }
 
-        // Auto-submit when all 6 digits are filled
         if (digitInputs.every(i => i.value.length === 1)) {
-          // Small delay to let the last digit render before submitting
           setTimeout(() => btnFetchCode.click(), 100);
         }
       });
@@ -701,7 +774,6 @@ const relatedTools = [
         }
       });
 
-      // Handle paste of full 6-digit code
       input.addEventListener('paste', (e) => {
         const paste = (e.clipboardData || window.clipboardData).getData('text').trim();
         if (/^\d{6}$/.test(paste)) {
@@ -713,7 +785,6 @@ const relatedTools = [
         }
       });
 
-      // Select text on focus for easy overwrite
       input.addEventListener('focus', () => {
         input.select();
       });
@@ -732,8 +803,11 @@ const relatedTools = [
         try {
           const data = JSON.parse(raw);
           if (!data.expireAt || Date.now() <= data.expireAt) {
-            displayRetrievedSnippet(code, data.text, data.createdAt || Date.now());
-            return;
+            const clean = unwrapSnippetText(data.text || data);
+            if (clean) {
+              displayRetrievedSnippet(code, clean, data.createdAt || Date.now());
+              return;
+            }
           } else {
             localStorage.removeItem(`sniptools_clip_${code}`);
           }
@@ -744,10 +818,10 @@ const relatedTools = [
       if (urlPayload) {
         const decodedText = decodePayload(urlPayload);
         if (decodedText) {
-          // Cache locally for future lookups
-          const snippetData = { code, text: decodedText, createdAt: Date.now(), expireAt: null };
+          const clean = unwrapSnippetText(decodedText);
+          const snippetData = { code, text: clean, createdAt: Date.now(), expireAt: null };
           try { localStorage.setItem(`sniptools_clip_${code}`, JSON.stringify(snippetData)); } catch(e) {}
-          displayRetrievedSnippet(code, decodedText, Date.now());
+          displayRetrievedSnippet(code, clean, Date.now());
           return;
         }
       }
@@ -764,33 +838,35 @@ const relatedTools = [
               if (!lines[i].trim()) continue;
               try {
                 const msg = JSON.parse(lines[i]);
-                if (msg.event === 'message' && msg.message) {
-                  let snippetText = msg.message;
+                if (msg.event === 'message') {
+                  let rawContent = msg.message || '';
                   let createdAt = (msg.time * 1000) || Date.now();
 
-                  // Attempt JSON parse in case structured payload was saved
-                  try {
-                    const parsed = JSON.parse(msg.message);
-                    if (parsed && typeof parsed.text === 'string') {
-                      snippetText = parsed.text;
-                      if (parsed.createdAt) createdAt = parsed.createdAt;
-                    }
-                  } catch (eJson) {}
-
-                  // If ntfy converted code to file attachment, fetch raw file URL
-                  if (msg.attachment && msg.attachment.url && snippetText.includes('attachment')) {
+                  // If ntfy stored large payload as an attachment file, fetch the full content
+                  if (msg.attachment && msg.attachment.url) {
                     try {
                       const fileRes = await fetch(msg.attachment.url);
                       if (fileRes.ok) {
-                        snippetText = await fileRes.text();
+                        rawContent = await fileRes.text();
                       }
-                    } catch (fErr) {}
+                    } catch (fErr) {
+                      console.warn('Attachment fetch error', fErr);
+                    }
                   }
 
-                  const snippetData = { code, text: snippetText, createdAt, expireAt: null };
-                  try { localStorage.setItem(`sniptools_clip_${code}`, JSON.stringify(snippetData)); } catch(e) {}
-                  displayRetrievedSnippet(code, snippetText, createdAt);
-                  return;
+                  const snippetText = unwrapSnippetText(rawContent);
+
+                  if (snippetText) {
+                    try {
+                      const parsed = JSON.parse(rawContent);
+                      if (parsed && parsed.createdAt) createdAt = parsed.createdAt;
+                    } catch (e) {}
+
+                    const snippetData = { code, text: snippetText, createdAt, expireAt: null };
+                    try { localStorage.setItem(`sniptools_clip_${code}`, JSON.stringify(snippetData)); } catch(e) {}
+                    displayRetrievedSnippet(code, snippetText, createdAt);
+                    return;
+                  }
                 }
               } catch (e) {}
             }
@@ -802,17 +878,18 @@ const relatedTools = [
 
       // All layers exhausted — show helpful error
       window.showToast(
-        `Code ${code} not found. Make sure to use the QR code or Direct Link for cross-device sharing.`,
+        `Code ${code} not found or expired. Use QR Code or Direct Link for instant sync.`,
         'error'
       );
       retrievedContainer.classList.add('hidden');
     }
 
     function displayRetrievedSnippet(code, text, createdAt) {
-      retrievedOutput.value = text;
+      const cleanText = unwrapSnippetText(text);
+      retrievedOutput.value = cleanText;
       retrievedMeta.textContent = `Code: ${code} | Retrieved ${new Date(createdAt).toLocaleTimeString()}`;
       retrievedContainer.classList.remove('hidden');
-      saveToHistory(code, { text, createdAt });
+      saveToHistory(code, { text: cleanText, createdAt });
       window.showToast('Snippet retrieved successfully!', 'success');
     }
 
@@ -850,10 +927,11 @@ const relatedTools = [
         history = JSON.parse(localStorage.getItem('sniptools_clip_history') || '[]');
       } catch (e) {}
 
+      const cleanSnippet = unwrapSnippetText(data.text || '');
       history = history.filter(item => item.code !== code);
       history.unshift({
         code,
-        snippet: (data.text || '').slice(0, 60),
+        snippet: cleanSnippet.slice(0, 80),
         time: data.createdAt || Date.now()
       });
 
