@@ -1,5 +1,7 @@
 # SnipToolkit
 
+**🌐 Access the live tool suite here: [sniptoolkit.com](https://sniptoolkit.com)**
+
 A fast, private, 100% client-side suite of developer utilities.
 
 SnipToolkit was built to solve a simple problem: developers constantly need to format JSON, decode Base64, or generate UUIDs, but doing so on ad-filled, tracking-heavy websites is a massive privacy risk. SnipToolkit brings all essential utilities into a single, lightning-fast workspace where **your data never leaves your browser**.
