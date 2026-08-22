@@ -1,48 +1,25 @@
-# SnipTools — Free Developer & Utility Tools
+# SnipToolkit
 
-> **Domain**: [sniptoolkit.com](https://sniptoolkit.com)
-> **Stack**: Astro 7 + Tailwind CSS 4 · 100% Static · Cloudflare Pages
+A fast, private, 100% client-side suite of developer utilities.
 
-Fast, free, privacy-first developer tools that run entirely in your browser. Zero sign-up, zero server uploads, zero tracking.
+SnipToolkit was built to solve a simple problem: developers constantly need to format JSON, decode Base64, or generate UUIDs, but doing so on ad-filled, tracking-heavy websites is a massive privacy risk. SnipToolkit brings all essential utilities into a single, lightning-fast workspace where **your data never leaves your browser**.
 
-## Tools Included
+## 🛡️ Core Philosophy
 
-| Tool | Description |
-| :--- | :--- |
-| **JSON Formatter & Validator** | Format, beautify, minify, and validate JSON with error highlighting |
-| **Base64 Encode & Decode** | Encode/decode text and files to/from Base64 |
-| **UUID Generator** | Generate UUID v4 & v7 in bulk with formatting options |
-| **URL Encode & Decode** | Percent-encode/decode URLs and query parameters |
-| **Unix Timestamp Converter** | Convert epoch timestamps to human-readable dates |
-| **Hash Generator (SHA/MD5)** | Generate MD5, SHA-1, SHA-256, SHA-512 hashes & HMAC |
-| **Word & Character Counter** | Count words, characters, sentences, reading time |
-| **Color Picker & Converter** | Convert between HEX, RGB, HSL, HSV with WCAG contrast |
-| **Lorem Ipsum Generator** | Generate placeholder text in paragraphs, words, or bytes |
-| **Online Clipboard** | Share text snippets between tabs via 6-digit codes |
+* **100% Client-Side:** No backend databases. No server-side processing. Your data is processed entirely by your own local machine.
+* **Zero Tracking:** No analytics logging your inputs, no cookies tracking your behavior.
+* **Ad-Free Workspace:** A clean, distraction-free environment designed for developers.
+* **Instant Execution:** Because everything runs locally, tools execute with zero network latency.
 
-## Quick Start
+## 🛠️ Available Utilities
 
-```bash
-npm install        # Install dependencies
-npm run dev        # Start dev server at localhost:4321
-npm run build      # Build production static site to dist/
-npm run preview    # Preview production build locally
-```
+* **Data:** JSON Formatter & Validator
+* **Encoding:** Base64 Encode/Decode, URL Encode/Decode
+* **Security:** Hash Generator (MD5, SHA), Password & UUID Generators
+* **Text & Design:** Lorem Ipsum, Word Counter, Color Picker
 
-## Deploy to Cloudflare Pages
+## 🔒 Security Guarantee
+All tools strictly utilize local browser APIs (such as the Web Crypto API for secure generation). We do not collect, store, or transmit any user input data to any external servers.
 
-```bash
-npm run deploy     # Build + deploy to Cloudflare Pages
-```
-
-## Architecture
-
-- **100% Static Output** — No server, no database, no backend
-- **100% Client-Side Processing** — All tools run in the browser via JavaScript & Web Crypto API
-- **Zero Data Collection** — No user inputs are ever transmitted or stored
-- **Dark Mode First** — Vercel-inspired design with light mode toggle
-- **Command Palette** — Press `Ctrl+K` to fuzzy-search all tools instantly
-
-## License
-
-© 2026 SnipTools. All rights reserved.
+---
+*Built for developers, by developers.*
