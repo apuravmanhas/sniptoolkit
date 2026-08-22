@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  /* Color System - Deep Dark (Vercel / Raycast Aesthetic) */
-  --color-bg-primary: #050505;
-  --color-bg-secondary: #0d0d0d;
-  --color-bg-tertiary: #141414;
-  --color-bg-hover: #1a1a1a;
-  --color-bg-active: #222222;
+  /* Color System - Layered Dark (VS Code / GitHub Dark Aesthetic) */
+  --color-bg-primary: #0B0D0F;
+  --color-bg-secondary: #12151A;
+  --color-bg-tertiary: #1A1E25;
+  --color-bg-hover: #222830;
+  --color-bg-active: #2A3038;
 
-  --color-border-primary: #1f1f1f;
-  --color-border-secondary: #2e2e2e;
-  --color-border-hover: #404040;
+  --color-border-primary: #1E2430;
+  --color-border-secondary: #2E3642;
+  --color-border-hover: #3E4854;
 
   --color-text-primary: #f5f5f5;
   --color-text-secondary: #a3a3a3;
@@ -39,14 +39,14 @@
   --color-text-secondary-light: #475569;
   --color-text-tertiary-light: #94a3b8;
 
-  /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  /* Typography - Moving away from generic Inter to system-native utilitarian */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
 
-  /* Shadows & Glows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.8);
+  /* Shadows - Flatter, functional aesthetics */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
   --shadow-glow-accent: 0 0 25px rgba(59, 130, 246, 0.25);
   --shadow-glow-purple: 0 0 25px rgba(139, 92, 246, 0.25);
   --shadow-glow-green: 0 0 25px rgba(16, 185, 129, 0.25);
@@ -74,22 +74,26 @@ body {
 /* Light Mode Support */
 html.light {
   color-scheme: light;
+  
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  --color-bg-hover: #e2e8f0;
+  --color-bg-active: #cbd5e1;
+
+  --color-border-primary: #e2e8f0;
+  --color-border-secondary: #cbd5e1;
+  --color-border-hover: #94a3b8;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
 }
 
 html.light body {
-  background-color: var(--color-bg-primary-light);
-  color: var(--color-text-primary-light);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
 }
-
-html.light .bg-bg-primary { background-color: var(--color-bg-primary-light) !important; }
-html.light .bg-bg-secondary { background-color: var(--color-bg-secondary-light) !important; }
-html.light .bg-bg-tertiary { background-color: var(--color-bg-tertiary-light) !important; }
-html.light .hover\:bg-bg-hover:hover { background-color: var(--color-bg-hover-light) !important; }
-html.light .border-border-primary { border-color: var(--color-border-primary-light) !important; }
-html.light .border-border-secondary { border-color: var(--color-border-secondary-light) !important; }
-html.light .text-text-primary { color: var(--color-text-primary-light) !important; }
-html.light .text-text-secondary { color: var(--color-text-secondary-light) !important; }
-html.light .text-text-tertiary { color: var(--color-text-tertiary-light) !important; }
 
 /* Custom Ambient Mesh Background Glow */
 .ambient-glow {
